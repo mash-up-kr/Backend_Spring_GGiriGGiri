@@ -1,4 +1,4 @@
-package mashup.ggiriggiri.gifticonstorm
+package mashup.ggiriggiri.gifticonstorm.presentation
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

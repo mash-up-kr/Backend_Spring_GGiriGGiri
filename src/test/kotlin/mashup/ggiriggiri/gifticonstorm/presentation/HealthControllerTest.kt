@@ -1,6 +1,5 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
-import mashup.ggiriggiri.gifticonstorm.HealthController
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

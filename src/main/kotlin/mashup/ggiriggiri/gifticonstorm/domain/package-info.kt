@@ -1,0 +1,1 @@
+package mashup.ggiriggiri.gifticonstorm.domain;
