@@ -1,0 +1,23 @@
+= 끼리끼리 서버 API
+gifticon-storm
+:toc: left
+:toclevels: 3
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:sectlinks:
+:hardbreaks:
+
+[[introduction]]
+== Overview
+
+끼리끼리 서버 API 연동 규격서
+
+
+
+
+// sample
+=== health
+==== Curl Command
+
+include::{snippets}/health/health/http-response.adoc[]
