@@ -1,7 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.domain.coupon
 
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
-import mashup.ggiriggiri.gifticonstorm.domain.entry.Entry
+import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
 import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -20,5 +20,5 @@ class Coupon (
         val category: Category,
 
         @OneToMany(mappedBy = "coupon")
-        val entries: MutableList<Entry> = mutableListOf()
+        val participants: MutableList<Participant> = mutableListOf()
 ): BaseEntity()
