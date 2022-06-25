@@ -30,7 +30,6 @@ dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 //	implementation("org.springframework.boot:spring-boot-starter-validation")
 //	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
-	runtimeOnly("com.h2database:h2")
 
 //	implementation("org.springframework.boot:spring-boot-starter-security")
 //	testImplementation("org.springframework.security:spring-security-test")
@@ -39,19 +38,25 @@ dependencies {
 
 //	implementation("org.springframework.boot:spring-boot-starter-actuator")
 //	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+	implementation("org.redisson:redisson-spring-boot-starter:3.17.3")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+	runtimeOnly("mysql:mysql-connector-java")
+
 	// queryDsl
-//	runtimeOnly("mysql:mysql-connector-java:8.0.15")
 	implementation("com.querydsl:querydsl-jpa:5.0.0")
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+
+	// test
+	testImplementation("com.h2database:h2")
 
 	// documentation
 	asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor")
 	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
 }
 
 tasks.withType<KotlinCompile> {
