@@ -444,9 +444,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#introduction">Overview</a>
 <ul class="sectlevel2">
-<li><a href="#_health">health</a>
+<li><a href="#_sample">sample</a>
 <ul class="sectlevel3">
 <li><a href="#_curl_command">Curl Command</a></li>
+<li><a href="#_http_request">Http Request</a></li>
+<li><a href="#_http_response">Http Response</a></li>
+</ul>
+</li>
+<li><a href="#_health">health</a>
+<ul class="sectlevel3">
+<li><a href="#_curl_command_2">Curl Command</a></li>
 </ul>
 </li>
 </ul>
@@ -462,9 +469,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>끼리끼리 서버 API 연동 규격서</p>
 </div>
 <div class="sect2">
-<h3 id="_health"><a class="link" href="#_health">health</a></h3>
+<h3 id="_sample"><a class="link" href="#_sample">sample</a></h3>
 <div class="sect3">
 <h4 id="_curl_command"><a class="link" href="#_curl_command">Curl Command</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://sample.com/restdocs/sample' -i -X POST \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -H 'Accept: application/json' \
+    -d '{
+  "inherenceId" : "3a78Bds78"
+}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_request"><a class="link" href="#_http_request">Http Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /restdocs/sample HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: application/json
+Content-Length: 33
+Host: sample.com
+
+{
+  "inherenceId" : "3a78Bds78"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_response"><a class="link" href="#_http_response">Http Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 103
+
+{
+  "spreadId" : 357,
+  "merchandiseName" : "ice americano",
+  "imageUrl" : "image.sample.com/image1"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_health"><a class="link" href="#_health">health</a></h3>
+<div class="sect3">
+<h4 id="_curl_command_2"><a class="link" href="#_curl_command_2">Curl Command</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -478,7 +533,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-06-18 16:30:55 +0900
+Last updated 2022-06-25 11:06:30 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">

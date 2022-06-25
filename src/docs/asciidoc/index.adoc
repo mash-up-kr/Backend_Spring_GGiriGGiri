@@ -16,8 +16,21 @@ gifticon-storm
 
 
 
-// sample
+=== sample
+==== Curl Command
+
+include::{snippets}/sample/sample/curl-request.adoc[]
+
+==== Http Request
+
+include::{snippets}/sample/sample/http-request.adoc[]
+
+==== Http Response
+
+include::{snippets}/sample/sample/http-response.adoc[]
+
 === health
+
 ==== Curl Command
 
 include::{snippets}/health/health/http-response.adoc[]
