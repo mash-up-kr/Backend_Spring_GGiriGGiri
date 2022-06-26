@@ -1,9 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
 import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
-import mashup.ggiriggiri.gifticonstorm.infrastructure.CouponImageUploader
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestPart

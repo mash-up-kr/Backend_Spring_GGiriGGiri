@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Component
-class CouponImageUploader(
+class S3ImageUploader(
     private val amazonS3Client : AmazonS3Client,
 
     @Value("\${cloud.aws.s3.bucket}")
