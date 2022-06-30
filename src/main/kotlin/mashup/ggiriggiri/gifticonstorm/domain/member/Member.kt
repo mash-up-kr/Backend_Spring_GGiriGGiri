@@ -8,9 +8,9 @@ import javax.persistence.OneToMany
 
 @Entity
 class Member (
-        @Column(unique = true)
-        val inherenceId: String,
+    @Column(unique = true)
+    val inherenceId: String,
 
-        @OneToMany(mappedBy = "member")
-        val participants: MutableList<Participant> = mutableListOf()
+    @OneToMany(mappedBy = "member")
+    val participants: MutableList<Participant> = mutableListOf()
 ) : BaseEntity()

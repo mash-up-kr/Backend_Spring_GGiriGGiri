@@ -10,15 +10,15 @@ import javax.persistence.OneToMany
 
 @Entity
 class Coupon (
-        val brandName: String,
-        val merchandiseName: String,
-        val expiredAt: LocalDateTime,
-        val bburigiAt: LocalDateTime,
-        val imageUrl: String,
+    val brandName: String,
+    val merchandiseName: String,
+    val expiredAt: LocalDateTime,
+    val bburigiAt: LocalDateTime,
+    val imageUrl: String,
 
-        @Enumerated(EnumType.STRING)
-        val category: Category,
+    @Enumerated(EnumType.STRING)
+    val category: Category,
 
-        @OneToMany(mappedBy = "coupon")
-        val participants: MutableList<Participant> = mutableListOf()
+    @OneToMany(mappedBy = "coupon")
+    val participants: MutableList<Participant> = mutableListOf()
 ): BaseEntity()
