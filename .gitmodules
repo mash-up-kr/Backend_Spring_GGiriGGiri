@@ -1,0 +1,3 @@
+[submodule "ggiriggiri-config"]
+	path = src/main/resources/ggiriggiri-config
+	url = https://github.com/plzprayme/ggiriggiri-config
