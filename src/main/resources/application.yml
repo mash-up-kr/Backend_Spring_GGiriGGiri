@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    include: local, dev, production
+
+server:
+  error:
+    whitelabel:
+      enabled: false
