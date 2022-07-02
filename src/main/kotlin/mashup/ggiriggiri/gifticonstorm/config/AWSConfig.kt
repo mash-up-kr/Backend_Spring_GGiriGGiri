@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 
 @Configuration
-class AWSConfig{
-
+class AWSConfig(
     @Value("\${cloud.aws.credentials.access-key}")
-    private val accessKey: String? = null
+    private val accessKey: String,
 
     @Value("\${cloud.aws.credentials.secret-key}")
-    val secretKey: String? = null
+    val secretKey: String,
 
     @Value("\${cloud.aws.region.static}")
-    private val region: String? = null
+    private val region: String
+){
 
     @Primary
     @Bean
