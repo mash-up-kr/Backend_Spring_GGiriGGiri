@@ -37,11 +37,7 @@ class S3ImageUploader(
     }
 
     private fun generateKey(file: MultipartFile): String {
-        return buildString {
-            append(LocalDateTime.now().toString())
-            append("-")
-            append(file.originalFilename)
-        }
+        return "${LocalDateTime.now()}-${file.originalFilename}"
     }
 
 }
