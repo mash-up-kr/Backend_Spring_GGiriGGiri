@@ -27,7 +27,7 @@ class S3ImageUploader(
 
     private fun upload(file: MultipartFile, key: String) {
         val result = amazonS3Client.putObject(bucket, key, file.inputStream, getObjectMetadata(file.inputStream.available().toLong()))
-        logger.info("image uploaded path: {}/{}", bucket, key)
+        logger.info("image uploaded path: $bucket/$key")
     }
 
     private fun getObjectMetadata(contentLength: Long) : ObjectMetadata {
