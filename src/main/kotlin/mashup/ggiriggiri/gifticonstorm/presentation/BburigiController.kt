@@ -9,16 +9,15 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-class BurrigiController {
+class BburigiController {
 
-    val logger = LoggerFactory.getLogger(javaClass)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping("/bburigi")
-    fun createBurrigi(
+    fun createBburigi(
         @RequestPart(value = "image") image: MultipartFile,
         @RequestPart(value = "eventInfo") dto: CreateEventRequestDto
     ) : ResponseEntity<Unit> {
-
         return ResponseEntity.ok(Unit);
     }
 }
