@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - config/**
 
 jobs:
   build:
