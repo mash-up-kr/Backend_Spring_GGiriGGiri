@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17.0.2_8-jre-alpine
+FROM eclipse-temurin:11.0.15_10-jre-alpine as build
 WORKDIR /home
 CMD ["mkdir", "-p", "/home/server/build/libs"]
 CMD ["mkdir", "-p", "/home/server/src/main/resources"]
