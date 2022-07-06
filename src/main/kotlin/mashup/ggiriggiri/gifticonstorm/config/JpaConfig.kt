@@ -13,10 +13,10 @@ class JpaConfig {
     @Bean
     @Primary
     fun dataSource(
-        @Value("\${db.driver-class-name}") driverClassName: String,
-        @Value("\${db.jdbc.url}") jdbcUrl: String,
-        @Value("\${db.username}") username: String,
-        @Value("\${db.password}") password: String
+        @Value("\${mysql.driver-class-name}") driverClassName: String,
+        @Value("\${mysql.jdbc.url}") jdbcUrl: String,
+        @Value("\${mysql.username}") username: String,
+        @Value("\${mysql.password}") password: String
     ): DataSource {
         return HikariDataSource().apply {
             this.driverClassName = driverClassName

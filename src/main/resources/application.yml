@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    include: db, aws
+
+server:
+  error:
+    whitelabel:
+      enabled: false
