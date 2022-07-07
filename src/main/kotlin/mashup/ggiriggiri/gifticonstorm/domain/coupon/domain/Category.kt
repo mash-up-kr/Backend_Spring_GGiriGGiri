@@ -1,4 +1,4 @@
-package mashup.ggiriggiri.gifticonstorm.domain.coupon
+package mashup.ggiriggiri.gifticonstorm.domain.coupon.domain
 
 enum class Category(
         private val description: String,
