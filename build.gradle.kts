@@ -28,7 +28,7 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 //	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-//	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 //	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
 //	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -47,9 +47,6 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 
 	runtimeOnly("mysql:mysql-connector-java")
-
-	// h2
-	runtimeOnly("com.h2database:h2:2.1.212")
 
 	// queryDsl
 	implementation("com.querydsl:querydsl-jpa:5.0.0")
