@@ -24,4 +24,10 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(exception.errorCode.status)
             .body(BaseResponse.error(exception.errorCode))
     }
+
+    @ExceptionHandler(Exception::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    private fun handleException(exception: Exception): BaseResponse<Unit> {
+        return BaseResponse.error(ErrorCode.INTERNAL_SERVER_ERROR)
+    }
 }
