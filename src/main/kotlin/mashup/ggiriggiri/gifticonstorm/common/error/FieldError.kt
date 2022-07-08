@@ -1,7 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.common.error
 
 import org.springframework.validation.BindingResult
-import kotlin.streams.toList
 
 class FieldError(
     val field: String,
@@ -11,11 +10,12 @@ class FieldError(
     companion object {
         fun of(bindingResult: BindingResult): List<FieldError> {
             val fieldErrors = bindingResult.fieldErrors
-            return fieldErrors.stream()
-                .map { error -> FieldError(
+            return fieldErrors.map { error ->
+                FieldError(
                     field = error.field,
                     message = error.defaultMessage
-                ) }.toList()
+                )
+            }.toList()
         }
     }
 }
