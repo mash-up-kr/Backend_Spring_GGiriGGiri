@@ -15,7 +15,6 @@ class CouponService(
     private val couponRepository: CouponRepository
 ){
 
-    @Transactional
     fun saveCoupon(image: MultipartFile, saveRequestDto: CouponSaveRequestDto) {
         val imageUrl = s3ImageUploader.upload(image)
         val coupon = Coupon.of(imageUrl, saveRequestDto)
