@@ -23,12 +23,14 @@ repositories {
 
 dependencies {
 
+	// spring
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-webflux") {
+		exclude(module = "spring-boot-starter-netty")
+	}
 //	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-//	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 //	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
 //	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -48,14 +50,12 @@ dependencies {
 
 	runtimeOnly("mysql:mysql-connector-java")
 
-	// h2
-	runtimeOnly("com.h2database:h2:2.1.212")
-
 	// queryDsl
 	implementation("com.querydsl:querydsl-jpa:5.0.0")
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 
 	// test
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("com.h2database:h2")
 
 	// documentation
