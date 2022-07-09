@@ -1,9 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.common.dto
 
-import mashup.ggiriggiri.gifticonstorm.common.error.ErrorCode
-
 class BaseResponse<T>(
-    val success: Boolean,
     val code: String,
     val message: String,
     val data: T? = null
@@ -12,34 +9,30 @@ class BaseResponse<T>(
     companion object {
         fun ok(): BaseResponse<Unit> {
             return BaseResponse(
-                success = true,
-                code = "0",
-                message = "성공하였습니다."
+                code = ResponseCode.OK.code,
+                message = ResponseCode.OK.message
             )
         }
 
         fun <T> ok(data: T): BaseResponse<T> {
             return BaseResponse(
-                success = true,
-                code = "0",
-                message = "성공하였습니다.",
+                code = ResponseCode.OK.code,
+                message = ResponseCode.OK.message,
                 data = data
             )
         }
 
-        fun error(errorCode: ErrorCode): BaseResponse<Unit> {
+        fun error(responseCode: ResponseCode): BaseResponse<Unit> {
             return BaseResponse(
-                success = false,
-                code = errorCode.code,
-                message = errorCode.message
+                code = responseCode.code,
+                message = responseCode.message
             )
         }
 
-        fun <T> error(errorCode: ErrorCode, data: T): BaseResponse<T> {
+        fun <T> error(responseCode: ResponseCode, data: T): BaseResponse<T> {
             return BaseResponse(
-                success = false,
-                code = errorCode.code,
-                message = errorCode.message,
+                code = responseCode.code,
+                message = responseCode.message,
                 data = data
             )
         }
