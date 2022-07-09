@@ -15,7 +15,7 @@ class FieldError(
                     field = error.field,
                     message = error.defaultMessage
                 )
-            }.toList()
+            }
         }
     }
 }
