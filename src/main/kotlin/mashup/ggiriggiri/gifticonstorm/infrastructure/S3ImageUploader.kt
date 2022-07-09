@@ -25,7 +25,7 @@ class S3ImageUploader(
         return upload(file, generateKey(file))
     }
 
-    private fun upload(file: MultipartFile, key: String) {
+    private fun upload(file: MultipartFile, key: String): String {
         amazonS3Client.putObject(bucket, key, file.inputStream, getObjectMetadata(file.inputStream.available().toLong()))
         log.info("image uploaded path: $bucket/$key")
         return amazonS3Client.getUrl(bucket, key).toString()

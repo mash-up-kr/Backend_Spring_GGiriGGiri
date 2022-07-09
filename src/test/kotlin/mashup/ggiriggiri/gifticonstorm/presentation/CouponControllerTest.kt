@@ -38,7 +38,7 @@ internal class CouponControllerTest : TestRestDocs() {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = LocalDate.now().plusDays(1).toString(),
-            bburigiTime = 1L
+            sprinkleTime = 1L
         )
 
         val image = MockMultipartFile(
@@ -57,7 +57,7 @@ internal class CouponControllerTest : TestRestDocs() {
 
         //when, then
         mockMvc.perform(
-            multipart("/api/v1/bburigi")
+            multipart("/api/v1/sprinkle")
                 .file(image)
                 .file(couponInfo)
                 .accept(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ internal class CouponControllerTest : TestRestDocs() {
                         fieldWithPath("brandName").type(JsonFieldType.STRING).description("쿠폰 브랜드명"),
                         fieldWithPath("merchandiseName").type(JsonFieldType.STRING).description("쿠폰 상품명"),
                         fieldWithPath("couponExpiredTime").type(JsonFieldType.STRING).description("쿠폰 유효기간"),
-                        fieldWithPath("bburigiTime").type(JsonFieldType.NUMBER).description("쿠폰 뿌릴 시간 (몇 시간 뒤)")
+                        fieldWithPath("sprinkleTime").type(JsonFieldType.NUMBER).description("쿠폰 뿌릴 시간 (몇 시간 뒤)")
                     ),
                     responseFields(
                         fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
@@ -99,7 +99,7 @@ internal class CouponControllerTest : TestRestDocs() {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = "2022/07/06",
-            bburigiTime = 3L
+            sprinkleTime = 3L
         )
 
         val image = MockMultipartFile(
@@ -117,7 +117,7 @@ internal class CouponControllerTest : TestRestDocs() {
         )
         //when, then
         mockMvc.perform(
-            multipart("/api/v1/bburigi")
+            multipart("/api/v1/sprinkle")
                 .file(image)
                 .file(couponInfo)
                 .accept(MediaType.APPLICATION_JSON)
@@ -149,7 +149,7 @@ internal class CouponControllerTest : TestRestDocs() {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = LocalDate.now().minusDays(1).toString(),
-            bburigiTime = 3L
+            sprinkleTime = 3L
         )
 
         val image = MockMultipartFile(
@@ -167,7 +167,7 @@ internal class CouponControllerTest : TestRestDocs() {
         )
         //when, then
         mockMvc.perform(
-            multipart("/api/v1/bburigi")
+            multipart("/api/v1/sprinkle")
                 .file(image)
                 .file(couponInfo)
                 .accept(MediaType.APPLICATION_JSON)
@@ -199,7 +199,7 @@ internal class CouponControllerTest : TestRestDocs() {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = LocalDate.now().toString(),
-            bburigiTime = 24L
+            sprinkleTime = 24L
         )
 
         val image = MockMultipartFile(
@@ -217,7 +217,7 @@ internal class CouponControllerTest : TestRestDocs() {
         )
         //when, then
         mockMvc.perform(
-            multipart("/api/v1/bburigi")
+            multipart("/api/v1/sprinkle")
                 .file(image)
                 .file(couponInfo)
                 .accept(MediaType.APPLICATION_JSON)
@@ -234,7 +234,7 @@ internal class CouponControllerTest : TestRestDocs() {
                 jsonPath("\$.message").value(ErrorCode.INVALID_INPUT_VALUE.message)
             )
             .andExpect(
-                jsonPath("\$.data[0].field").value("bburigiTime")
+                jsonPath("\$.data[0].field").value("sprinkleTime")
             )
             .andExpect(
                 jsonPath("\$.data[0].message").value("뿌리기 시간은 쿠폰 유효기간 이내여야 합니다.")

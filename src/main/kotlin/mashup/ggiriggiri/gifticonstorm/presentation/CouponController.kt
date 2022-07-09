@@ -15,7 +15,7 @@ class CouponController(
     private val couponService: CouponService
 ) {
 
-    @PostMapping("/api/v1/bburigi")
+    @PostMapping("/api/v1/sprinkle")
     fun saveCoupon(
         @RequestPart(value = "image") image: MultipartFile,
         @RequestPart(value = "couponInfo") @Valid requestDto: CouponSaveRequestDto

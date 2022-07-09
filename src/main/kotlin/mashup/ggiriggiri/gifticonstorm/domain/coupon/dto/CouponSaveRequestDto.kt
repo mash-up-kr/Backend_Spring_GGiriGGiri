@@ -20,5 +20,5 @@ data class CouponSaveRequestDto(
     val couponExpiredTime: String,
 
     @field:Min(value = 1) @field:Max(value = 24)
-    val bburigiTime: Long
+    val sprinkleTime: Long
 )

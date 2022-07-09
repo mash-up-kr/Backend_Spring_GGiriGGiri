@@ -29,13 +29,13 @@ class CouponTimeCheckValidator: ConstraintValidator<CouponTimeCheck, CouponSaveR
             return false
         }
 
-        if (value.bburigiTime !in 1..24) {
+        if (value.sprinkleTime !in 1..24) {
             return false
         }
 
-        val bburigiTime = LocalDateTime.now().plusHours(value.bburigiTime)
-        if (bburigiTime.isAfter(couponExpiredTime)) {
-            addConstraintViolation(context, "뿌리기 시간은 쿠폰 유효기간 이내여야 합니다.", "bburigiTime")
+        val sprinkleTime = LocalDateTime.now().plusHours(value.sprinkleTime)
+        if (sprinkleTime.isAfter(couponExpiredTime)) {
+            addConstraintViolation(context, "뿌리기 시간은 쿠폰 유효기간 이내여야 합니다.", "sprinkleTime")
             return false
         }
 

@@ -42,7 +42,7 @@ internal class CouponServiceTest {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = "2022-07-06",
-            bburigiTime = 3L
+            sprinkleTime = 3L
         )
         //when
         given(imageUploader.upload(image)).willReturn("testImageUrl")
