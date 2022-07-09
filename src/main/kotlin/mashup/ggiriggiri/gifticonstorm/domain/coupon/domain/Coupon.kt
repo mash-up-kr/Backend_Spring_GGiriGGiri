@@ -2,28 +2,25 @@ package mashup.ggiriggiri.gifticonstorm.domain.coupon.domain
 
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
-import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
+import mashup.ggiriggiri.gifticonstorm.domain.member.Member
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.OneToMany
+import javax.persistence.*
 
 @Entity
-class Coupon (
+class Coupon(
     val brandName: String,
     val merchandiseName: String,
     val expiredAt: LocalDateTime,
-    val sprinkleAt: LocalDateTime,
     val imageUrl: String,
 
     @Enumerated(EnumType.STRING)
     val category: Category,
 
-    @OneToMany(mappedBy = "coupon")
-    val participants: MutableList<Participant> = mutableListOf()
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    val member: Member
 ): BaseEntity() {
 
     companion object {
@@ -32,9 +29,9 @@ class Coupon (
                 brandName = couponSaveRequestDto.brandName,
                 merchandiseName = couponSaveRequestDto.merchandiseName,
                 expiredAt = LocalDate.parse(couponSaveRequestDto.couponExpiredTime).atTime(LocalTime.MAX),
-                sprinkleAt = LocalDateTime.now().plusHours(couponSaveRequestDto.sprinkleTime),
                 imageUrl = imageUrl,
-                category = couponSaveRequestDto.category
+                category = couponSaveRequestDto.category,
+                member = Member("sample") // TODO : 임시 멤버 이후에 조회하여 실제 멤버 엔티티로 대체
             )
         }
     }
