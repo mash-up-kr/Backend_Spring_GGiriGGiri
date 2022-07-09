@@ -1,1 +1,0 @@
-package mashup.ggiriggiri.gifticonstorm.common;
