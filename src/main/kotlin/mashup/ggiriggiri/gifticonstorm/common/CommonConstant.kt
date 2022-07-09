@@ -23,3 +23,4 @@ val DEFAULT_OBJECT_MAPPER = Jackson2ObjectMapperBuilder()
         .build()
     )
     .build<ObjectMapper>()
+

@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-class BburigiController {
+class SprinkleController {
 
     companion object : Logger
 
-    @PostMapping("/bburigi")
-    fun createBburigi(
+    @PostMapping("/sprinkle")
+    fun createSprinkle(
         @RequestPart(value = "image") image: MultipartFile,
         @RequestPart(value = "eventInfo") dto: CreateEventRequestDto
     ) : ResponseEntity<Unit> {

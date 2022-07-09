@@ -16,7 +16,7 @@ class Coupon (
     val brandName: String,
     val merchandiseName: String,
     val expiredAt: LocalDateTime,
-    val bburigiAt: LocalDateTime,
+    val sprinkleAt: LocalDateTime,
     val imageUrl: String,
 
     @Enumerated(EnumType.STRING)
@@ -32,7 +32,7 @@ class Coupon (
                 brandName = couponSaveRequestDto.brandName,
                 merchandiseName = couponSaveRequestDto.merchandiseName,
                 expiredAt = LocalDate.parse(couponSaveRequestDto.couponExpiredTime).atTime(LocalTime.MAX),
-                bburigiAt = LocalDateTime.now().plusHours(couponSaveRequestDto.bburigiTime),
+                sprinkleAt = LocalDateTime.now().plusHours(couponSaveRequestDto.sprinkleTime),
                 imageUrl = imageUrl,
                 category = couponSaveRequestDto.category
             )
