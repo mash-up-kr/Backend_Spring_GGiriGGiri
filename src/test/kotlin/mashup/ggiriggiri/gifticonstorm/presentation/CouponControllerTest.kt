@@ -2,7 +2,7 @@ package mashup.ggiriggiri.gifticonstorm.presentation
 
 import mashup.ggiriggiri.gifticonstorm.application.CouponService
 import mashup.ggiriggiri.gifticonstorm.common.DEFAULT_OBJECT_MAPPER
-import mashup.ggiriggiri.gifticonstorm.common.error.ErrorCode
+import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
@@ -81,7 +81,6 @@ internal class CouponControllerTest : TestRestDocs() {
                         fieldWithPath("bburigiTime").type(JsonFieldType.NUMBER).description("쿠폰 뿌릴 시간 (몇 시간 뒤)")
                     ),
                     responseFields(
-                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                         fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
                         fieldWithPath("data").type(JsonFieldType.NULL).description("응답 데이터")
@@ -125,13 +124,10 @@ internal class CouponControllerTest : TestRestDocs() {
             .andDo(print())
             .andExpect(status().isBadRequest)
             .andExpect(
-                jsonPath("\$.success").value(false),
+                jsonPath("\$.code").value(ResponseCode.INVALID_INPUT_VALUE.code),
             )
             .andExpect(
-                jsonPath("\$.code").value(ErrorCode.INVALID_INPUT_VALUE.code),
-            )
-            .andExpect(
-                jsonPath("\$.message").value(ErrorCode.INVALID_INPUT_VALUE.message)
+                jsonPath("\$.message").value(ResponseCode.INVALID_INPUT_VALUE.message)
             )
             .andExpect(
                 jsonPath("\$.data[0].field").value("couponExpiredTime")
@@ -175,13 +171,10 @@ internal class CouponControllerTest : TestRestDocs() {
             .andDo(print())
             .andExpect(status().isBadRequest)
             .andExpect(
-                jsonPath("\$.success").value(false),
+                jsonPath("\$.code").value(ResponseCode.INVALID_INPUT_VALUE.code),
             )
             .andExpect(
-                jsonPath("\$.code").value(ErrorCode.INVALID_INPUT_VALUE.code),
-            )
-            .andExpect(
-                jsonPath("\$.message").value(ErrorCode.INVALID_INPUT_VALUE.message)
+                jsonPath("\$.message").value(ResponseCode.INVALID_INPUT_VALUE.message)
             )
             .andExpect(
                 jsonPath("\$.data[0].field").value("couponExpiredTime")
@@ -225,13 +218,10 @@ internal class CouponControllerTest : TestRestDocs() {
             .andDo(print())
             .andExpect(status().isBadRequest)
             .andExpect(
-                jsonPath("\$.success").value(false),
+                jsonPath("\$.code").value(ResponseCode.INVALID_INPUT_VALUE.code),
             )
             .andExpect(
-                jsonPath("\$.code").value(ErrorCode.INVALID_INPUT_VALUE.code),
-            )
-            .andExpect(
-                jsonPath("\$.message").value(ErrorCode.INVALID_INPUT_VALUE.message)
+                jsonPath("\$.message").value(ResponseCode.INVALID_INPUT_VALUE.message)
             )
             .andExpect(
                 jsonPath("\$.data[0].field").value("bburigiTime")
