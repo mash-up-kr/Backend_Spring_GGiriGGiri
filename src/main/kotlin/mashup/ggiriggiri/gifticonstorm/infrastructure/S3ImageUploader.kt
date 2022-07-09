@@ -1,15 +1,11 @@
 package mashup.ggiriggiri.gifticonstorm.infrastructure
 
 import com.amazonaws.services.s3.AmazonS3Client
-import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
 import java.time.LocalDateTime
-import java.util.*
 
 @Component
 class S3ImageUploader(
@@ -25,7 +21,7 @@ class S3ImageUploader(
         return upload(file, generateKey(file))
     }
 
-    private fun upload(file: MultipartFile, key: String) {
+    private fun upload(file: MultipartFile, key: String): String {
         amazonS3Client.putObject(bucket, key, file.inputStream, getObjectMetadata(file.inputStream.available().toLong()))
         log.info("image uploaded path: $bucket/$key")
         return amazonS3Client.getUrl(bucket, key).toString()
