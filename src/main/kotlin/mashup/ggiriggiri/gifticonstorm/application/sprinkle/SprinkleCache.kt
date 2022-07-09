@@ -17,11 +17,11 @@ class SprinkleCache(
     private val eventPublisher: ApplicationEventPublisher,
     redissonClient: RedissonClient
 ) {
-    private val sprinkleCache = redissonClient.getMapCache<String, String>("sprinkle")
-
     companion object : Logger {
         const val SPRINKLE_KEY_IDENTIFIER = "sprinkle"
     }
+
+    private val sprinkleCache = redissonClient.getMapCache<String, String>("sprinkle")
 
     @PostConstruct
     fun init() {
