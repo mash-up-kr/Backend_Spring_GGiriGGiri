@@ -20,7 +20,7 @@ class CouponRepositoryCustomImpl(private val jpaQueryFactory: JPAQueryFactory) :
         val qMember = QMember.member
 
         return jpaQueryFactory.selectFrom(qCoupon)
-            .leftJoin(qCoupon.participants, qParticipant).fetchJoin()
+//            .leftJoin(qCoupon.participants, qParticipant).fetchJoin()
             .join(qParticipant.member, qMember).fetchJoin()
             .where(qCoupon.id.eq(couponId))
             .fetchOne()
