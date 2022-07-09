@@ -23,6 +23,6 @@ class SprinkleDrawHandler(
 
     private fun draw(couponId: Long) {
         val coupon = couponRepository.findByCouponId(couponId) ?: throw RuntimeException()
-        val winnerParticipant = coupon.participants.also { it.shuffle() }.first()
+//        val winnerParticipant = coupon.participants.also { it.shuffle() }.first()
     }
 }
