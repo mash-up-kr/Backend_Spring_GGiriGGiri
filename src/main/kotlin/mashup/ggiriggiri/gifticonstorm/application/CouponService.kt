@@ -5,10 +5,8 @@ import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.repository.CouponRepository
 import mashup.ggiriggiri.gifticonstorm.infrastructure.S3ImageUploader
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 
-@Transactional(readOnly = true)
 @Service
 class CouponService(
     private val s3ImageUploader: S3ImageUploader,
