@@ -1,13 +1,11 @@
-package mashup.ggiriggiri.gifticonstorm.domain.sprinkle
+package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain
 
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
 import mashup.ggiriggiri.gifticonstorm.domain.member.Member
+import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
 import java.time.LocalDateTime
-import javax.persistence.Entity
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToOne
+import javax.persistence.*
 
 @Entity
 class Sprinkle(
@@ -18,5 +16,7 @@ class Sprinkle(
     @JoinColumn(name = "coupon_id")
     val coupon: Coupon,
     val sprinkleAt: LocalDateTime,
-    var sprinkled: Boolean = false
+    var sprinkled: Boolean = false,
+    @OneToMany(mappedBy = "sprinkle")
+    val participants: MutableList<Participant> = mutableListOf()
 ) : BaseEntity()
