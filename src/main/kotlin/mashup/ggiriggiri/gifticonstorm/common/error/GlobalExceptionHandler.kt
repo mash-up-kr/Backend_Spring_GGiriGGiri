@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -36,5 +37,12 @@ class GlobalExceptionHandler {
     private fun handleException(e: Exception): BaseResponse<Unit> {
         log.error(e.message, e)
         return BaseResponse.error(ResponseCode.INTERNAL_SERVER_ERROR)
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private fun handMethodArgumentTypeMismatchException(e: MethodArgumentTypeMismatchException): BaseResponse<Unit> {
+        log.warn(e.message, e)
+        return BaseResponse.error(ResponseCode.INVALID_INPUT_VALUE)
     }
 }
