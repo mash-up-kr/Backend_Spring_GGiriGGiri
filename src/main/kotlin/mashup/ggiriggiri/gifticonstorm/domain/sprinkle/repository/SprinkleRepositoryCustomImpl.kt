@@ -2,6 +2,7 @@ package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository
 
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.QCoupon.coupon
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.QSprinkle.sprinkle
@@ -34,7 +35,7 @@ class SprinkleRepositoryCustomImpl(
             ).limit(limit).collect(Collectors.toList())
     }
 
-    override fun findAllByCategory(category: Category): List<SprinkleListVo> {
+    override fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<SprinkleListVo> {
         return jpaQueryFactory
             .select(QSprinkleListVo(
                 sprinkle.id,
@@ -48,9 +49,18 @@ class SprinkleRepositoryCustomImpl(
             .from(sprinkle)
             .join(sprinkle.coupon, coupon)
             .where(
-                sprinkle.sprinkled.isFalse, eqCategory(category)
+                gtSprinkleId(noOffsetRequest.id),
+                sprinkle.sprinkled.isFalse,
+                eqCategory(category)
             )
+            .orderBy(sprinkle.id.asc())
+            .limit(noOffsetRequest.limit)
             .fetch()
+    }
+
+    private fun gtSprinkleId(id: Long?): BooleanExpression? {
+        if (id == null) return null
+        return sprinkle.id.gt(id)
     }
 
     private fun eqCategory(category: Category): BooleanExpression? {

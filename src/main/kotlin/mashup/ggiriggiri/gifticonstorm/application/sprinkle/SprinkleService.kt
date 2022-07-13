@@ -1,5 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.application.sprinkle
 
+import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
@@ -16,14 +17,17 @@ class SprinkleService(
     private val sprinkleRepository: SprinkleRepository,
     private val participantRepository: ParticipantRepository
 ) {
-    fun getSprinkles(orderBy: OrderBy?, category: Category?): List<GetSprinkleResDto> {
+    fun getSprinkles(orderBy: OrderBy?, category: Category?, noOffsetRequest: NoOffsetRequest): List<GetSprinkleResDto> {
         if (orderBy == null || category == null) {
             throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         }
-        val sprinkleListVos = if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category) else findAllByCategory(category)
+        val sprinkleListVos =
+            if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category)
+            else findAllByCategory(category, noOffsetRequest)
         val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(1) //TODO: 로그인 기능 추가 후 해당 사용자 id 전달
         return sprinkleListVos.map {
             GetSprinkleResDto(
+                sprinkleId = it.sprinkleId,
                 brandName = it.brandName,
                 merchandiseName = it.merchandiseName,
                 category = it.category,
@@ -35,8 +39,8 @@ class SprinkleService(
         }
     }
 
-    private fun findAllByCategory(category: Category): List<SprinkleListVo> {
-        return sprinkleRepository.findAllByCategory(category)
+    private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<SprinkleListVo> {
+        return sprinkleRepository.findAllByCategory(category, noOffsetRequest)
     }
 
     private fun findAllByDeadLine(category: Category): List<SprinkleListVo> {
