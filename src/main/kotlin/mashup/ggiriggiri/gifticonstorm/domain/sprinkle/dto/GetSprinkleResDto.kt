@@ -3,6 +3,7 @@ package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 
 data class GetSprinkleResDto(
+    val sprinkleId: Long,
     val brandName: String,
     val merchandiseName: String,
     val category: Category,
