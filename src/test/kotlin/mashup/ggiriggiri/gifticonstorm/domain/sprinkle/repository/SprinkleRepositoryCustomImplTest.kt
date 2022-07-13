@@ -1,5 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository
 
+import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.config.QuerydslTestConfig
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
@@ -10,7 +11,6 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -124,28 +124,40 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
     }
 
     @Test
-    fun `findAllByCategory - 전체 조회`() {
+    fun `findAllByCategory - 전체 조회, NoOffset 첫 번째 페이지`() {
+        //given
+        val noOffsetRequest = NoOffsetRequest.of(id = null, limit = 2)
         //when
-        val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.ALL)
+        val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.ALL, noOffsetRequest)
         //then
-        assertEquals(sprinkleListVos.size, 4)
-        assertEquals(sprinkleListVos[0].sprinkleId, sprinkleList[0].id)
-        assertEquals(sprinkleListVos[0].participants, 2)
-        assertEquals(sprinkleListVos[1].sprinkleId, sprinkleList[1].id)
-        assertEquals(sprinkleListVos[1].participants, 1)
-        assertEquals(sprinkleListVos[2].sprinkleId, sprinkleList[2].id)
-        assertEquals(sprinkleListVos[2].participants, 1)
-        assertEquals(sprinkleListVos[3].sprinkleId, sprinkleList[3].id)
-        assertEquals(sprinkleListVos[3].participants, 0)
+        assertThat(sprinkleListVos).hasSize(2)
+        assertThat(sprinkleListVos[0].sprinkleId).isEqualTo(sprinkleList[0].id)
+        assertThat(sprinkleListVos[0].participants).isEqualTo(2)
+        assertThat(sprinkleListVos[1].sprinkleId).isEqualTo(sprinkleList[1].id)
+        assertThat(sprinkleListVos[1].participants).isEqualTo(1)
+    }
+
+    @Test
+    fun `findAllByCategory - 전체 조회, NoOffset 두 번째 페이지`() {
+        //given
+        val noOffsetRequest = NoOffsetRequest.of(id = sprinkleList[1].id, limit = 2)
+        //when
+        val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.ALL, noOffsetRequest)
+        //then
+        assertThat(sprinkleListVos).hasSize(2)
+        assertThat(sprinkleListVos[0].sprinkleId).isEqualTo(sprinkleList[2].id)
+        assertThat(sprinkleListVos[0].participants).isEqualTo(1)
+        assertThat(sprinkleListVos[1].sprinkleId).isEqualTo(sprinkleList[3].id)
+        assertThat(sprinkleListVos[1].participants).isEqualTo(0)
     }
 
     @Test
     fun `findAllByCategory - 특정 카테고리 조회`() {
         //when
-        val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.CAFE)
+        val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.CAFE, NoOffsetRequest.of())
         //then
-        assertEquals(sprinkleListVos.size, 1)
-        assertEquals(sprinkleListVos[0].sprinkleId, sprinkleList[0].id)
-        assertEquals(sprinkleListVos[0].participants, 2)
+        assertThat(sprinkleListVos).hasSize(1)
+        assertThat(sprinkleListVos[0].sprinkleId).isEqualTo(sprinkleList[0].id)
+        assertThat(sprinkleListVos[0].participants).isEqualTo(2)
     }
 }

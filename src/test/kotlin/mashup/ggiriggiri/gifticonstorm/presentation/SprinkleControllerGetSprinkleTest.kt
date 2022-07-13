@@ -1,6 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
 import mashup.ggiriggiri.gifticonstorm.application.sprinkle.SprinkleService
+import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
@@ -36,6 +37,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         requestParams.add("category", category.toString())
 
         val resultDto = GetSprinkleResDto(
+            sprinkleId = 1,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             category = Category.CAFE,
@@ -45,7 +47,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category)).thenReturn(resultData)
+        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of())).thenReturn(resultData)
 
         //when, then
         mockMvc.perform(
@@ -73,12 +75,16 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //given
         val orderBy = OrderBy.CREATED_AT
         val category = Category.ALL
+        val noOffsetRequest = NoOffsetRequest.of()
 
         val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
         requestParams.add("orderBy", orderBy.toString())
         requestParams.add("category", category.toString())
+        requestParams.add("id", noOffsetRequest.id?.toString())
+        requestParams.add("limit", noOffsetRequest.limit.toString())
 
         val resultDto = GetSprinkleResDto(
+            sprinkleId = 1,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             category = Category.CAFE,
@@ -88,7 +94,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category)).thenReturn(resultData)
+        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, noOffsetRequest)).thenReturn(resultData)
 
         //when, then
         mockMvc.perform(
@@ -116,12 +122,16 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //given
         val orderBy = OrderBy.CREATED_AT
         val category = Category.CAFE
+        val noOffsetRequest = NoOffsetRequest.of()
 
         val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
         requestParams.add("orderBy", orderBy.toString())
         requestParams.add("category", category.toString())
+        requestParams.add("id", noOffsetRequest.id?.toString())
+        requestParams.add("limit", noOffsetRequest.limit.toString())
 
         val resultDto = GetSprinkleResDto(
+            sprinkleId = 1,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             category = Category.CAFE,
@@ -131,7 +141,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category)).thenReturn(resultData)
+        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, noOffsetRequest)).thenReturn(resultData)
 
         //when, then
         mockMvc.perform(
@@ -160,7 +170,6 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
         requestParams.add("orderBy", "OTHER")
         requestParams.add("category", Category.CAFE.toString())
-
         //when, then
         mockMvc.perform(
             get("/api/v1/sprinkles")
@@ -207,7 +216,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         requestParams.add("orderBy", orderBy.toString())
         requestParams.add("category", category.toString())
 
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category)).thenThrow(BaseException(ResponseCode.INVALID_INPUT_VALUE))
+        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of())).thenThrow(BaseException(ResponseCode.INVALID_INPUT_VALUE))
         //when, then
         mockMvc.perform(
             get("/api/v1/sprinkles")

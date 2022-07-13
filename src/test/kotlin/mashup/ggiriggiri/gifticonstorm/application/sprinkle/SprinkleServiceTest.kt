@@ -1,5 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.application.sprinkle
 
+import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
@@ -60,12 +61,14 @@ internal class SprinkleServiceTest {
         Mockito.`when`(participantRepository.findAllSprinkleIdByMemberId(1)).thenReturn(sprinkleIds)
 
         //when
-        val resDtos = sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.ALL)
+        val resDtos = sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.ALL, NoOffsetRequest.of())
 
         //then
         assertThat(resDtos.size).isEqualTo(2)
+        assertThat(resDtos[0].sprinkleId).isEqualTo(sprinkleListVos[0].sprinkleId)
         assertThat(resDtos[0].brandName).isEqualTo(sprinkleListVos[0].brandName)
         assertThat(resDtos[0].participateIn).isEqualTo(true)
+        assertThat(resDtos[1].sprinkleId).isEqualTo(sprinkleListVos[1].sprinkleId)
         assertThat(resDtos[1].brandName).isEqualTo(sprinkleListVos[1].brandName)
         assertThat(resDtos[1].participateIn).isEqualTo(false)
     }
@@ -74,6 +77,7 @@ internal class SprinkleServiceTest {
     fun `뿌리기 전체 조회 성공`() {
         //given
         val category = Category.ALL
+        val noOffsetRequest = NoOffsetRequest.of()
 
         val sprinkleListVos = listOf(
             SprinkleListVo(
@@ -95,18 +99,20 @@ internal class SprinkleServiceTest {
                 sprinkleAt = LocalDateTime.now().plusMinutes(9)
             )
         )
-        Mockito.`when`(sprinkleRepository.findAllByCategory(category)).thenReturn(sprinkleListVos)
+        Mockito.`when`(sprinkleRepository.findAllByCategory(category, noOffsetRequest)).thenReturn(sprinkleListVos)
 
         val sprinkleIds = listOf(1L)
         Mockito.`when`(participantRepository.findAllSprinkleIdByMemberId(1)).thenReturn(sprinkleIds)
 
         //when
-        val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category)
+        val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
 
         //then
         assertThat(resDtos.size).isEqualTo(2)
+        assertThat(resDtos[0].sprinkleId).isEqualTo(sprinkleListVos[0].sprinkleId)
         assertThat(resDtos[0].brandName).isEqualTo(sprinkleListVos[0].brandName)
         assertThat(resDtos[0].participateIn).isEqualTo(true)
+        assertThat(resDtos[1].sprinkleId).isEqualTo(sprinkleListVos[1].sprinkleId)
         assertThat(resDtos[1].brandName).isEqualTo(sprinkleListVos[1].brandName)
         assertThat(resDtos[1].participateIn).isEqualTo(false)
     }
@@ -115,6 +121,7 @@ internal class SprinkleServiceTest {
     fun `뿌리기 카테고리별 조회 성공`() {
         //given
         val category = Category.CAFE
+        val noOffsetRequest = NoOffsetRequest.of()
 
         val sprinkleListVos = listOf(
             SprinkleListVo(
@@ -127,16 +134,17 @@ internal class SprinkleServiceTest {
                 sprinkleAt = LocalDateTime.now().plusMinutes(10)
             )
         )
-        Mockito.`when`(sprinkleRepository.findAllByCategory(category)).thenReturn(sprinkleListVos)
+        Mockito.`when`(sprinkleRepository.findAllByCategory(category, noOffsetRequest)).thenReturn(sprinkleListVos)
 
         val sprinkleIds = listOf(1L)
         Mockito.`when`(participantRepository.findAllSprinkleIdByMemberId(1)).thenReturn(sprinkleIds)
 
         //when
-        val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category)
+        val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
 
         //then
         assertThat(resDtos.size).isEqualTo(1)
+        assertThat(resDtos[0].sprinkleId).isEqualTo(sprinkleListVos[0].sprinkleId)
         assertThat(resDtos[0].brandName).isEqualTo(sprinkleListVos[0].brandName)
         assertThat(resDtos[0].participateIn).isEqualTo(true)
     }
@@ -144,14 +152,14 @@ internal class SprinkleServiceTest {
     @Test
     fun `뿌리기 조회 실패 - orderBy=null, category=null 일 때`() {
         assertThrows<BaseException> {
-            sprinkleService.getSprinkles(null, null)
+            sprinkleService.getSprinkles(null, null, NoOffsetRequest.of())
         }
     }
 
     @Test
     fun `뿌리기 조회 실패 - orderBy=DEADLINE, category!=ALL 일 때`() {
         assertThrows<BaseException> {
-            sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.CAFE)
+            sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.CAFE, NoOffsetRequest.of())
         }
     }
 
