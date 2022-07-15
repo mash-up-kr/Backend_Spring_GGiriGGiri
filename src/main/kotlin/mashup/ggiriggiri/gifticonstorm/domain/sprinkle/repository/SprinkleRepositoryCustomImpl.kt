@@ -59,8 +59,7 @@ class SprinkleRepositoryCustomImpl(
     }
 
     private fun gtSprinkleId(id: Long?): BooleanExpression? {
-        if (id == null) return null
-        return sprinkle.id.gt(id)
+        return id?.let { sprinkle.id.gt(it) }
     }
 
     private fun eqCategory(category: Category): BooleanExpression? {
