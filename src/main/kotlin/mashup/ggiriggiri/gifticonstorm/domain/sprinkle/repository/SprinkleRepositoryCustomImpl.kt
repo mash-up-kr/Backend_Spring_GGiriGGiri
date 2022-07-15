@@ -67,6 +67,7 @@ class SprinkleRepositoryCustomImpl(
     }
 
     private fun withinTime(leftMinute: Long): BooleanExpression {
-        return sprinkle.sprinkleAt.between(LocalDateTime.now(), LocalDateTime.now().plusMinutes(leftMinute))
+        val now = LocalDateTime.now()
+        return sprinkle.sprinkleAt.between(now, now.plusMinutes(leftMinute))
     }
 }
