@@ -25,18 +25,7 @@ class SprinkleService(
             if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category)
             else findAllByCategory(category, noOffsetRequest)
         val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(1) //TODO: 로그인 기능 추가 후 해당 사용자 id 전달
-        return sprinkleListVos.map {
-            GetSprinkleResDto(
-                sprinkleId = it.sprinkleId,
-                brandName = it.brandName,
-                merchandiseName = it.merchandiseName,
-                category = it.category,
-                expiredAt = it.expiredAt.toString(),
-                participants = it.participants,
-                sprinkleAt = it.sprinkleAt.toString(),
-                participateIn = it.sprinkleId in sprinkleIds
-            )
-        }
+        return sprinkleListVos.map { GetSprinkleResDto.toDto(it, sprinkleIds) }
     }
 
     private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<SprinkleListVo> {
