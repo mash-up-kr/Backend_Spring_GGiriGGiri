@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: local, db, aws
+    include: db, aws
 
 server:
   error:
