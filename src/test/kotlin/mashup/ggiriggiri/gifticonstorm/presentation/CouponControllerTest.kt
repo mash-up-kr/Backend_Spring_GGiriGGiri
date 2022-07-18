@@ -1,5 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.justRun
 import mashup.ggiriggiri.gifticonstorm.application.CouponService
 import mashup.ggiriggiri.gifticonstorm.common.DEFAULT_OBJECT_MAPPER
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
@@ -8,7 +10,6 @@ import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
@@ -27,7 +28,7 @@ import java.time.LocalDate
 @WebMvcTest(CouponController::class)
 internal class CouponControllerTest : TestRestDocs() {
 
-    @MockBean
+    @MockkBean
     private lateinit var couponService: CouponService
 
     @Test
@@ -54,6 +55,8 @@ internal class CouponControllerTest : TestRestDocs() {
             MediaType.APPLICATION_JSON_VALUE,
             DEFAULT_OBJECT_MAPPER.writeValueAsString(requestDto).toByteArray()
         )
+
+        justRun { couponService.saveCoupon(image, requestDto) }
 
         //when, then
         mockMvc.perform(

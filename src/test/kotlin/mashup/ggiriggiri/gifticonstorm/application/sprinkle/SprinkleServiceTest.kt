@@ -1,5 +1,10 @@
 package mashup.ggiriggiri.gifticonstorm.application.sprinkle
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
@@ -7,35 +12,90 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleListVo
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.junit.jupiter.MockitoExtension
 import java.time.LocalDateTime
 
-@ExtendWith(MockitoExtension::class)
-internal class SprinkleServiceTest {
+internal class SprinkleServiceTest : FunSpec({
 
-    @Mock
-    private lateinit var sprinkleRepository: SprinkleRepository
+    val sprinkleRepository = mockk<SprinkleRepository>()
+    val participantRepository = mockk<ParticipantRepository>()
+    val sprinkleCache = mockk<SprinkleCache>()
+    val sprinkleService = SprinkleService(sprinkleCache, sprinkleRepository, participantRepository)
 
-    @Mock
-    private lateinit var participantRepository: ParticipantRepository
+    context("뿌리기 마감임박 조회") {
+        test("성공") {
+            //given
+            every { sprinkleRepository.findAllByDeadLine(10, 4) } returns sprinkleListVos
+            every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
 
-    @Mock
-    private lateinit var sprinkleCache: SprinkleCache
+            //when
+            val resDtos = sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.ALL, NoOffsetRequest.of())
 
-    @InjectMocks
-    private lateinit var sprinkleService: SprinkleService
+            //then
+            resDtos.size shouldBe 2
+            resDtos[0].sprinkleId shouldBe 1
+            resDtos[0].brandName shouldBe "스타벅스"
+            resDtos[0].participateIn shouldBe true
+            resDtos[1].sprinkleId shouldBe 2
+            resDtos[1].brandName shouldBe "베스킨라빈스"
+            resDtos[1].participateIn shouldBe false
+        }
 
-    @Test
-    fun `뿌리기 마감임박 조회 성공`() {
-        //given
-        val sprinkleListVos = listOf(
+        test("실패 - orderBy=DEADLINE, category!=ALL 일 때") {
+            shouldThrow<BaseException> {
+                sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.CAFE, NoOffsetRequest.of())
+            }
+        }
+    }
+
+    context("뿌리기 카테고리별 조회") {
+        test("전체 조회 성공") {
+            //given
+            val category = Category.ALL
+            val noOffsetRequest = NoOffsetRequest.of()
+
+            every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns sprinkleListVos
+            every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
+
+            //when
+            val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
+
+            //then
+            resDtos.size shouldBe 2
+            resDtos[0].sprinkleId shouldBe 1
+            resDtos[0].brandName shouldBe "스타벅스"
+            resDtos[0].participateIn shouldBe true
+            resDtos[1].sprinkleId shouldBe 2
+            resDtos[1].brandName shouldBe "베스킨라빈스"
+            resDtos[1].participateIn shouldBe false
+        }
+
+        test("특정 카테고리 조회 성공") {
+            //given
+            val category = Category.CAFE
+            val noOffsetRequest = NoOffsetRequest.of()
+
+            every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns listOf(sprinkleListVos[0])
+            every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
+
+            //when
+            val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
+
+            //then
+            resDtos.size shouldBe 1
+            resDtos[0].sprinkleId shouldBe 1
+            resDtos[0].brandName shouldBe "스타벅스"
+            resDtos[0].participateIn shouldBe true
+        }
+
+        test("실패 - orderBy=null, category=null 일 때") {
+            shouldThrow<BaseException> {
+                sprinkleService.getSprinkles(null, null, NoOffsetRequest.of())
+            }
+        }
+    }
+}) {
+    companion object {
+        private val sprinkleListVos = listOf(
             SprinkleListVo(
                 sprinkleId = 1,
                 brandName = "스타벅스",
@@ -55,112 +115,5 @@ internal class SprinkleServiceTest {
                 sprinkleAt = LocalDateTime.now().plusMinutes(9)
             )
         )
-        Mockito.`when`(sprinkleRepository.findAllByDeadLine(10, 4)).thenReturn(sprinkleListVos)
-
-        val sprinkleIds = listOf(1L)
-        Mockito.`when`(participantRepository.findAllSprinkleIdByMemberId(1)).thenReturn(sprinkleIds)
-
-        //when
-        val resDtos = sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.ALL, NoOffsetRequest.of())
-
-        //then
-        assertThat(resDtos.size).isEqualTo(2)
-        assertThat(resDtos[0].sprinkleId).isEqualTo(sprinkleListVos[0].sprinkleId)
-        assertThat(resDtos[0].brandName).isEqualTo(sprinkleListVos[0].brandName)
-        assertThat(resDtos[0].participateIn).isEqualTo(true)
-        assertThat(resDtos[1].sprinkleId).isEqualTo(sprinkleListVos[1].sprinkleId)
-        assertThat(resDtos[1].brandName).isEqualTo(sprinkleListVos[1].brandName)
-        assertThat(resDtos[1].participateIn).isEqualTo(false)
     }
-
-    @Test
-    fun `뿌리기 전체 조회 성공`() {
-        //given
-        val category = Category.ALL
-        val noOffsetRequest = NoOffsetRequest.of()
-
-        val sprinkleListVos = listOf(
-            SprinkleListVo(
-                sprinkleId = 1,
-                brandName = "스타벅스",
-                merchandiseName = "아이스 아메리카노",
-                category = Category.CAFE,
-                expiredAt = LocalDateTime.now().plusDays(1),
-                participants = 3,
-                sprinkleAt = LocalDateTime.now().plusMinutes(10)
-            ),
-            SprinkleListVo(
-                sprinkleId = 2,
-                brandName = "베스킨라빈스",
-                merchandiseName = "파인트",
-                category = Category.ICECREAM,
-                expiredAt = LocalDateTime.now().plusDays(1),
-                participants = 2,
-                sprinkleAt = LocalDateTime.now().plusMinutes(9)
-            )
-        )
-        Mockito.`when`(sprinkleRepository.findAllByCategory(category, noOffsetRequest)).thenReturn(sprinkleListVos)
-
-        val sprinkleIds = listOf(1L)
-        Mockito.`when`(participantRepository.findAllSprinkleIdByMemberId(1)).thenReturn(sprinkleIds)
-
-        //when
-        val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
-
-        //then
-        assertThat(resDtos.size).isEqualTo(2)
-        assertThat(resDtos[0].sprinkleId).isEqualTo(sprinkleListVos[0].sprinkleId)
-        assertThat(resDtos[0].brandName).isEqualTo(sprinkleListVos[0].brandName)
-        assertThat(resDtos[0].participateIn).isEqualTo(true)
-        assertThat(resDtos[1].sprinkleId).isEqualTo(sprinkleListVos[1].sprinkleId)
-        assertThat(resDtos[1].brandName).isEqualTo(sprinkleListVos[1].brandName)
-        assertThat(resDtos[1].participateIn).isEqualTo(false)
-    }
-
-    @Test
-    fun `뿌리기 카테고리별 조회 성공`() {
-        //given
-        val category = Category.CAFE
-        val noOffsetRequest = NoOffsetRequest.of()
-
-        val sprinkleListVos = listOf(
-            SprinkleListVo(
-                sprinkleId = 1,
-                brandName = "스타벅스",
-                merchandiseName = "아이스 아메리카노",
-                category = Category.CAFE,
-                expiredAt = LocalDateTime.now().plusDays(1),
-                participants = 3,
-                sprinkleAt = LocalDateTime.now().plusMinutes(10)
-            )
-        )
-        Mockito.`when`(sprinkleRepository.findAllByCategory(category, noOffsetRequest)).thenReturn(sprinkleListVos)
-
-        val sprinkleIds = listOf(1L)
-        Mockito.`when`(participantRepository.findAllSprinkleIdByMemberId(1)).thenReturn(sprinkleIds)
-
-        //when
-        val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
-
-        //then
-        assertThat(resDtos.size).isEqualTo(1)
-        assertThat(resDtos[0].sprinkleId).isEqualTo(sprinkleListVos[0].sprinkleId)
-        assertThat(resDtos[0].brandName).isEqualTo(sprinkleListVos[0].brandName)
-        assertThat(resDtos[0].participateIn).isEqualTo(true)
-    }
-
-    @Test
-    fun `뿌리기 조회 실패 - orderBy=null, category=null 일 때`() {
-        assertThrows<BaseException> {
-            sprinkleService.getSprinkles(null, null, NoOffsetRequest.of())
-        }
-    }
-
-    @Test
-    fun `뿌리기 조회 실패 - orderBy=DEADLINE, category!=ALL 일 때`() {
-        assertThrows<BaseException> {
-            sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.CAFE, NoOffsetRequest.of())
-        }
-    }
-
 }

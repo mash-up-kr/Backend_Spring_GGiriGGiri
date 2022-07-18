@@ -1,5 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import mashup.ggiriggiri.gifticonstorm.application.sprinkle.SprinkleService
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
@@ -9,10 +11,13 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.restdocs.headers.HeaderDocumentation
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
+import org.springframework.restdocs.payload.JsonFieldType
+import org.springframework.restdocs.payload.PayloadDocumentation
+import org.springframework.restdocs.request.RequestDocumentation
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.util.LinkedMultiValueMap
@@ -23,7 +28,7 @@ import java.time.LocalDateTime
 @WebMvcTest(SprinkleController::class)
 internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
 
-    @MockBean
+    @MockkBean
     private lateinit var sprinkleService: SprinkleService
 
     @Test
@@ -47,14 +52,13 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of())).thenReturn(resultData)
+        every { sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of()) } returns resultData
 
         //when, then
         mockMvc.perform(
-            get("/api/v1/sprinkles")
+            MockMvcRequestBuilders.get("/api/v1/sprinkles")
                 .queryParams(requestParams)
-        )
-            .andDo(MockMvcResultHandlers.print())
+        ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(
                 MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.OK.code)
@@ -66,7 +70,30 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
                 MockMvcResultMatchers.jsonPath("\$.data.size()").value(1)
             )
             .andExpect(
-                MockMvcResultMatchers.jsonPath("\$.data[0].brandName").value(resultDto.brandName)
+                MockMvcResultMatchers.jsonPath("\$.data[0].brandName").value("스타벅스")
+            )
+            .andDo(
+                MockMvcRestDocumentation.document(
+                    "뿌리기조회/{methodName}",
+                    HeaderDocumentation.requestHeaders(),
+                    RequestDocumentation.requestParameters(
+                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류")
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
+                        PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkleId").type(JsonFieldType.NUMBER).description("뿌리기 id"),
+                        PayloadDocumentation.fieldWithPath("data[0].brandName").type(JsonFieldType.STRING).description("브랜드명"),
+                        PayloadDocumentation.fieldWithPath("data[0].merchandiseName").type(JsonFieldType.STRING).description("상품명"),
+                        PayloadDocumentation.fieldWithPath("data[0].category").type(JsonFieldType.STRING).description("카테고리"),
+                        PayloadDocumentation.fieldWithPath("data[0].expiredAt").type(JsonFieldType.STRING).description("유효기간"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkleAt").type(JsonFieldType.STRING).description("뿌리기 시간"),
+                        PayloadDocumentation.fieldWithPath("data[0].participants").type(JsonFieldType.NUMBER).description("응모자 수"),
+                        PayloadDocumentation.fieldWithPath("data[0].participateIn").type(JsonFieldType.BOOLEAN).description("해당 사용자 응모 여부")
+                    ),
+                    HeaderDocumentation.responseHeaders()
+                )
             )
     }
 
@@ -94,14 +121,13 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, noOffsetRequest)).thenReturn(resultData)
+        every { sprinkleService.getSprinkles(orderBy, category, noOffsetRequest) } returns resultData
 
         //when, then
         mockMvc.perform(
-            get("/api/v1/sprinkles")
+            MockMvcRequestBuilders.get("/api/v1/sprinkles")
                 .queryParams(requestParams)
-        )
-            .andDo(MockMvcResultHandlers.print())
+        ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(
                 MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.OK.code)
@@ -113,7 +139,32 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
                 MockMvcResultMatchers.jsonPath("\$.data.size()").value(1)
             )
             .andExpect(
-                MockMvcResultMatchers.jsonPath("\$.data[0].brandName").value(resultDto.brandName)
+                MockMvcResultMatchers.jsonPath("\$.data[0].brandName").value("스타벅스")
+            )
+            .andDo(
+                MockMvcRestDocumentation.document(
+                    "뿌리기조회/{methodName}",
+                    HeaderDocumentation.requestHeaders(),
+                    RequestDocumentation.requestParameters(
+                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류"),
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id"),
+                        RequestDocumentation.parameterWithName("limit").description("조회 개수")
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
+                        PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkleId").type(JsonFieldType.NUMBER).description("뿌리기 id"),
+                        PayloadDocumentation.fieldWithPath("data[0].brandName").type(JsonFieldType.STRING).description("브랜드명"),
+                        PayloadDocumentation.fieldWithPath("data[0].merchandiseName").type(JsonFieldType.STRING).description("상품명"),
+                        PayloadDocumentation.fieldWithPath("data[0].category").type(JsonFieldType.STRING).description("카테고리"),
+                        PayloadDocumentation.fieldWithPath("data[0].expiredAt").type(JsonFieldType.STRING).description("유효기간"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkleAt").type(JsonFieldType.STRING).description("뿌리기 시간"),
+                        PayloadDocumentation.fieldWithPath("data[0].participants").type(JsonFieldType.NUMBER).description("응모자 수"),
+                        PayloadDocumentation.fieldWithPath("data[0].participateIn").type(JsonFieldType.BOOLEAN).description("해당 사용자 응모 여부")
+                    ),
+                    HeaderDocumentation.responseHeaders()
+                )
             )
     }
 
@@ -124,7 +175,9 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         val category = Category.CAFE
         val noOffsetRequest = NoOffsetRequest.of()
 
-        val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
+        val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap(
+
+        )
         requestParams.add("orderBy", orderBy.toString())
         requestParams.add("category", category.toString())
         requestParams.add("id", noOffsetRequest.id?.toString())
@@ -141,14 +194,13 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, noOffsetRequest)).thenReturn(resultData)
+        every { sprinkleService.getSprinkles(orderBy, category, noOffsetRequest) } returns resultData
 
         //when, then
         mockMvc.perform(
-            get("/api/v1/sprinkles")
+            MockMvcRequestBuilders.get("/api/v1/sprinkles")
                 .queryParams(requestParams)
-        )
-            .andDo(MockMvcResultHandlers.print())
+        ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(
                 MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.OK.code)
@@ -160,7 +212,32 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
                 MockMvcResultMatchers.jsonPath("\$.data.size()").value(1)
             )
             .andExpect(
-                MockMvcResultMatchers.jsonPath("\$.data[0].brandName").value(resultDto.brandName)
+                MockMvcResultMatchers.jsonPath("\$.data[0].brandName").value("스타벅스")
+            )
+            .andDo(
+                MockMvcRestDocumentation.document(
+                    "뿌리기조회/{methodName}",
+                    HeaderDocumentation.requestHeaders(),
+                    RequestDocumentation.requestParameters(
+                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류"),
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id"),
+                        RequestDocumentation.parameterWithName("limit").description("조회 개수")
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
+                        PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkleId").type(JsonFieldType.NUMBER).description("뿌리기 id"),
+                        PayloadDocumentation.fieldWithPath("data[0].brandName").type(JsonFieldType.STRING).description("브랜드명"),
+                        PayloadDocumentation.fieldWithPath("data[0].merchandiseName").type(JsonFieldType.STRING).description("상품명"),
+                        PayloadDocumentation.fieldWithPath("data[0].category").type(JsonFieldType.STRING).description("카테고리"),
+                        PayloadDocumentation.fieldWithPath("data[0].expiredAt").type(JsonFieldType.STRING).description("유효기간"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkleAt").type(JsonFieldType.STRING).description("뿌리기 시간"),
+                        PayloadDocumentation.fieldWithPath("data[0].participants").type(JsonFieldType.NUMBER).description("응모자 수"),
+                        PayloadDocumentation.fieldWithPath("data[0].participateIn").type(JsonFieldType.BOOLEAN).description("해당 사용자 응모 여부")
+                    ),
+                    HeaderDocumentation.responseHeaders()
+                )
             )
     }
 
@@ -172,10 +249,9 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         requestParams.add("category", Category.CAFE.toString())
         //when, then
         mockMvc.perform(
-            get("/api/v1/sprinkles")
+            MockMvcRequestBuilders.get("/api/v1/sprinkles")
                 .queryParams(requestParams)
-        )
-            .andDo(MockMvcResultHandlers.print())
+        ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
             .andExpect(
                 MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.INVALID_INPUT_VALUE.code)
@@ -193,10 +269,9 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         requestParams.add("category", "OTHER")
         //when, then
         mockMvc.perform(
-            get("/api/v1/sprinkles")
+            MockMvcRequestBuilders.get("/api/v1/sprinkles")
                 .queryParams(requestParams)
-        )
-            .andDo(MockMvcResultHandlers.print())
+        ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
             .andExpect(
                 MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.INVALID_INPUT_VALUE.code)
@@ -216,13 +291,12 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         requestParams.add("orderBy", orderBy.toString())
         requestParams.add("category", category.toString())
 
-        Mockito.`when`(sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of())).thenThrow(BaseException(ResponseCode.INVALID_INPUT_VALUE))
+        every { sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of()) } throws (BaseException(ResponseCode.INVALID_INPUT_VALUE))
         //when, then
         mockMvc.perform(
-            get("/api/v1/sprinkles")
+            MockMvcRequestBuilders.get("/api/v1/sprinkles")
                 .queryParams(requestParams)
-        )
-            .andDo(MockMvcResultHandlers.print())
+        ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
             .andExpect(
                 MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.INVALID_INPUT_VALUE.code)
