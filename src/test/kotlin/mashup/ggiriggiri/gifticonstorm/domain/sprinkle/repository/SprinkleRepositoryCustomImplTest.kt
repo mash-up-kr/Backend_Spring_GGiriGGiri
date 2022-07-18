@@ -11,7 +11,6 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
-import javax.persistence.EntityManager
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -28,8 +26,7 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
     private val sprinkleRepository: SprinkleRepository,
     private val couponRepository: CouponRepository,
     private val memberRepository: MemberRepository,
-    private val participantRepository: ParticipantRepository,
-    private val entityManager: EntityManager
+    private val participantRepository: ParticipantRepository
 ) {
 
     private lateinit var memberList: List<Member>
@@ -112,23 +109,14 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
         participantRepository.saveAll(participantList)
     }
 
-    @AfterEach
-    fun tearDown() {
-        entityManager
-            .createNativeQuery("ALTER TABLE sprinkle ALTER COLUMN `id` RESTART WITH 1")
-            .executeUpdate()
-    }
-
     @Test
     fun `findAllByDeadLine - 뿌리기 남은 시간 10분 이내 & 참여자 수 내림차순 중 상위 2개 조회`() {
         //when
         val sprinkleListVos = sprinkleRepository.findAllByDeadLine(10, 2)
         //then
         assertThat(sprinkleListVos.size).isEqualTo(2)
-        assertThat(sprinkleListVos[0].sprinkleId).isEqualTo(1)
         assertThat(sprinkleListVos[0].brandName).isEqualTo("스타벅스")
         assertThat(sprinkleListVos[0].participants).isEqualTo(2)
-        assertThat(sprinkleListVos[1].sprinkleId).isEqualTo(3)
         assertThat(sprinkleListVos[1].brandName).isEqualTo("베스킨라빈스")
         assertThat(sprinkleListVos[1].participants).isEqualTo(1)
     }
@@ -141,23 +129,23 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
         val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.ALL, noOffsetRequest)
         //then
         assertThat(sprinkleListVos).hasSize(2)
-        assertThat(sprinkleListVos[0].sprinkleId).isEqualTo(1)
+        assertThat(sprinkleListVos[0].brandName).isEqualTo("스타벅스")
         assertThat(sprinkleListVos[0].participants).isEqualTo(2)
-        assertThat(sprinkleListVos[1].sprinkleId).isEqualTo(2)
+        assertThat(sprinkleListVos[1].brandName).isEqualTo("BHC")
         assertThat(sprinkleListVos[1].participants).isEqualTo(1)
     }
 
     @Test
     fun `findAllByCategory - 전체 조회, NoOffset 두 번째 페이지`() {
         //given
-        val noOffsetRequest = NoOffsetRequest.of(id = 2, limit = 2)
+        val noOffsetRequest = NoOffsetRequest.of(id = sprinkleList[1].id, limit = 2)
         //when
         val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.ALL, noOffsetRequest)
         //then
         assertThat(sprinkleListVos).hasSize(2)
-        assertThat(sprinkleListVos[0].sprinkleId).isEqualTo(3)
+        assertThat(sprinkleListVos[0].brandName).isEqualTo("베스킨라빈스")
         assertThat(sprinkleListVos[0].participants).isEqualTo(1)
-        assertThat(sprinkleListVos[1].sprinkleId).isEqualTo(4)
+        assertThat(sprinkleListVos[1].brandName).isEqualTo("버거킹")
         assertThat(sprinkleListVos[1].participants).isEqualTo(0)
     }
 
@@ -167,7 +155,7 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
         val sprinkleListVos = sprinkleRepository.findAllByCategory(Category.CAFE, NoOffsetRequest.of())
         //then
         assertThat(sprinkleListVos).hasSize(1)
-        assertThat(sprinkleListVos[0].sprinkleId).isEqualTo(1)
+        assertThat(sprinkleListVos[0].brandName).isEqualTo("스타벅스")
         assertThat(sprinkleListVos[0].participants).isEqualTo(2)
     }
 }

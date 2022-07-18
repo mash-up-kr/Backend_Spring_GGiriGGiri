@@ -78,7 +78,7 @@ class ParticipantRepositoryCustomImplTest @Autowired constructor(
         val sprinkleIdList = participantRepository.findAllSprinkleIdByMemberId(memberList[1].id)
         //then
         assertThat(sprinkleIdList.size).isEqualTo(2)
-        assertThat(sprinkleIdList[0]).isEqualTo(1)
-        assertThat(sprinkleIdList[1]).isEqualTo(2)
+        assertThat(sprinkleIdList[0]).isEqualTo(sprinkleList[0].id)
+        assertThat(sprinkleIdList[1]).isEqualTo(sprinkleList[1].id)
     }
 }
