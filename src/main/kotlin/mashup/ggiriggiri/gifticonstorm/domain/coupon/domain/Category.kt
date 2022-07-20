@@ -1,9 +1,10 @@
 package mashup.ggiriggiri.gifticonstorm.domain.coupon.domain
 
 enum class Category(
-        private val description: String,
+    private val description: String,
 ) {
 
+    ALL("전체"),
     CAFE("음료/디저트"),
     DELIVERY("치킨/배달음식"),
     ICECREAM("아이스크림"),
