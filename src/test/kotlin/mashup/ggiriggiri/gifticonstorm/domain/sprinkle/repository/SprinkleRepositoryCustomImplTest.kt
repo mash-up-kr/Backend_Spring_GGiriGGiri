@@ -5,7 +5,7 @@ import mashup.ggiriggiri.gifticonstorm.config.QuerydslTestConfig
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.repository.CouponRepository
-import mashup.ggiriggiri.gifticonstorm.domain.member.Member
+import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository

@@ -19,7 +19,6 @@ class CouponController(
         @RequestPart(value = "image") image: MultipartFile,
         @RequestPart(value = "couponInfo") @Valid requestDto: CouponSaveRequestDto
     ): BaseResponse<Unit> {
-        couponService.saveCoupon(image, requestDto)
         return BaseResponse.ok()
     }
 }
