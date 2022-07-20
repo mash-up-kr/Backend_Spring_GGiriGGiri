@@ -2,7 +2,7 @@ package mashup.ggiriggiri.gifticonstorm.domain.coupon.domain
 
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
-import mashup.ggiriggiri.gifticonstorm.domain.member.Member
+import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
