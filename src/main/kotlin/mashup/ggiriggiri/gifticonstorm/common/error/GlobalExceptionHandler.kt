@@ -3,6 +3,7 @@ package mashup.ggiriggiri.gifticonstorm.common.error
 import mashup.ggiriggiri.gifticonstorm.common.dto.BaseResponse
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
+import mashup.ggiriggiri.gifticonstorm.common.error.exception.UnauthorizedException
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,6 +17,13 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 class GlobalExceptionHandler {
 
     companion object : Logger
+
+    @ExceptionHandler(UnauthorizedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    private fun handleUnauthorizedException(e: UnauthorizedException): BaseResponse<Unit> {
+        log.info(e.message, e)
+        return BaseResponse.error(ResponseCode.UNAUTHORIZED)
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
