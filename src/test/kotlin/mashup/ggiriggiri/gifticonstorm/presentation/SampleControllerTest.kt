@@ -1,6 +1,8 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
+import com.ninjasquad.springmockk.MockkBean
 import mashup.ggiriggiri.gifticonstorm.common.DEFAULT_OBJECT_MAPPER
+import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -16,6 +18,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest(SampleController::class)
 internal class SampleControllerTest : TestRestDocs() {
+
+    @MockkBean
+    private lateinit var memberRepository: MemberRepository
 
     @Test
     fun sample() {

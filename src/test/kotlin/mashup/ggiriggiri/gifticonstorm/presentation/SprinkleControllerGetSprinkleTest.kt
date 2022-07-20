@@ -7,6 +7,7 @@ import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
+import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
@@ -30,6 +31,9 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
 
     @MockkBean
     private lateinit var sprinkleService: SprinkleService
+
+    @MockkBean
+    private lateinit var memberRepository: MemberRepository
 
     @Test
     fun `뿌리기 마감임박 조회 성공`() {

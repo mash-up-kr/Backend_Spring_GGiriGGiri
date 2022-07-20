@@ -4,11 +4,7 @@ import mashup.ggiriggiri.gifticonstorm.common.error.exception.UnauthorizedExcept
 import mashup.ggiriggiri.gifticonstorm.config.annotation.UserInfo
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.AutoConfigureOrder
-import org.springframework.context.annotation.DependsOn
 import org.springframework.core.MethodParameter
-import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
@@ -16,7 +12,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 
 @Component
-@Order(5)
 class UserInfoResolver(private val memberRepository: MemberRepository) : HandlerMethodArgumentResolver {
     companion object {
         const val AUTHORIZATION_KEY_HEADER_NAME = "Authorization"
