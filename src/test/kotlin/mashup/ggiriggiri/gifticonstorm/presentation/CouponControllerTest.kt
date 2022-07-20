@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 
-@WebMvcTest(CouponController::class,)
+@WebMvcTest(CouponController::class)
 internal class CouponControllerTest : TestRestDocs() {
 
     @MockkBean
