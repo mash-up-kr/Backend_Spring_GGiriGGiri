@@ -1,4 +1,4 @@
-package mashup.ggiriggiri.gifticonstorm.domain.member
+package mashup.ggiriggiri.gifticonstorm.domain.member.domain
 
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
 import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant

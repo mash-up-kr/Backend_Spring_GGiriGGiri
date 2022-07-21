@@ -2,7 +2,7 @@ package mashup.ggiriggiri.gifticonstorm.domain.participant
 
 import mashup.ggiriggiri.gifticonstorm.application.push.DrawStatus
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
-import mashup.ggiriggiri.gifticonstorm.domain.member.Member
+import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import javax.persistence.*
 

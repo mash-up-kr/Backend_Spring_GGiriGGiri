@@ -7,6 +7,7 @@ import mashup.ggiriggiri.gifticonstorm.common.DEFAULT_OBJECT_MAPPER
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
+import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -30,6 +31,9 @@ internal class CouponControllerTest : TestRestDocs() {
 
     @MockkBean
     private lateinit var couponService: CouponService
+
+    @MockkBean
+    private lateinit var memberRepository: MemberRepository
 
     @Test
     fun `뿌리기 쿠폰 등록 성공`() {
