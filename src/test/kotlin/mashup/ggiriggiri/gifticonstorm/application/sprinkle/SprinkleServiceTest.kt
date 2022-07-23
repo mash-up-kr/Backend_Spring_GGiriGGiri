@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
+import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
@@ -25,10 +26,10 @@ internal class SprinkleServiceTest : FunSpec({
         test("성공") {
             //given
             every { sprinkleRepository.findAllByDeadLine(10, 4) } returns sprinkleListVos
-            every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
+            every { participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id) } returns listOf(1L)
 
             //when
-            val resDtos = sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.ALL, NoOffsetRequest.of())
+            val resDtos = sprinkleService.getSprinkles(userInfoDto, OrderBy.DEADLINE, Category.ALL, NoOffsetRequest.of())
 
             //then
             resDtos.size shouldBe 2
@@ -42,7 +43,7 @@ internal class SprinkleServiceTest : FunSpec({
 
         test("실패 - orderBy=DEADLINE, category!=ALL 일 때") {
             shouldThrow<BaseException> {
-                sprinkleService.getSprinkles(OrderBy.DEADLINE, Category.CAFE, NoOffsetRequest.of())
+                sprinkleService.getSprinkles(userInfoDto, OrderBy.DEADLINE, Category.CAFE, NoOffsetRequest.of())
             }
         }
     }
@@ -57,7 +58,7 @@ internal class SprinkleServiceTest : FunSpec({
             every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
 
             //when
-            val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
+            val resDtos = sprinkleService.getSprinkles(userInfoDto, OrderBy.CREATED_AT, category, noOffsetRequest)
 
             //then
             resDtos.size shouldBe 2
@@ -78,7 +79,7 @@ internal class SprinkleServiceTest : FunSpec({
             every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
 
             //when
-            val resDtos = sprinkleService.getSprinkles(OrderBy.CREATED_AT, category, noOffsetRequest)
+            val resDtos = sprinkleService.getSprinkles(userInfoDto, OrderBy.CREATED_AT, category, noOffsetRequest)
 
             //then
             resDtos.size shouldBe 1
@@ -89,12 +90,14 @@ internal class SprinkleServiceTest : FunSpec({
 
         test("실패 - orderBy=null, category=null 일 때") {
             shouldThrow<BaseException> {
-                sprinkleService.getSprinkles(null, null, NoOffsetRequest.of())
+                sprinkleService.getSprinkles(userInfoDto, null, null, NoOffsetRequest.of())
             }
         }
     }
 }) {
     companion object {
+        private val userInfoDto = UserInfoDto(id = 1, inherenceId = "test-user")
+
         private val sprinkleListVos = listOf(
             SprinkleListVo(
                 sprinkleId = 1,
