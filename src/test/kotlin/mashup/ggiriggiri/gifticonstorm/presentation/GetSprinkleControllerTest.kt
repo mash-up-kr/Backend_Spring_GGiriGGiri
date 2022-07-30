@@ -30,7 +30,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @WebMvcTest(SprinkleController::class)
-internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
+internal class GetSprinkleControllerTest : TestRestDocs() {
 
     @MockkBean
     private lateinit var sprinkleService: SprinkleService
@@ -90,10 +90,12 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             .andDo(
                 MockMvcRestDocumentation.document(
                     "뿌리기조회/{methodName}",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParameters(
-                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
-                        RequestDocumentation.parameterWithName("category").description("카테고리 종류")
+                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건 - 'DEADLINE' 고정값"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류 - 'ALL' 고정값")
                     ),
                     PayloadDocumentation.responseFields(
                         PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
@@ -117,7 +119,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //given
         val orderBy = OrderBy.CREATED_AT
         val category = Category.ALL
-        val noOffsetRequest = NoOffsetRequest.of()
+        val noOffsetRequest = NoOffsetRequest.of(1, 10)
 
         val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
         requestParams.add("orderBy", orderBy.toString())
@@ -160,11 +162,13 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             .andDo(
                 MockMvcRestDocumentation.document(
                     "뿌리기조회/{methodName}",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParameters(
-                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
-                        RequestDocumentation.parameterWithName("category").description("카테고리 종류"),
-                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id"),
+                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건 - 'CREATED_AT' 고정값"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류 - ALL, CAFE(카페/디저트), DELIVERY(치킨/배달음식), ICECREAM(아이스크림), CONVENIENCE_STORE(편의점), FAST_FOOD(패스트푸드), VOUCHER(금액권), ETC(기타)"),
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id (첫 요청시 id = null)"),
                         RequestDocumentation.parameterWithName("limit").description("조회 개수")
                     ),
                     PayloadDocumentation.responseFields(
@@ -189,7 +193,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //given
         val orderBy = OrderBy.CREATED_AT
         val category = Category.CAFE
-        val noOffsetRequest = NoOffsetRequest.of()
+        val noOffsetRequest = NoOffsetRequest.of(1, 10)
 
         val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
         requestParams.add("orderBy", orderBy.toString())
@@ -232,11 +236,13 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             .andDo(
                 MockMvcRestDocumentation.document(
                     "뿌리기조회/{methodName}",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParameters(
                         RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
-                        RequestDocumentation.parameterWithName("category").description("카테고리 종류"),
-                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류 - ALL, CAFE(카페/디저트), DELIVERY(치킨/배달음식), ICECREAM(아이스크림), CONVENIENCE_STORE(편의점), FAST_FOOD(패스트푸드), VOUCHER(금액권), ETC(기타)"),
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id (첫 요청시 id = null)"),
                         RequestDocumentation.parameterWithName("limit").description("조회 개수")
                     ),
                     PayloadDocumentation.responseFields(
