@@ -6,11 +6,14 @@ import mashup.ggiriggiri.gifticonstorm.application.sprinkle.SprinkleService
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
+import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
+import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.restdocs.headers.HeaderDocumentation
@@ -27,13 +30,20 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @WebMvcTest(SprinkleController::class)
-internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
+internal class GetSprinkleControllerTest : TestRestDocs() {
 
     @MockkBean
     private lateinit var sprinkleService: SprinkleService
 
     @MockkBean
     private lateinit var memberRepository: MemberRepository
+
+    private val userInfoDto = UserInfoDto(id = 0, inherenceId = "test-user")
+
+    @BeforeEach
+    fun setUp() {
+        every { memberRepository.findByInherenceId(userInfoDto.inherenceId) } returns Member(inherenceId = userInfoDto.inherenceId)
+    }
 
     @Test
     fun `뿌리기 마감임박 조회 성공`() {
@@ -56,11 +66,12 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        every { sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of()) } returns resultData
+        every { sprinkleService.getSprinkles(userInfoDto, orderBy, category, NoOffsetRequest.of()) } returns resultData
 
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/v1/sprinkles")
+                .header("Authorization", userInfoDto.inherenceId)
                 .queryParams(requestParams)
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
@@ -79,10 +90,12 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             .andDo(
                 MockMvcRestDocumentation.document(
                     "뿌리기조회/{methodName}",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParameters(
-                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
-                        RequestDocumentation.parameterWithName("category").description("카테고리 종류")
+                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건 - 'DEADLINE' 고정값"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류 - 'ALL' 고정값")
                     ),
                     PayloadDocumentation.responseFields(
                         PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
@@ -106,7 +119,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //given
         val orderBy = OrderBy.CREATED_AT
         val category = Category.ALL
-        val noOffsetRequest = NoOffsetRequest.of()
+        val noOffsetRequest = NoOffsetRequest.of(1, 10)
 
         val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
         requestParams.add("orderBy", orderBy.toString())
@@ -125,11 +138,12 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        every { sprinkleService.getSprinkles(orderBy, category, noOffsetRequest) } returns resultData
+        every { sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest) } returns resultData
 
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/v1/sprinkles")
+                .header("Authorization", userInfoDto.inherenceId)
                 .queryParams(requestParams)
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
@@ -148,11 +162,13 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             .andDo(
                 MockMvcRestDocumentation.document(
                     "뿌리기조회/{methodName}",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParameters(
-                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
-                        RequestDocumentation.parameterWithName("category").description("카테고리 종류"),
-                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id"),
+                        RequestDocumentation.parameterWithName("orderBy").description("정렬 조건 - 'CREATED_AT' 고정값"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류 - ALL, CAFE(카페/디저트), DELIVERY(치킨/배달음식), ICECREAM(아이스크림), CONVENIENCE_STORE(편의점), FAST_FOOD(패스트푸드), VOUCHER(금액권), ETC(기타)"),
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id (첫 요청시 id = null)"),
                         RequestDocumentation.parameterWithName("limit").description("조회 개수")
                     ),
                     PayloadDocumentation.responseFields(
@@ -177,11 +193,9 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //given
         val orderBy = OrderBy.CREATED_AT
         val category = Category.CAFE
-        val noOffsetRequest = NoOffsetRequest.of()
+        val noOffsetRequest = NoOffsetRequest.of(1, 10)
 
-        val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap(
-
-        )
+        val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
         requestParams.add("orderBy", orderBy.toString())
         requestParams.add("category", category.toString())
         requestParams.add("id", noOffsetRequest.id?.toString())
@@ -198,11 +212,12 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             participateIn = true
         )
         val resultData = listOf(resultDto)
-        every { sprinkleService.getSprinkles(orderBy, category, noOffsetRequest) } returns resultData
+        every { sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest) } returns resultData
 
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/v1/sprinkles")
+                .header("Authorization", userInfoDto.inherenceId)
                 .queryParams(requestParams)
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
@@ -221,11 +236,13 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
             .andDo(
                 MockMvcRestDocumentation.document(
                     "뿌리기조회/{methodName}",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParameters(
                         RequestDocumentation.parameterWithName("orderBy").description("정렬 조건"),
-                        RequestDocumentation.parameterWithName("category").description("카테고리 종류"),
-                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id"),
+                        RequestDocumentation.parameterWithName("category").description("카테고리 종류 - ALL, CAFE(카페/디저트), DELIVERY(치킨/배달음식), ICECREAM(아이스크림), CONVENIENCE_STORE(편의점), FAST_FOOD(패스트푸드), VOUCHER(금액권), ETC(기타)"),
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id (첫 요청시 id = null)"),
                         RequestDocumentation.parameterWithName("limit").description("조회 개수")
                     ),
                     PayloadDocumentation.responseFields(
@@ -254,6 +271,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/v1/sprinkles")
+                .header("Authorization", userInfoDto.inherenceId)
                 .queryParams(requestParams)
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
@@ -274,6 +292,7 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/v1/sprinkles")
+                .header("Authorization", userInfoDto.inherenceId)
                 .queryParams(requestParams)
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
@@ -295,10 +314,11 @@ internal class SprinkleControllerGetSprinkleTest : TestRestDocs() {
         requestParams.add("orderBy", orderBy.toString())
         requestParams.add("category", category.toString())
 
-        every { sprinkleService.getSprinkles(orderBy, category, NoOffsetRequest.of()) } throws (BaseException(ResponseCode.INVALID_INPUT_VALUE))
+        every { sprinkleService.getSprinkles(userInfoDto, orderBy, category, NoOffsetRequest.of()) } throws (BaseException(ResponseCode.INVALID_INPUT_VALUE))
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/v1/sprinkles")
+                .header("Authorization", userInfoDto.inherenceId)
                 .queryParams(requestParams)
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)

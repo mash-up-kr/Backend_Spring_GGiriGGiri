@@ -5,11 +5,11 @@ enum class Category(
 ) {
 
     ALL("전체"),
-    CAFE("음료/디저트"),
+    CAFE("카페/디저트"),
     DELIVERY("치킨/배달음식"),
     ICECREAM("아이스크림"),
     CONVENIENCE_STORE("편의점"),
     FAST_FOOD("패스트푸드"),
-    VOUCHER("상품권"),
+    VOUCHER("금액권"),
     ETC("기타")
 }

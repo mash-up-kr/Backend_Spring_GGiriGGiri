@@ -3,6 +3,8 @@ package mashup.ggiriggiri.gifticonstorm.presentation
 import mashup.ggiriggiri.gifticonstorm.application.sprinkle.SprinkleService
 import mashup.ggiriggiri.gifticonstorm.common.dto.BaseResponse
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
+import mashup.ggiriggiri.gifticonstorm.config.annotation.UserInfo
+import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
@@ -29,12 +31,13 @@ class SprinkleController(
 
     @GetMapping("/api/v1/sprinkles")
     fun getSprinkles(
+        @UserInfo userInfoDto: UserInfoDto,
         @RequestParam(value = "orderBy", required = false) orderBy: OrderBy?,
         @RequestParam(value = "category", required = false) category: Category?,
         noOffsetRequest: NoOffsetRequest
     ): BaseResponse<List<GetSprinkleResDto>> {
         return BaseResponse.ok(
-            sprinkleService.getSprinkles(orderBy, category, noOffsetRequest)
+            sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest)
         )
     }
 }
