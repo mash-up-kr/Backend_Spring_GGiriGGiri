@@ -1,7 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.common.validator
 
-import mashup.ggiriggiri.gifticonstorm.common.annotation.CouponTimeCheck
-import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
+import mashup.ggiriggiri.gifticonstorm.common.annotation.SprinkleTimeCheck
+import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import org.springframework.util.StringUtils
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -10,9 +10,9 @@ import java.util.regex.Pattern
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 
-class CouponTimeCheckValidator: ConstraintValidator<CouponTimeCheck, CouponSaveRequestDto> {
+class SprinkleTimeCheckValidator: ConstraintValidator<SprinkleTimeCheck, CreateEventRequestDto> {
 
-    override fun isValid(value: CouponSaveRequestDto, context: ConstraintValidatorContext): Boolean {
+    override fun isValid(value: CreateEventRequestDto, context: ConstraintValidatorContext): Boolean {
         if (!StringUtils.hasText(value.couponExpiredTime)) {
             return false
         }
@@ -29,13 +29,9 @@ class CouponTimeCheckValidator: ConstraintValidator<CouponTimeCheck, CouponSaveR
             return false
         }
 
-        if (value.sprinkleTime !in 1..24) {
-            return false
-        }
-
-        val sprinkleTime = LocalDateTime.now().plusHours(value.sprinkleTime)
+        val sprinkleTime = LocalDateTime.now().plusMinutes(value.deadlineMinutes)
         if (sprinkleTime.isAfter(couponExpiredTime)) {
-            addConstraintViolation(context, "뿌리기 시간은 쿠폰 유효기간 이내여야 합니다.", "sprinkleTime")
+            addConstraintViolation(context, "뿌리기 시간은 쿠폰 유효기간 이내여야 합니다.", "deadlineMinutes")
             return false
         }
 
