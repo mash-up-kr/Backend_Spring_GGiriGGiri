@@ -10,7 +10,6 @@ import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
-import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
@@ -56,7 +55,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
     fun `뿌리기 쿠폰 등록 성공`() {
         //given
         val createEventRequestDto = CreateEventRequestDto(
-            category = Category.CAFE.name,
+            category = Category.CAFE,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = LocalDate.now().plusDays(1).toString(),
@@ -81,10 +80,10 @@ internal class SprinkleControllerTest : TestRestDocs() {
 
         //when, then
         mockMvc.perform(
-            MockMvcRequestBuilders.multipart("/api/v1/sprinkle")
+            RestDocumentationRequestBuilders.multipart("/api/v1/sprinkle")
                 .file(image)
                 .file(eventInfo)
-                .header("Authorization", "sample-auth")
+                .header("Authorization", userInfoDto.inherenceId)
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andDo(MockMvcResultHandlers.print())
@@ -92,7 +91,9 @@ internal class SprinkleControllerTest : TestRestDocs() {
             .andDo(
                 MockMvcRestDocumentation.document(
                     "뿌리기 등록",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParts(
                         RequestDocumentation.partWithName("image").description("쿠폰 이미지"),
                         RequestDocumentation.partWithName("eventInfo").description("쿠폰 상세정보")
@@ -109,8 +110,8 @@ internal class SprinkleControllerTest : TestRestDocs() {
                             .description("쿠폰 상품명"),
                         PayloadDocumentation.fieldWithPath("couponExpiredTime").type(JsonFieldType.STRING)
                             .description("쿠폰 유효기간"),
-                        PayloadDocumentation.fieldWithPath("sprinkleTime").type(JsonFieldType.STRING)
-                            .description("쿠폰 뿌릴 시간 (몇 시간 뒤)")
+                        PayloadDocumentation.fieldWithPath("deadlineMinutes").type(JsonFieldType.NUMBER)
+                            .description("쿠폰 뿌릴 시간 (몇 분 뒤)")
                     ),
                     HeaderDocumentation.responseHeaders()
                 )
@@ -120,12 +121,12 @@ internal class SprinkleControllerTest : TestRestDocs() {
     @Test
     fun `뿌리기 쿠폰 등록 실패 - 쿠폰 유효기간 데이터 형식 오류`() {
         //given
-        val requestDto = CouponSaveRequestDto(
+        val createEventRequestDto = CreateEventRequestDto(
             category = Category.CAFE,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = "2022/07/06",
-            sprinkleTime = 3L
+            deadlineMinutes = 180
         )
 
         val image = MockMultipartFile(
@@ -135,18 +136,19 @@ internal class SprinkleControllerTest : TestRestDocs() {
             "<<image data>>".toByteArray()
         )
 
-        val couponInfo = MockMultipartFile(
-            "couponInfo",
-            "couponInfo",
+        val eventInfo = MockMultipartFile(
+            "eventInfo",
+            "eventInfo",
             MediaType.APPLICATION_JSON_VALUE,
-            DEFAULT_OBJECT_MAPPER.writeValueAsString(requestDto).toByteArray()
+            DEFAULT_OBJECT_MAPPER.writeValueAsString(createEventRequestDto).toByteArray()
         )
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.multipart("/api/v1/sprinkle")
                 .file(image)
-                .file(couponInfo)
+                .file(eventInfo)
                 .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", userInfoDto.inherenceId)
         )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
@@ -167,12 +169,12 @@ internal class SprinkleControllerTest : TestRestDocs() {
     @Test
     fun `뿌리기 쿠폰 등록 실패 - 쿠폰 유효기간 지남`() {
         //given
-        val requestDto = CouponSaveRequestDto(
+        val createEventRequestDto = CreateEventRequestDto(
             category = Category.CAFE,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = LocalDate.now().minusDays(1).toString(),
-            sprinkleTime = 3L
+            deadlineMinutes = 180
         )
 
         val image = MockMultipartFile(
@@ -182,18 +184,22 @@ internal class SprinkleControllerTest : TestRestDocs() {
             "<<image data>>".toByteArray()
         )
 
-        val couponInfo = MockMultipartFile(
-            "couponInfo",
-            "couponInfo",
+        val eventInfo = MockMultipartFile(
+            "eventInfo",
+            "eventInfo",
             MediaType.APPLICATION_JSON_VALUE,
-            DEFAULT_OBJECT_MAPPER.writeValueAsString(requestDto).toByteArray()
+            DEFAULT_OBJECT_MAPPER.writeValueAsString(createEventRequestDto).toByteArray()
         )
+
+        justRun { sprinkleService.createSprinkle(image, createEventRequestDto, userInfoDto) }
+
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.multipart("/api/v1/sprinkle")
                 .file(image)
-                .file(couponInfo)
+                .file(eventInfo)
                 .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", userInfoDto.inherenceId)
         )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
@@ -214,12 +220,12 @@ internal class SprinkleControllerTest : TestRestDocs() {
     @Test
     fun `뿌리기 쿠폰 등록 실패 - 뿌리기 시간이 쿠폰 유효기간 넘김`() {
         //given
-        val requestDto = CouponSaveRequestDto(
+        val createEventRequestDto = CreateEventRequestDto(
             category = Category.CAFE,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             couponExpiredTime = LocalDate.now().toString(),
-            sprinkleTime = 24L
+            deadlineMinutes = 1440
         )
 
         val image = MockMultipartFile(
@@ -229,18 +235,19 @@ internal class SprinkleControllerTest : TestRestDocs() {
             "<<image data>>".toByteArray()
         )
 
-        val couponInfo = MockMultipartFile(
-            "couponInfo",
-            "couponInfo",
+        val eventInfo = MockMultipartFile(
+            "eventInfo",
+            "eventInfo",
             MediaType.APPLICATION_JSON_VALUE,
-            DEFAULT_OBJECT_MAPPER.writeValueAsString(requestDto).toByteArray()
+            DEFAULT_OBJECT_MAPPER.writeValueAsString(createEventRequestDto).toByteArray()
         )
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.multipart("/api/v1/sprinkle")
                 .file(image)
-                .file(couponInfo)
+                .file(eventInfo)
                 .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", userInfoDto.inherenceId)
         )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
@@ -251,7 +258,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
                 MockMvcResultMatchers.jsonPath("\$.message").value(ResponseCode.INVALID_INPUT_VALUE.message)
             )
             .andExpect(
-                MockMvcResultMatchers.jsonPath("\$.data[0].field").value("sprinkleTime")
+                MockMvcResultMatchers.jsonPath("\$.data[0].field").value("deadlineMinutes")
             )
             .andExpect(
                 MockMvcResultMatchers.jsonPath("\$.data[0].message").value("뿌리기 시간은 쿠폰 유효기간 이내여야 합니다.")
@@ -556,7 +563,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentation.document(
-                    "뿌리기응모/{methodName}",
+                    "뿌리기응모",
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
                     ),

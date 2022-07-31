@@ -16,24 +16,34 @@ gifticon-storm
 
 
 
-=== sample
-==== Curl Command
-
-include::{snippets}/sample/sample/curl-request.adoc[]
-
-==== Http Request
-
-include::{snippets}/sample/sample/http-request.adoc[]
-
-==== Http Response
-
-include::{snippets}/sample/sample/http-response.adoc[]
 
 === health
 
 ==== Curl Command
 
 include::{snippets}/health/health/http-response.adoc[]
+
+=== 뿌리기 등록
+==== Curl Command
+
+include::{snippets}/뿌리기 등록/curl-request.adoc[]
+
+==== Http Request
+
+include::{snippets}/뿌리기 등록/http-request.adoc[]
+
+==== Header
+
+include::{snippets}/뿌리기 등록/request-headers.adoc[]
+
+==== Parameter
+include::{snippets}/뿌리기 등록/request-parts.adoc[]
+include::{snippets}/뿌리기 등록/request-part-eventInfo-body.adoc[]
+include::{snippets}/뿌리기 등록/request-part-eventInfo-fields.adoc[]
+
+==== Http Response
+
+include::{snippets}/뿌리기 등록/http-response.adoc[]
 
 === 뿌리기 마감임박 조회
 ==== Curl Command
@@ -79,3 +89,25 @@ include::{snippets}/뿌리기조회/뿌리기 전체 조회 성공/request-param
 include::{snippets}/뿌리기조회/뿌리기 전체 조회 성공/http-response.adoc[]
 
 include::{snippets}/뿌리기조회/뿌리기 전체 조회 성공/response-fields.adoc[]
+
+=== 뿌리기 응모
+
+==== Curl Command
+
+include::{snippets}/뿌리기응모/curl-request.adoc[]
+
+==== Http Request
+
+include::{snippets}/뿌리기응모/http-request.adoc[]
+
+==== Header
+
+include::{snippets}/뿌리기응모/request-headers.adoc[]
+
+==== Parameter
+
+include::{snippets}/뿌리기응모/path-parameters.adoc[]
+
+==== Http Response
+
+include::{snippets}/뿌리기응모/http-response.adoc[]

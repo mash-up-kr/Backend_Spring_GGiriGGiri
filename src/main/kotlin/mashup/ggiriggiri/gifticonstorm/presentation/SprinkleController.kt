@@ -13,6 +13,7 @@ import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/v1")
@@ -25,7 +26,7 @@ class SprinkleController(
     @PostMapping("/sprinkle")
     fun createSprinkle(
         @RequestPart(value = "image") image: MultipartFile,
-        @RequestPart(value = "eventInfo") createEventRequestDto: CreateEventRequestDto,
+        @RequestPart(value = "eventInfo") @Valid createEventRequestDto: CreateEventRequestDto,
         @UserInfo userInfoDto: UserInfoDto,
     ): ResponseEntity<Unit> {
         sprinkleService.createSprinkle(image, createEventRequestDto, userInfoDto)

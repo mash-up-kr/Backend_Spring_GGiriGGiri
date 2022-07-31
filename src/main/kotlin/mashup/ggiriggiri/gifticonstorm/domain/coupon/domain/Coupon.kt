@@ -1,7 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.domain.coupon.domain
 
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
-import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import java.time.LocalDate
@@ -31,7 +30,7 @@ class Coupon(
                 merchandiseName = createEventRequestDto.merchandiseName,
                 expiredAt = LocalDate.parse(createEventRequestDto.couponExpiredTime).atTime(LocalTime.MAX),
                 imageUrl = imageUrl,
-                category = Category.valueOf(createEventRequestDto.category),
+                category = createEventRequestDto.category,
                 member = Member("sample") // TODO : 임시 멤버 이후에 조회하여 실제 멤버 엔티티로 대체
             )
         }
