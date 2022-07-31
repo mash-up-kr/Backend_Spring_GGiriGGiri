@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
+@RequestMapping("/api/v1")
 class SprinkleController(
     private val sprinkleService: SprinkleService
 ) {
@@ -24,22 +25,26 @@ class SprinkleController(
     @PostMapping("/sprinkle")
     fun createSprinkle(
         @RequestPart(value = "image") image: MultipartFile,
-        @RequestPart(value = "eventInfo") dto: CreateEventRequestDto,
-        @UserInfo user: UserInfoDto,
-    ) : ResponseEntity<Unit> {
-        sprinkleService.createSprinkle(image, dto, user)
+        @RequestPart(value = "eventInfo") createEventRequestDto: CreateEventRequestDto,
+        @UserInfo userInfoDto: UserInfoDto,
+    ): ResponseEntity<Unit> {
+        sprinkleService.createSprinkle(image, createEventRequestDto, userInfoDto)
         return ResponseEntity.ok(Unit)
     }
 
-    @GetMapping("/api/v1/sprinkles")
+    @PostMapping("/sprinkle/{sprinkleId}/apply")
+    fun applySprinkle(@UserInfo userInfoDto: UserInfoDto, @PathVariable sprinkleId: Long): ResponseEntity<Unit> {
+        sprinkleService.applySprinkle(userInfoDto, sprinkleId)
+        return ResponseEntity.ok(Unit)
+    }
+
+    @GetMapping("/sprinkles")
     fun getSprinkles(
         @UserInfo userInfoDto: UserInfoDto,
         @RequestParam(value = "orderBy", required = false) orderBy: OrderBy?,
         @RequestParam(value = "category", required = false) category: Category?,
         noOffsetRequest: NoOffsetRequest,
     ): BaseResponse<List<GetSprinkleResDto>> {
-        return BaseResponse.ok(
-            sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest)
-        )
+        return BaseResponse.ok(sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest))
     }
 }

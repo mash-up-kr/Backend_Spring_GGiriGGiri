@@ -1,7 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.application
 
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
-import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.repository.CouponRepository
 import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
@@ -13,11 +12,11 @@ import org.springframework.web.multipart.MultipartFile
 class CouponService(
     private val s3ImageUploader: S3ImageUploader,
     private val couponRepository: CouponRepository
-){
+) {
 
-    fun saveCoupon(image: MultipartFile, saveRequestDto: CreateEventRequestDto, member: Member): Coupon {
+    fun saveCoupon(image: MultipartFile, createEventRequestDto: CreateEventRequestDto, member: Member): Coupon {
         val imageUrl = s3ImageUploader.upload(image)
-        val coupon = Coupon.of(imageUrl, saveRequestDto, member)
+        val coupon = Coupon.of(imageUrl, createEventRequestDto, member)
         return couponRepository.save(coupon)
     }
 }

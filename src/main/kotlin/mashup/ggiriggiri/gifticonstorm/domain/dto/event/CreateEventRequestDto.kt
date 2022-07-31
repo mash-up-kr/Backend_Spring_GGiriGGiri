@@ -5,5 +5,5 @@ data class CreateEventRequestDto(
     val brandName: String,
     val merchandiseName: String,
     val couponExpiredTime: String,
-    val sprinkleTime: String,
+    val deadlineMinutes: Long,
 )
