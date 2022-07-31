@@ -28,14 +28,16 @@ class SprinkleService(
     private val couponService: CouponService,
     private val memberRepository: MemberRepository,
 ) {
-    fun getSprinkles(orderBy: OrderBy?, category: Category?, noOffsetRequest: NoOffsetRequest): List<GetSprinkleResDto> {
+    fun getSprinkles(
+        userInfoDto: UserInfoDto, orderBy: OrderBy?, category: Category?, noOffsetRequest: NoOffsetRequest
+    ): List<GetSprinkleResDto> {
         if (orderBy == null || category == null) {
             throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         }
         val sprinkleListVos =
             if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category)
             else findAllByCategory(category, noOffsetRequest)
-        val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(1) //TODO: 로그인 기능 추가 후 해당 사용자 id 전달
+        val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id)
         return sprinkleListVos.map { GetSprinkleResDto.toDto(it, sprinkleIds) }
     }
 

@@ -33,12 +33,13 @@ class SprinkleController(
 
     @GetMapping("/api/v1/sprinkles")
     fun getSprinkles(
+        @UserInfo userInfoDto: UserInfoDto,
         @RequestParam(value = "orderBy", required = false) orderBy: OrderBy?,
         @RequestParam(value = "category", required = false) category: Category?,
         noOffsetRequest: NoOffsetRequest,
     ): BaseResponse<List<GetSprinkleResDto>> {
         return BaseResponse.ok(
-            sprinkleService.getSprinkles(orderBy, category, noOffsetRequest)
+            sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest)
         )
     }
 }
