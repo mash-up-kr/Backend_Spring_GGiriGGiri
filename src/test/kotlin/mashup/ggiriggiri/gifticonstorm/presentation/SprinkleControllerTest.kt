@@ -15,6 +15,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.BeforeEach
@@ -33,8 +34,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @WebMvcTest(SprinkleController::class)
 internal class SprinkleControllerTest : TestRestDocs() {
@@ -49,6 +50,8 @@ internal class SprinkleControllerTest : TestRestDocs() {
     private lateinit var signinBot: SigninBot
 
     private val userInfoDto = UserInfoDto(id = 0, inherenceId = "test-user")
+
+    private val now = LocalDateTime.now()
 
     @BeforeEach
     fun setUp() {
@@ -284,8 +287,8 @@ internal class SprinkleControllerTest : TestRestDocs() {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             category = Category.CAFE,
-            expiredAt = LocalDate.now().plusDays(1).toString(),
-            sprinkleAt = LocalDateTime.now().plusMinutes(10).toString(),
+            expiredAt = now.plusDays(1).with(LocalTime.MAX).toString(),
+            sprinkleAt = now.plusMinutes(10).toString(),
             participants = 100,
             participateIn = true
         )
@@ -356,8 +359,8 @@ internal class SprinkleControllerTest : TestRestDocs() {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             category = Category.CAFE,
-            expiredAt = LocalDate.now().plusDays(1).toString(),
-            sprinkleAt = LocalDateTime.now().plusMinutes(10).toString(),
+            expiredAt = now.plusDays(1).with(LocalTime.MAX).toString(),
+            sprinkleAt = now.plusMinutes(10).toString(),
             participants = 100,
             participateIn = true
         )
@@ -431,8 +434,8 @@ internal class SprinkleControllerTest : TestRestDocs() {
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             category = Category.CAFE,
-            expiredAt = LocalDate.now().plusDays(1).toString(),
-            sprinkleAt = LocalDateTime.now().plusMinutes(10).toString(),
+            expiredAt = now.plusDays(1).with(LocalTime.MAX).toString(),
+            sprinkleAt = now.plusMinutes(10).toString(),
             participants = 100,
             participateIn = true
         )
@@ -577,4 +580,59 @@ internal class SprinkleControllerTest : TestRestDocs() {
                 )
             )
     }
+    @Test
+    fun `뿌리기 정보 조회 성공`() {
+        //given
+        val resDto = SprinkleInfoResDto(
+            sprinkleId = 1,
+            brandName = "스타벅스",
+            merchandiseName = "아이스 아메리카노",
+            category = Category.CAFE,
+            expiredAt = now.plusDays(1).with(LocalTime.MAX).toString(),
+            sprinkleAt = now.plusMinutes(10).toString(),
+            participants = 100
+        )
+
+        every { sprinkleService.getSprinkleInfo(1) } returns resDto
+
+        //when, then
+        mockMvc.perform(
+            RestDocumentationRequestBuilders.get("/api/v1/sprinkle-info/{id}", 1)
+                .header("Authorization", userInfoDto.inherenceId)
+        ).andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.OK.code)
+            )
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("\$.message").value(ResponseCode.OK.message)
+            )
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("\$.data.sprinkleId").value(1)
+            )
+            .andDo(
+                MockMvcRestDocumentation.document(
+                    "뿌리기 단건 조회/{methodName}",
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
+                    RequestDocumentation.pathParameters(
+                        RequestDocumentation.parameterWithName("id").description("Sprinkle(뿌리기) Id"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
+                        PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
+                        PayloadDocumentation.fieldWithPath("data.sprinkleId").type(JsonFieldType.NUMBER).description("뿌리기 id"),
+                        PayloadDocumentation.fieldWithPath("data.brandName").type(JsonFieldType.STRING).description("브랜드명"),
+                        PayloadDocumentation.fieldWithPath("data.merchandiseName").type(JsonFieldType.STRING).description("상품명"),
+                        PayloadDocumentation.fieldWithPath("data.category").type(JsonFieldType.STRING).description("카테고리"),
+                        PayloadDocumentation.fieldWithPath("data.expiredAt").type(JsonFieldType.STRING).description("유효기간"),
+                        PayloadDocumentation.fieldWithPath("data.sprinkleAt").type(JsonFieldType.STRING).description("뿌리기 시간"),
+                        PayloadDocumentation.fieldWithPath("data.participants").type(JsonFieldType.NUMBER).description("응모자 수"),
+                    ),
+                    HeaderDocumentation.requestHeaders()
+                )
+            )
+    }
+
 }
