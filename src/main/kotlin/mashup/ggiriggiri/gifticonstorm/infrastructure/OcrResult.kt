@@ -1,8 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.infrastructure
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 // TODO: 카카오 쿠폰 등등 종류별로 사용할 수 있도록 객체 관계 설계
 
