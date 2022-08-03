@@ -1,5 +1,10 @@
 package mashup.ggiriggiri.gifticonstorm.config
 
+import discord4j.core.DiscordClientBuilder
+import discord4j.core.GatewayDiscordClient
+import discord4j.rest.RestClient
+import mashup.ggiriggiri.gifticonstorm.common.setApplicationJsonContentType
+import mashup.ggiriggiri.gifticonstorm.common.setHost
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -28,9 +33,10 @@ class WebClientConfig(
 
         return WebClient.builder().apply {
             it.baseUrl(url)
-            it.defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+            it.setApplicationJsonContentType()
+            it.setHost(url)
             it.defaultHeader("X-OCR-SECRET", secret)
-            it.defaultHeader("Host", URI(url).host)
         }.build()
     }
+
 }
