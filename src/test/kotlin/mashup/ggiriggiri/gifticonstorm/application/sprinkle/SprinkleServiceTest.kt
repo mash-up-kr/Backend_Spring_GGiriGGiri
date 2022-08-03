@@ -5,10 +5,12 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import mashup.ggiriggiri.gifticonstorm.application.CouponService
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
+import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
@@ -17,10 +19,12 @@ import java.time.LocalDateTime
 
 internal class SprinkleServiceTest : FunSpec({
 
+    val sprinkleCache = mockk<SprinkleCache>()
     val sprinkleRepository = mockk<SprinkleRepository>()
     val participantRepository = mockk<ParticipantRepository>()
-    val sprinkleCache = mockk<SprinkleCache>()
-    val sprinkleService = SprinkleService(sprinkleCache, sprinkleRepository, participantRepository)
+    val couponService = mockk<CouponService>()
+    val memberRepository = mockk<MemberRepository>()
+    val sprinkleService = SprinkleService(sprinkleCache, sprinkleRepository, participantRepository, couponService, memberRepository)
 
     context("뿌리기 마감임박 조회") {
         test("성공") {
