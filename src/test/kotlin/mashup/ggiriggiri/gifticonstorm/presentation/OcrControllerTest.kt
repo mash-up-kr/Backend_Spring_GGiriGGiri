@@ -1,10 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
 import com.ninjasquad.springmockk.MockkBean
-import io.kotest.mpp.file
 import io.mockk.every
-import io.mockk.justRun
-import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.infrastructure.*
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
@@ -14,10 +11,10 @@ import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.request.RequestDocumentation
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
@@ -46,7 +43,7 @@ internal class OcrControllerTest : TestRestDocs() {
 
         //when, then
         mockMvc.perform(
-            MockMvcRequestBuilders.multipart("/ocr")
+            RestDocumentationRequestBuilders.multipart("/ocr")
                 .file(image)
                 .accept(MediaType.APPLICATION_JSON)
         )
