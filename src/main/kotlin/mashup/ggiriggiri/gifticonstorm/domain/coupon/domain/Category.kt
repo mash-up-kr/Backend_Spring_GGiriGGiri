@@ -11,5 +11,9 @@ enum class Category(
     CONVENIENCE_STORE("편의점"),
     FAST_FOOD("패스트푸드"),
     VOUCHER("금액권"),
-    ETC("기타")
+    ETC("기타");
+
+    companion object {
+        val categories = Category.values()
+    }
 }
