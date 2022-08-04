@@ -170,4 +170,16 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
         assertThat(sprinkleInfoVo!!.brandName).isEqualTo("스타벅스")
         assertThat(sprinkleInfoVo.participants).isEqualTo(2)
     }
+
+    @Test
+    fun `findRegistHistoryByMemberId - 쿠폰 등록 내역 조회`() {
+        //given
+        val noOffsetRequest = NoOffsetRequest.of(id = null, limit = 2)
+        //when
+        val registHistoryVos = sprinkleRepository.findRegistHistoryByMemberId(memberList[0].id, noOffsetRequest)
+        //then
+        assertThat(registHistoryVos).hasSize(2)
+        assertThat(registHistoryVos[0].brandName).isEqualTo("버거킹")
+        assertThat(registHistoryVos[1].brandName).isEqualTo("베스킨라빈스")
+    }
 }

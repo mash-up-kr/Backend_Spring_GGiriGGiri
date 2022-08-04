@@ -17,6 +17,8 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkledStatus
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -632,6 +634,72 @@ internal class SprinkleControllerTest : TestRestDocs() {
                         PayloadDocumentation.fieldWithPath("data.participants").type(JsonFieldType.NUMBER).description("응모자 수"),
                     ),
                     HeaderDocumentation.requestHeaders()
+                )
+            )
+    }
+
+    @Test
+    fun `뿌리기 등록 내역 조회 성공`() {
+        //given
+        val noOffsetRequest = NoOffsetRequest.of(1, 10)
+
+        val requestParams: MultiValueMap<String, String> = LinkedMultiValueMap()
+        requestParams.add("id", noOffsetRequest.id?.toString())
+        requestParams.add("limit", noOffsetRequest.limit.toString())
+
+        val resDto = SprinkleRegistHistoryResDto(
+            brandName = "스타벅스",
+            merchandiseName = "아이스 아메리카노",
+            expiredAt = LocalDateTime.now().plusDays(1).with(LocalTime.MAX).toString(),
+            category = Category.CAFE,
+            participants = 100,
+            deliveryDate = LocalDateTime.now().plusMinutes(10).toLocalDate().toString(),
+            sprinkledStatus = SprinkledStatus.PROGRESS
+        )
+        val resultData = listOf(resDto)
+
+        every { sprinkleService.getSprinkleRegistHistory(userInfoDto, noOffsetRequest) } returns resultData
+
+        //when, then
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/v1/sprinkle/registration-history")
+                .header("Authorization", userInfoDto.inherenceId)
+                .queryParams(requestParams)
+        ).andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("\$.code").value(ResponseCode.OK.code)
+            )
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("\$.message").value(ResponseCode.OK.message)
+            )
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("\$.data[0].brandName").value("스타벅스")
+            )
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("\$.data[0].sprinkledStatus").value(SprinkledStatus.PROGRESS.name)
+            )
+            .andDo(
+                MockMvcRestDocumentation.document(
+                    "뿌리기 등록 내역 조회/{methodName}",
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
+                    RequestDocumentation.requestParameters(
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id (첫 요청시 id = null)"),
+                        RequestDocumentation.parameterWithName("limit").description("조회 개수"),
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
+                        PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
+                        PayloadDocumentation.fieldWithPath("data[0].brandName").type(JsonFieldType.STRING).description("브랜드명"),
+                        PayloadDocumentation.fieldWithPath("data[0].merchandiseName").type(JsonFieldType.STRING).description("상품명"),
+                        PayloadDocumentation.fieldWithPath("data[0].expiredAt").type(JsonFieldType.STRING).description("유효기간"),
+                        PayloadDocumentation.fieldWithPath("data[0].category").type(JsonFieldType.STRING).description("카테고리"),
+                        PayloadDocumentation.fieldWithPath("data[0].participants").type(JsonFieldType.NUMBER).description("응모자 수"),
+                        PayloadDocumentation.fieldWithPath("data[0].deliveryDate").type(JsonFieldType.STRING).description("전달 날짜"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkledStatus").type(JsonFieldType.STRING).description("뿌리기 진행 상태"),
+                    )
                 )
             )
     }

@@ -16,8 +16,10 @@ import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkledStatus
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleRegistHistoryVo
 import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -38,7 +40,7 @@ internal class SprinkleServiceTest : FunSpec({
             every { participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id) } returns listOf(1L)
 
             //when
-            val resDtos = sprinkleService.getSprinkles(userInfoDto, OrderBy.DEADLINE, Category.ALL, NoOffsetRequest.of())
+            val resDtos = sprinkleService.getSprinkles(userInfoDto, OrderBy.DEADLINE, Category.ALL, noOffsetRequest)
 
             //then
             resDtos.size shouldBe 2
@@ -52,7 +54,7 @@ internal class SprinkleServiceTest : FunSpec({
 
         test("실패 - orderBy=DEADLINE, category!=ALL 일 때") {
             shouldThrow<BaseException> {
-                sprinkleService.getSprinkles(userInfoDto, OrderBy.DEADLINE, Category.CAFE, NoOffsetRequest.of())
+                sprinkleService.getSprinkles(userInfoDto, OrderBy.DEADLINE, Category.CAFE, noOffsetRequest)
             }
         }
     }
@@ -61,7 +63,6 @@ internal class SprinkleServiceTest : FunSpec({
         test("전체 조회 성공") {
             //given
             val category = Category.ALL
-            val noOffsetRequest = NoOffsetRequest.of()
 
             every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns sprinkleInfoVos
             every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
@@ -82,7 +83,6 @@ internal class SprinkleServiceTest : FunSpec({
         test("특정 카테고리 조회 성공") {
             //given
             val category = Category.CAFE
-            val noOffsetRequest = NoOffsetRequest.of()
 
             every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns listOf(sprinkleInfoVos[0])
             every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
@@ -132,9 +132,27 @@ internal class SprinkleServiceTest : FunSpec({
         }
     }
 
+
+    context("뿌리기 등록 내역 조회") {
+        test("성공") {
+            //given
+            every { sprinkleRepository.findRegistHistoryByMemberId(1, noOffsetRequest) } returns sprinkleRegistHistoryListVos
+
+            //when
+            val resDtos = sprinkleService.getSprinkleRegistHistory(userInfoDto, noOffsetRequest)
+
+            //then
+            resDtos.size shouldBe 1
+            resDtos[0].brandName shouldBe "스타벅스"
+            resDtos[0].sprinkledStatus shouldBe SprinkledStatus.PROGRESS
+        }
+    }
+
 }) {
     companion object {
         private val userInfoDto = UserInfoDto(id = 1, inherenceId = "test-user")
+
+        private val noOffsetRequest = NoOffsetRequest.of()
 
         private val now = LocalDateTime.now()
         private val sprinkleInfoVos = listOf(
@@ -171,6 +189,18 @@ internal class SprinkleServiceTest : FunSpec({
             member = member,
             coupon = coupon,
             sprinkleAt = now.plusMinutes(10)
+        )
+
+        private val sprinkleRegistHistoryListVos = listOf(
+            SprinkleRegistHistoryVo(
+                brandName = "스타벅스",
+                merchandiseName = "아이스 아메리카노",
+                expiredAt = LocalDateTime.now().plusDays(1).with(LocalTime.MAX),
+                category = Category.CAFE,
+                participants = 100,
+                sprinkled = false,
+                sprinkleAt = LocalDateTime.now().plusMinutes(10)
+            )
         )
     }
 }
