@@ -1,17 +1,11 @@
 package mashup.ggiriggiri.gifticonstorm.config
 
-import discord4j.core.DiscordClientBuilder
-import discord4j.core.GatewayDiscordClient
-import discord4j.rest.RestClient
 import mashup.ggiriggiri.gifticonstorm.common.setApplicationJsonContentType
 import mashup.ggiriggiri.gifticonstorm.common.setHost
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
-import java.net.URI
-import java.net.URL
 
 const val APPLE_PUSH_URL = "appleurl.com"
 
