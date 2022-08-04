@@ -12,6 +12,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
+import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,6 +38,9 @@ internal class GetSprinkleControllerTest : TestRestDocs() {
 
     @MockkBean
     private lateinit var memberRepository: MemberRepository
+
+    @MockkBean
+    private lateinit var signinBot: SigninBot
 
     private val userInfoDto = UserInfoDto(id = 0, inherenceId = "test-user")
 
