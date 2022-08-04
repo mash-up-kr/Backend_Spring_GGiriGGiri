@@ -10,6 +10,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -55,5 +56,15 @@ class SprinkleController(
         @PathVariable(name = "id") sprinkleId: Long
     ): BaseResponse<SprinkleInfoResDto> {
         return BaseResponse.ok(sprinkleService.getSprinkleInfo(sprinkleId))
+    }
+
+    @GetMapping("/sprinkle/registration-history")
+    fun getSprinkleRegistHistory(
+        @UserInfo userInfoDto: UserInfoDto,
+        noOffsetRequest: NoOffsetRequest
+    ): BaseResponse<List<SprinkleRegistHistoryResDto>> {
+        return BaseResponse.ok(
+            sprinkleService.getSprinkleRegistHistory(userInfoDto, noOffsetRequest)
+        )
     }
 }
