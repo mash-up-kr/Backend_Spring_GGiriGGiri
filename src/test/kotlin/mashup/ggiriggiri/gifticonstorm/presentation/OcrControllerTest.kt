@@ -30,6 +30,9 @@ internal class OcrControllerTest : TestRestDocs() {
     @MockkBean
     private lateinit var memberRepository: MemberRepository
 
+    @MockkBean
+    private lateinit var signinBot: SigninBot
+
     @Test
     fun `OCR 성공`() {
         //given

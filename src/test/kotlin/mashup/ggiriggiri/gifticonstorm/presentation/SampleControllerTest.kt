@@ -3,9 +3,11 @@ package mashup.ggiriggiri.gifticonstorm.presentation
 import com.ninjasquad.springmockk.MockkBean
 import mashup.ggiriggiri.gifticonstorm.common.DEFAULT_OBJECT_MAPPER
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
+import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
@@ -21,6 +23,9 @@ internal class SampleControllerTest : TestRestDocs() {
 
     @MockkBean
     private lateinit var memberRepository: MemberRepository
+
+    @MockkBean
+    private lateinit var signinBot: SigninBot
 
     @Test
     fun sample() {

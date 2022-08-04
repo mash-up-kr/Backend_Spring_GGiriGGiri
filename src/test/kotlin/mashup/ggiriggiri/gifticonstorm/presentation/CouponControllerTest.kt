@@ -3,6 +3,7 @@ package mashup.ggiriggiri.gifticonstorm.presentation
 import com.ninjasquad.springmockk.MockkBean
 import mashup.ggiriggiri.gifticonstorm.application.CouponService
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
+import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -21,6 +22,9 @@ internal class CouponControllerTest : TestRestDocs() {
 
     @MockkBean
     private lateinit var memberRepository: MemberRepository
+
+    @MockkBean
+    private lateinit var signinBot: SigninBot
 
     @Test
     fun `쿠폰 카테고리 목록 조회 성공`() {
