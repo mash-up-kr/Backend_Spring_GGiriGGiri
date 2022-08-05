@@ -17,5 +17,7 @@ class Participant(
     val sprinkle: Sprinkle,
 
     @Enumerated(EnumType.STRING)
-    val drawStatus: DrawStatus = DrawStatus.PROGRESS
+    val drawStatus: DrawStatus = DrawStatus.PROGRESS,
+
+    val isChecked: Boolean = false
 ) : BaseEntity()
