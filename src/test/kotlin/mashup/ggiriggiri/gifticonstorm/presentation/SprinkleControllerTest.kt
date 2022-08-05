@@ -19,6 +19,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkledStatus
+import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -648,6 +649,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
         requestParams.add("limit", noOffsetRequest.limit.toString())
 
         val resDto = SprinkleRegistHistoryResDto(
+            sprinkleId = 1,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
             expiredAt = LocalDateTime.now().plusDays(1).with(LocalTime.MAX).toString(),
@@ -692,6 +694,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
                     PayloadDocumentation.responseFields(
                         PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
                         PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
+                        PayloadDocumentation.fieldWithPath("data[0].sprinkleId").type(JsonFieldType.NUMBER).description("뿌리기 id"),
                         PayloadDocumentation.fieldWithPath("data[0].brandName").type(JsonFieldType.STRING).description("브랜드명"),
                         PayloadDocumentation.fieldWithPath("data[0].merchandiseName").type(JsonFieldType.STRING).description("상품명"),
                         PayloadDocumentation.fieldWithPath("data[0].expiredAt").type(JsonFieldType.STRING).description("유효기간"),

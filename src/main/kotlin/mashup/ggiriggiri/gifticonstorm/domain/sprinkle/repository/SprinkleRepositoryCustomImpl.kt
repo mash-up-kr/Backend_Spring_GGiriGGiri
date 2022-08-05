@@ -80,6 +80,7 @@ class SprinkleRepositoryCustomImpl(
     override fun findRegistHistoryByMemberId(memberId: Long, noOffsetRequest: NoOffsetRequest): List<SprinkleRegistHistoryVo> {
         return jpaQueryFactory
             .select(QSprinkleRegistHistoryVo(
+                sprinkle.id,
                 coupon.brandName,
                 coupon.merchandiseName,
                 coupon.expiredAt,

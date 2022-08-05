@@ -5,6 +5,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import java.time.LocalDateTime
 
 data class SprinkleRegistHistoryVo @QueryProjection constructor(
+    val sprinkleId: Long,
     val brandName: String,
     val merchandiseName: String,
     val expiredAt: LocalDateTime,

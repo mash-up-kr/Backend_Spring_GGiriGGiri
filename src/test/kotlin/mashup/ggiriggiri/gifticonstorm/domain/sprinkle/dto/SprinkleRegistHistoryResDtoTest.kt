@@ -13,6 +13,7 @@ class SprinkleRegistHistoryResDtoTest : FunSpec({
     context("응모 진행 여부") {
         test("뿌리기 진행중이면 PROGRESS 반환") {
             val vo = SprinkleRegistHistoryVo(
+                sprinkleId = 1,
                 brandName = "스타벅스",
                 merchandiseName = "아이스 아메리카노",
                 expiredAt = now.plusDays(1),
@@ -26,6 +27,7 @@ class SprinkleRegistHistoryResDtoTest : FunSpec({
 
         test("뿌리기 종료 & 참여자 수 1명 이상이면 FINISH 반환") {
             val vo = SprinkleRegistHistoryVo(
+                sprinkleId = 1,
                 brandName = "스타벅스",
                 merchandiseName = "아이스 아메리카노",
                 expiredAt = now.plusDays(1),
@@ -39,6 +41,7 @@ class SprinkleRegistHistoryResDtoTest : FunSpec({
 
         test("뿌리기 종료 & 참여자 수 0명이면 NO_PARTICIPANTS 반환") {
             val vo = SprinkleRegistHistoryVo(
+                sprinkleId = 1,
                 brandName = "스타벅스",
                 merchandiseName = "아이스 아메리카노",
                 expiredAt = now.plusDays(1),

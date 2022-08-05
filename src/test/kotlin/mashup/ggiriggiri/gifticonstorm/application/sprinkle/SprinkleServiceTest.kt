@@ -193,6 +193,7 @@ internal class SprinkleServiceTest : FunSpec({
 
         private val sprinkleRegistHistoryListVos = listOf(
             SprinkleRegistHistoryVo(
+                sprinkleId = 1,
                 brandName = "스타벅스",
                 merchandiseName = "아이스 아메리카노",
                 expiredAt = LocalDateTime.now().plusDays(1).with(LocalTime.MAX),
