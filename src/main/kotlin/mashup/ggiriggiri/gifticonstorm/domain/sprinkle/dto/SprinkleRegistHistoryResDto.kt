@@ -24,13 +24,8 @@ data class SprinkleRegistHistoryResDto(
                 category = sprinkleRegistHistoryVo.category,
                 participants = sprinkleRegistHistoryVo.participants,
                 deliveryDate = sprinkleRegistHistoryVo.sprinkleAt.toLocalDate().toString(),
-                sprinkledStatus = getSprinkledStatus(sprinkleRegistHistoryVo.sprinkled, sprinkleRegistHistoryVo.participants)
+                sprinkledStatus = sprinkleRegistHistoryVo.getSprinkledStatus()
             )
-        }
-
-        private fun getSprinkledStatus(sprinkled: Boolean, participants: Int): SprinkledStatus {
-            if (!sprinkled) return SprinkledStatus.PROGRESS
-            return if (participants > 0) SprinkledStatus.FINISH else SprinkledStatus.NO_PARTICIPANTS
         }
     }
 }

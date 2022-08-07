@@ -1,12 +1,13 @@
-package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto
+package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleRegistHistoryVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkledStatus
 import java.time.LocalDateTime
 
-class SprinkleRegistHistoryResDtoTest : FunSpec({
+class SprinkleRegistHistoryVoTest : FunSpec({
 
     val now = LocalDateTime.now()
 
