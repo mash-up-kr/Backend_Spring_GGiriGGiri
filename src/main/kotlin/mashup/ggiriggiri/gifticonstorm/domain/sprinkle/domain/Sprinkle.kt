@@ -19,4 +19,14 @@ class Sprinkle(
     var sprinkled: Boolean = false,
     @OneToMany(mappedBy = "sprinkle")
     val participants: MutableList<Participant> = mutableListOf()
-) : BaseEntity()
+) : BaseEntity() {
+    companion object {
+        fun of(deadlineMinutes: Long, coupon: Coupon, member: Member): Sprinkle {
+            return Sprinkle(sprinkleAt = getSprinkleTimeFromNow(deadlineMinutes), coupon = coupon, member = member)
+        }
+
+        private fun getSprinkleTimeFromNow(deadlineMinutes: Long): LocalDateTime {
+            return LocalDateTime.now().plusMinutes(deadlineMinutes)
+        }
+    }
+}

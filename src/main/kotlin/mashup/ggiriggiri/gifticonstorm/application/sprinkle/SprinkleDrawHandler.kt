@@ -18,7 +18,7 @@ class SprinkleDrawHandler(
     @Async
     @EventListener
     fun drawEventListener(sprinkleDto: SprinkleDto) {
-        draw(sprinkleDto.couponId)
+        draw(sprinkleDto.sprinkleId)
     }
 
     private fun draw(couponId: Long) {

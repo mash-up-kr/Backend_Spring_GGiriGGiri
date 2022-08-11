@@ -8,7 +8,7 @@ import org.redisson.api.map.event.EntryEvent
 import org.redisson.api.map.event.EntryExpiredListener
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
 
@@ -34,8 +34,8 @@ class SprinkleCache(
         })
     }
 
-    fun generateSprinkle(couponId: Long, deadLineHour: Long) {
-        sprinkleCache.fastPut(generateSprinkleKey(), SprinkleDto(couponId).toJson(), deadLineHour, TimeUnit.HOURS)
+    fun generateSprinkle(sprinkleId: Long, deadLineMinutes: Long) {
+        sprinkleCache.fastPut(generateSprinkleKey(), SprinkleDto(sprinkleId).toJson(), deadLineMinutes, TimeUnit.MINUTES)
     }
 
     private fun generateSprinkleKey(): String {
@@ -44,5 +44,5 @@ class SprinkleCache(
 }
 
 data class SprinkleDto(
-    val couponId: Long
+    val sprinkleId: Long
 )
