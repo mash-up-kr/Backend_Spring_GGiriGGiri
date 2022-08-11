@@ -49,7 +49,7 @@ class SprinkleController(
         return BaseResponse.ok(sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest))
     }
 
-    @GetMapping("/api/v1/sprinkle-info/{id}")
+    @GetMapping("/sprinkle-info/{id}")
     fun getSprinkle(
         @UserInfo userInfoDto: UserInfoDto,
         @PathVariable(name = "id") sprinkleId: Long
