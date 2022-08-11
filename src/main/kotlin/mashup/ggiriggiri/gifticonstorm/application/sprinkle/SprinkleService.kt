@@ -4,7 +4,7 @@ import mashup.ggiriggiri.gifticonstorm.application.CouponService
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
-import mashup.ggiriggiri.gifticonstorm.common.error.exception.SprinkleNotFoundException
+import mashup.ggiriggiri.gifticonstorm.common.error.exception.EntityNotFoundException
 import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
@@ -89,7 +89,7 @@ class SprinkleService(
     }
     fun getSprinkleInfo(sprinkleId: Long): SprinkleInfoResDto {
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)
-            ?: throw SprinkleNotFoundException("sprinkle not found -> sprinkleId : $sprinkleId")
+            ?: throw EntityNotFoundException("sprinkle", "sprinkleId : $sprinkleId")
         return SprinkleInfoResDto.of(sprinkleInfoVo)
     }
 
