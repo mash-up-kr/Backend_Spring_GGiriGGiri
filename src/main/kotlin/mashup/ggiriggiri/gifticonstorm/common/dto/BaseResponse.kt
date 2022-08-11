@@ -29,10 +29,25 @@ class BaseResponse<T>(
             )
         }
 
+        fun error(responseCode: ResponseCode, message: String): BaseResponse<Unit> {
+            return BaseResponse(
+                code = responseCode.code,
+                message = message
+            )
+        }
+
         fun <T> error(responseCode: ResponseCode, data: T): BaseResponse<T> {
             return BaseResponse(
                 code = responseCode.code,
                 message = responseCode.message,
+                data = data
+            )
+        }
+
+        fun <T> error(responseCode: ResponseCode, message: String, data: T): BaseResponse<T> {
+            return BaseResponse(
+                code = responseCode.code,
+                message = message,
                 data = data
             )
         }

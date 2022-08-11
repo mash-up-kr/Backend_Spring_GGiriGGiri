@@ -4,6 +4,7 @@ import mashup.ggiriggiri.gifticonstorm.application.CouponService
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
+import mashup.ggiriggiri.gifticonstorm.common.error.exception.EntityNotFoundException
 import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
@@ -15,8 +16,9 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleListVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -37,18 +39,18 @@ class SprinkleService(
         if (orderBy == null || category == null) {
             throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         }
-
-        val sprinkleListVos = if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category) else findAllByCategory(category, noOffsetRequest)
-
+        val sprinkleInfoVos =
+            if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category)
+            else findAllByCategory(category, noOffsetRequest)
         val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id)
-        return sprinkleListVos.map { GetSprinkleResDto.toDto(it, sprinkleIds) }
+        return sprinkleInfoVos.map { GetSprinkleResDto.of(it, it.sprinkleId in sprinkleIds) }
     }
 
-    private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<SprinkleListVo> {
+    private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<SprinkleInfoVo> {
         return sprinkleRepository.findAllByCategory(category, noOffsetRequest)
     }
 
-    private fun findAllByDeadLine(category: Category): List<SprinkleListVo> {
+    private fun findAllByDeadLine(category: Category): List<SprinkleInfoVo> {
         if (category != Category.ALL) throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         return sprinkleRepository.findAllByDeadLine(10, 4)
     }
@@ -85,4 +87,10 @@ class SprinkleService(
 
         participantRepository.save(Participant(applySprinkleMember, sprinkle))
     }
+    fun getSprinkleInfo(sprinkleId: Long): SprinkleInfoResDto {
+        val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)
+            ?: throw EntityNotFoundException("sprinkle", "sprinkleId : $sprinkleId")
+        return SprinkleInfoResDto.of(sprinkleInfoVo)
+    }
+
 }
