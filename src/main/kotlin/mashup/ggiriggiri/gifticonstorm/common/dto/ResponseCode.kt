@@ -12,6 +12,8 @@ enum class ResponseCode(
 
     //Fail
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "F001", "No Header Name: Authorization"),
+    FAILED_RECOGNIZE(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "FAILED_RECOGNIZE_IMAGE"),
+    NOT_SUPPORT_OCR_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "F003", "NOT_SUPPORTED_IMAGE_FORMAT"),
 
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "F002", "Data not found"),
 

@@ -7,29 +7,23 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
 
-const val APPLE_PUSH_URL = "appleurl.com"
-
 @Configuration
-class WebClientConfig(
-    @Value("\${ncp.ocr.domain.ggiriggiri-general.url}")
-    private val url : String,
-    @Value("\${ncp.ocr.domain.ggiriggiri-general.secret}")
-    private val secret : String,
+class SigninBotConfig(
+    @Value("\${discord.signin.bot.token}")
+    private val token : String,
+    @Value("\${discord.base-url}")
+    private val baseUrl : String,
+    @Value("\${discord.signin.bot.channel.id}")
+    private val channelId: String
 ) {
 
     @Bean
-    fun applePushWebClient(): WebClient {
-        return WebClient.create(APPLE_PUSH_URL)
-    }
-
-    @Bean
-    fun naverCloudOCRClient(): WebClient {
-
+    fun signinBotClient(): WebClient {
         return WebClient.builder().apply {
-            it.baseUrl(url)
+            it.baseUrl("$baseUrl/channels/$channelId/messages")
+            it.defaultHeader("Authorization", "Bot $token")
             it.setApplicationJsonContentType()
-            it.setHost(url)
-            it.defaultHeader("X-OCR-SECRET", secret)
+            it.setHost(baseUrl)
         }.build()
     }
 

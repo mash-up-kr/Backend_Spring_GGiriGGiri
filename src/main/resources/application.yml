@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: db, aws
+    include: db, aws, ocr, discord
 
 server:
   error:
