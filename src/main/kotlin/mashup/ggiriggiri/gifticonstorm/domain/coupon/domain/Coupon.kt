@@ -31,7 +31,7 @@ class Coupon(
                 expiredAt = LocalDate.parse(createEventRequestDto.couponExpiredTime).atTime(LocalTime.MAX),
                 imageUrl = imageUrl,
                 category = createEventRequestDto.category,
-                member = Member("sample") // TODO : 임시 멤버 이후에 조회하여 실제 멤버 엔티티로 대체
+                member = member
             )
         }
     }

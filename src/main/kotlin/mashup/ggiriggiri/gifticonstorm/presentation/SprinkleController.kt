@@ -10,7 +10,6 @@ import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import javax.validation.Valid
@@ -28,15 +27,15 @@ class SprinkleController(
         @RequestPart(value = "image") image: MultipartFile,
         @RequestPart(value = "eventInfo") @Valid createEventRequestDto: CreateEventRequestDto,
         @UserInfo userInfoDto: UserInfoDto,
-    ): ResponseEntity<Unit> {
+    ): BaseResponse<Unit> {
         sprinkleService.createSprinkle(image, createEventRequestDto, userInfoDto)
-        return ResponseEntity.ok(Unit)
+        return BaseResponse.ok()
     }
 
     @PostMapping("/sprinkle/{sprinkleId}/apply")
-    fun applySprinkle(@UserInfo userInfoDto: UserInfoDto, @PathVariable sprinkleId: Long): ResponseEntity<Unit> {
+    fun applySprinkle(@UserInfo userInfoDto: UserInfoDto, @PathVariable sprinkleId: Long): BaseResponse<Unit> {
         sprinkleService.applySprinkle(userInfoDto, sprinkleId)
-        return ResponseEntity.ok(Unit)
+        return BaseResponse.ok()
     }
 
     @GetMapping("/sprinkles")

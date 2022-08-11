@@ -29,6 +29,4 @@ class Sprinkle(
             return LocalDateTime.now().plusMinutes(deadlineMinutes)
         }
     }
-
-
 }

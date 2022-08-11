@@ -28,7 +28,7 @@ class UserInfoResolver(private val memberRepository: MemberRepository) : Handler
         binderFactory: WebDataBinderFactory?
     ): Any? {
         val authkey = webRequest.getHeader(AUTHORIZATION_KEY_HEADER_NAME) ?: throw UnauthorizedException()
-        val member = memberRepository.findByInherenceId(authkey) ?: memberRepository.save(Member(inherenceId =  authkey))
+        val member = memberRepository.findByInherenceId(authkey) ?: memberRepository.save(Member(inherenceId = authkey))
         return UserInfoDto(id = member.id, inherenceId = member.inherenceId)
     }
 }
