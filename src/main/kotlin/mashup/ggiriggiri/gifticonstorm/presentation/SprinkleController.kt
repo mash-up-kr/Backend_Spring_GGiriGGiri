@@ -12,6 +12,8 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.CouponInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.DrawResultResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -51,6 +53,24 @@ class SprinkleController(
         noOffsetRequest: NoOffsetRequest,
     ): BaseResponse<List<GetSprinkleResDto>> {
         return BaseResponse.ok(sprinkleService.getSprinkles(userInfoDto, orderBy, category, noOffsetRequest))
+    }
+
+    @GetMapping("/sprinkle-info/{id}")
+    fun getSprinkle(
+        @UserInfo userInfoDto: UserInfoDto,
+        @PathVariable(name = "id") sprinkleId: Long
+    ): BaseResponse<SprinkleInfoResDto> {
+        return BaseResponse.ok(sprinkleService.getSprinkleInfo(sprinkleId))
+    }
+
+    @GetMapping("/sprinkle/registration-history")
+    fun getSprinkleRegistHistory(
+        @UserInfo userInfoDto: UserInfoDto,
+        noOffsetRequest: NoOffsetRequest
+    ): BaseResponse<List<SprinkleRegistHistoryResDto>> {
+        return BaseResponse.ok(
+            sprinkleService.getSprinkleRegistHistory(userInfoDto, noOffsetRequest)
+        )
     }
 
     @GetMapping("/draw-result/{sprinkleId}")

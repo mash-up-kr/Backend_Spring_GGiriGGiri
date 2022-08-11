@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -34,6 +35,8 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
     private lateinit var sprinkleList: List<Sprinkle>
     private lateinit var participantList: List<Participant>
 
+    private val now = LocalDateTime.now()
+
     @BeforeEach
     fun setUp() {
         memberList = mutableListOf(
@@ -45,7 +48,7 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
             Coupon(
                 brandName = "스타벅스",
                 merchandiseName = "아이스 아메리카노",
-                expiredAt = LocalDateTime.now().plusDays(1),
+                expiredAt = now.plusDays(1).with(LocalTime.MAX),
                 imageUrl = "testUrl",
                 category = Category.CAFE,
                 member = memberList[0]
@@ -53,7 +56,7 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
             Coupon(
                 brandName = "BHC",
                 merchandiseName = "치킨",
-                expiredAt = LocalDateTime.now().plusDays(1),
+                expiredAt = now.plusDays(1).with(LocalTime.MAX),
                 imageUrl = "testUrl",
                 category = Category.DELIVERY,
                 member = memberList[0]
@@ -61,7 +64,7 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
             Coupon(
                 brandName = "베스킨라빈스",
                 merchandiseName = "파인트",
-                expiredAt = LocalDateTime.now().plusDays(1),
+                expiredAt = now.plusDays(1).with(LocalTime.MAX),
                 imageUrl = "testUrl",
                 category = Category.ICECREAM,
                 member = memberList[0]
@@ -69,7 +72,7 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
             Coupon(
                 brandName = "버거킹",
                 merchandiseName = "햄버거",
-                expiredAt = LocalDateTime.now().plusDays(1),
+                expiredAt = now.plusDays(1).with(LocalTime.MAX),
                 imageUrl = "testUrl",
                 category = Category.FAST_FOOD,
                 member = memberList[0]
@@ -79,22 +82,22 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
             Sprinkle( //마감임박 해당 데이터
                 member = memberList[0],
                 coupon = couponList[0],
-                sprinkleAt = LocalDateTime.now().plusMinutes(10)
+                sprinkleAt = now.plusMinutes(10)
             ),
             Sprinkle( //마감임박 해당 X 데이터
                 member = memberList[0],
                 coupon = couponList[1],
-                sprinkleAt = LocalDateTime.now().plusMinutes(11)
+                sprinkleAt = now.plusMinutes(11)
             ),
             Sprinkle( //마감임박 해당 데이터
                 member = memberList[0],
                 coupon = couponList[2],
-                sprinkleAt = LocalDateTime.now().plusMinutes(9)
+                sprinkleAt = now.plusMinutes(9)
             ),
             Sprinkle( //마감임박 해당 데이터
                 member = memberList[0],
                 coupon = couponList[3],
-                sprinkleAt = LocalDateTime.now().plusMinutes(8)
+                sprinkleAt = now.plusMinutes(8)
             )
         )
         participantList = mutableListOf(
@@ -157,5 +160,26 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
         assertThat(sprinkleListVos).hasSize(1)
         assertThat(sprinkleListVos[0].brandName).isEqualTo("스타벅스")
         assertThat(sprinkleListVos[0].participants).isEqualTo(2)
+    }
+
+    @Test
+    fun `findInfoById - 뿌리기 정보 조회`() {
+        //when
+        val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleList[0].id)
+        //then
+        assertThat(sprinkleInfoVo!!.brandName).isEqualTo("스타벅스")
+        assertThat(sprinkleInfoVo.participants).isEqualTo(2)
+    }
+
+    @Test
+    fun `findRegistHistoryByMemberId - 쿠폰 등록 내역 조회`() {
+        //given
+        val noOffsetRequest = NoOffsetRequest.of(id = null, limit = 2)
+        //when
+        val registHistoryVos = sprinkleRepository.findRegistHistoryByMemberId(memberList[0].id, noOffsetRequest)
+        //then
+        assertThat(registHistoryVos).hasSize(2)
+        assertThat(registHistoryVos[0].brandName).isEqualTo("버거킹")
+        assertThat(registHistoryVos[1].brandName).isEqualTo("베스킨라빈스")
     }
 }

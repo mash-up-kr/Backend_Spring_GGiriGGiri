@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import java.time.LocalDateTime
 
-data class SprinkleListVo @QueryProjection constructor(
+data class SprinkleInfoVo @QueryProjection constructor(
     val sprinkleId: Long,
     val brandName: String,
     val merchandiseName: String,

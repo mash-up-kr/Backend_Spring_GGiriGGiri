@@ -1,5 +1,6 @@
 package mashup.ggiriggiri.gifticonstorm.domain.participant.repository
 
+import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.config.QuerydslTestConfig
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
@@ -11,6 +12,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -28,15 +30,19 @@ class ParticipantRepositoryCustomImplTest @Autowired constructor(
     private val participantRepository: ParticipantRepository
 ) {
 
-    @Test
-    fun `특정 사용자가 응모한 뿌리기의 id 리스트 반환`() {
-        //given
-        val memberList = mutableListOf(
+    private lateinit var memberList: List<Member>
+    private lateinit var couponList: List<Coupon>
+    private lateinit var sprinkleList: List<Sprinkle>
+    private lateinit var participantList: List<Participant>
+
+    @BeforeEach
+    fun setUp() {
+        memberList = mutableListOf(
             Member(inherenceId = "testUser1"),
             Member(inherenceId = "testUser2"),
             Member(inherenceId = "testUser3")
         )
-        val couponList = mutableListOf(
+        couponList = mutableListOf(
             Coupon(
                 brandName = "스타벅스",
                 merchandiseName = "아이스 아메리카노",
@@ -54,7 +60,7 @@ class ParticipantRepositoryCustomImplTest @Autowired constructor(
                 member = memberList[0]
             )
         )
-        val sprinkleList = mutableListOf(
+        sprinkleList = mutableListOf(
             Sprinkle(
                 member = memberList[0],
                 coupon = couponList[0],
@@ -66,7 +72,7 @@ class ParticipantRepositoryCustomImplTest @Autowired constructor(
                 sprinkleAt = LocalDateTime.now().plusMinutes(11)
             )
         )
-        val participantList = mutableListOf(
+        participantList = mutableListOf(
             Participant(member = memberList[1], sprinkle = sprinkleList[0]),
             Participant(member = memberList[2], sprinkle = sprinkleList[0]),
             Participant(member = memberList[1], sprinkle = sprinkleList[1]),
@@ -75,11 +81,27 @@ class ParticipantRepositoryCustomImplTest @Autowired constructor(
         couponRepository.saveAll(couponList)
         sprinkleRepository.saveAll(sprinkleList)
         participantRepository.saveAll(participantList)
+    }
+
+    @Test
+    fun `특정 사용자가 응모한 뿌리기의 id 리스트 반환`() {
         //when
         val sprinkleIdList = participantRepository.findAllSprinkleIdByMemberId(memberList[1].id)
         //then
         assertThat(sprinkleIdList.size).isEqualTo(2)
         assertThat(sprinkleIdList[0]).isEqualTo(sprinkleList[0].id)
         assertThat(sprinkleIdList[1]).isEqualTo(sprinkleList[1].id)
+    }
+
+    @Test
+    fun `findHistoryByMemberId - 응모 내역 조회`() {
+        //given
+        val noOffsetRequest = NoOffsetRequest.of()
+        //when
+        val infoVos = participantRepository.findHistoryByMemberId(memberList[1].id, noOffsetRequest)
+        //then
+        assertThat(infoVos.size).isEqualTo(2)
+        assertThat(infoVos[0].brandName).isEqualTo("BHC")
+        assertThat(infoVos[1].brandName).isEqualTo("스타벅스")
     }
 }

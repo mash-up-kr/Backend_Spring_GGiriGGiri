@@ -4,7 +4,8 @@ import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 
 open class BaseException(
     val responseCode: ResponseCode,
-    val errorMessage: String
-): RuntimeException(errorMessage) {
+    override val message: String
+): RuntimeException(message) {
+
     constructor(responseCode: ResponseCode) : this(responseCode, responseCode.message)
 }
