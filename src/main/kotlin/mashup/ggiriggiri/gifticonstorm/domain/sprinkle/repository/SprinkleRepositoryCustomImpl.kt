@@ -8,6 +8,8 @@ import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.QCoupon.coupon
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.QSprinkle.sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.QSprinkleInfoVo
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.QSprinkleRegistHistoryVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleRegistHistoryVo
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 
@@ -73,6 +75,33 @@ class SprinkleRepositoryCustomImpl(
             .join(sprinkle.coupon, coupon)
             .where(sprinkle.id.eq(id))
             .fetchOne()
+    }
+
+    override fun findRegistHistoryByMemberId(memberId: Long, noOffsetRequest: NoOffsetRequest): List<SprinkleRegistHistoryVo> {
+        return jpaQueryFactory
+            .select(QSprinkleRegistHistoryVo(
+                sprinkle.id,
+                coupon.brandName,
+                coupon.merchandiseName,
+                coupon.expiredAt,
+                coupon.category,
+                sprinkle.participants.size(),
+                sprinkle.sprinkled,
+                sprinkle.sprinkleAt
+            ))
+            .from(sprinkle)
+            .join(sprinkle.coupon, coupon)
+            .where(
+                ltSprinkleId(noOffsetRequest.id),
+                sprinkle.member.id.eq(memberId)
+            )
+            .orderBy(sprinkle.id.desc())
+            .limit(noOffsetRequest.limit)
+            .fetch()
+    }
+
+    private fun ltSprinkleId(id: Long?): BooleanExpression? {
+        return id?.let { sprinkle.id.lt(it) }
     }
 
     private fun gtSprinkleId(id: Long?): BooleanExpression? {

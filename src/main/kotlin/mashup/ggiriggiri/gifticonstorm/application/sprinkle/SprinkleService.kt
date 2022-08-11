@@ -16,6 +16,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
@@ -91,6 +92,11 @@ class SprinkleService(
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)
             ?: throw EntityNotFoundException("sprinkle", "sprinkleId : $sprinkleId")
         return SprinkleInfoResDto.of(sprinkleInfoVo)
+    }
+
+    fun getSprinkleRegistHistory(userInfoDto: UserInfoDto, noOffsetRequest: NoOffsetRequest): List<SprinkleRegistHistoryResDto> {
+        val registHistoryVos = sprinkleRepository.findRegistHistoryByMemberId(userInfoDto.id, noOffsetRequest)
+        return registHistoryVos.map { SprinkleRegistHistoryResDto.of(it) }
     }
 
 }
