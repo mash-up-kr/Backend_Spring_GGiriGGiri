@@ -1,7 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.domain.coupon.domain
 
 import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
-import mashup.ggiriggiri.gifticonstorm.domain.coupon.dto.CouponSaveRequestDto
+import mashup.ggiriggiri.gifticonstorm.domain.dto.event.CreateEventRequestDto
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -24,14 +24,14 @@ class Coupon(
 ): BaseEntity() {
 
     companion object {
-        fun of(imageUrl: String, couponSaveRequestDto: CouponSaveRequestDto): Coupon {
+        fun of(imageUrl: String, createEventRequestDto: CreateEventRequestDto, member: Member): Coupon {
             return Coupon(
-                brandName = couponSaveRequestDto.brandName,
-                merchandiseName = couponSaveRequestDto.merchandiseName,
-                expiredAt = LocalDate.parse(couponSaveRequestDto.couponExpiredTime).atTime(LocalTime.MAX),
+                brandName = createEventRequestDto.brandName,
+                merchandiseName = createEventRequestDto.merchandiseName,
+                expiredAt = LocalDate.parse(createEventRequestDto.couponExpiredTime).atTime(LocalTime.MAX),
                 imageUrl = imageUrl,
-                category = couponSaveRequestDto.category,
-                member = Member("sample") // TODO : 임시 멤버 이후에 조회하여 실제 멤버 엔티티로 대체
+                category = createEventRequestDto.category,
+                member = member
             )
         }
     }

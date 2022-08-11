@@ -15,6 +15,10 @@ enum class ResponseCode(
     FAILED_RECOGNIZE(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "FAILED_RECOGNIZE_IMAGE"),
     NOT_SUPPORT_OCR_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "F003", "NOT_SUPPORTED_IMAGE_FORMAT"),
 
+    DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "F002", "Data not found"),
+
+    INVALID_PARTICIPATE_REQUEST(HttpStatus.BAD_REQUEST, "F003", "participant, sprinkle creator is same"),
+
     // Common
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "C001", "Invalid Input Value"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C002", "Internal Server Error")
