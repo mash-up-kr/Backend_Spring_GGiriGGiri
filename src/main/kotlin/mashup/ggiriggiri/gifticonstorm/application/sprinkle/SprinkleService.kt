@@ -90,7 +90,7 @@ class SprinkleService(
         if (sprinkle.participants.any { it.member.id == applySprinkleMember.id })
             throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "이미 참여한 뿌리기 sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
-        participantRepository.save(Participant(applySprinkleMember, sprinkle))
+        participantRepository.save(Participant(member = applySprinkleMember, sprinkle = sprinkle))
     }
     fun getSprinkleInfo(sprinkleId: Long): SprinkleInfoResDto {
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)

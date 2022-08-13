@@ -176,7 +176,7 @@ internal class SprinkleServiceTest : FunSpec({
             )
         )
 
-        private val member = Member("test-user")
+        private val member = Member(inherenceId = "test-user")
         private val coupon = Coupon(
             brandName = "스타벅스",
             merchandiseName = "아이스아메리카노",

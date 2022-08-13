@@ -8,15 +8,22 @@ import mashup.ggiriggiri.gifticonstorm.application.push.DrawStatus
 import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
+import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
+import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
+import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
 import mashup.ggiriggiri.gifticonstorm.domain.participant.vo.ParticipantInfoVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
+import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDateTime
 import java.time.LocalTime
 
 class ParticipantServiceTest : FunSpec({
 
     val participantRepository = mockk<ParticipantRepository>()
-    val participantService = ParticipantService(participantRepository)
+    val sprinkleRepository = mockk<SprinkleRepository>()
+    val participantService = ParticipantService(participantRepository, sprinkleRepository)
 
     context("응모 내역 조회") {
         test("성공") {
@@ -33,6 +40,33 @@ class ParticipantServiceTest : FunSpec({
             resDtos[0].participateDate shouldBe now.minusDays(1).toLocalDate().toString()
         }
     }
+
+    context("응모 결과 조회") {
+        test("당첨") {
+            // given
+            val drawResultRequester = Member(id = userInfoDto.id, inherenceId = "user-inherenceId")
+            val sprinkleMember = Member(id = 2, inherenceId = "user-inherenceId")
+            val participant = Member(id = 3, inherenceId = "user-inherenceId")
+            val sprinkle = Sprinkle(
+                member = sprinkleMember,
+                coupon = Coupon(brandName = "베스킨라빈스", merchandiseName = "싱글 레귤러", expiredAt = LocalDateTime.now().plusMonths(2), imageUrl = "http://dummyimage.com/240x100.png/dddddd/000000", category = Category.ICECREAM, member = sprinkleMember),
+                sprinkleAt = LocalDateTime.now().plusHours(2),
+                sprinkled = false
+            )
+
+            sprinkle.participants.add(Participant(member = drawResultRequester, drawStatus = DrawStatus.WIN, sprinkle = sprinkle))
+            sprinkle.participants.add(Participant(member = participant, drawStatus = DrawStatus.LOSE, sprinkle = sprinkle))
+
+            every { sprinkleRepository.findByIdOrNull(sprinkleId) } returns sprinkle
+
+            // when
+            val drawResultResDto = participantService.getDrawResult(userInfoDto, sprinkleId)
+
+            // then
+            drawResultResDto.drawStatus shouldBe DrawStatus.WIN
+        }
+
+    }
 }) {
     companion object {
 
@@ -40,6 +74,8 @@ class ParticipantServiceTest : FunSpec({
         val noOffsetRequest = NoOffsetRequest.of()
 
         val now: LocalDateTime = LocalDateTime.now()
+
+        const val sprinkleId = 1L
 
         val participantInfoVos = listOf(
             ParticipantInfoVo(
