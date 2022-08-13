@@ -111,3 +111,43 @@ include::{snippets}/뿌리기응모/path-parameters.adoc[]
 ==== Http Response
 
 include::{snippets}/뿌리기응모/http-response.adoc[]
+
+=== OCR 요청
+
+==== Curl Command
+
+include::{snippets}/OCR 요청/curl-request.adoc[]
+
+==== Http Request
+
+include::{snippets}/OCR 요청/http-request.adoc[]
+
+==== RequestPart Body
+
+include::{snippets}/OCR 요청/request-parts.adoc[]
+
+==== Http Response
+
+include::{snippets}/OCR 요청/response-body.adoc[]
+
+include::{snippets}/OCR 요청/response-fields.adoc[]
+
+=== 쿠폰 카테고리 목록 조회
+
+==== Curl Command
+
+include::{snippets}/쿠폰 카테고리 목록 조회/쿠폰 카테고리 목록 조회 성공/curl-request.adoc[]
+
+==== Http Request
+
+include::{snippets}/쿠폰 카테고리 목록 조회/쿠폰 카테고리 목록 조회 성공/http-request.adoc[]
+
+==== Http Response
+
+include::{snippets}/쿠폰 카테고리 목록 조회/쿠폰 카테고리 목록 조회 성공/http-response.adoc[]
+
+include::{snippets}/쿠폰 카테고리 목록 조회/쿠폰 카테고리 목록 조회 성공/response-fields.adoc[]
+
+
+
+
