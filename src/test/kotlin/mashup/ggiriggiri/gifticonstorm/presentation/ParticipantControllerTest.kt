@@ -97,7 +97,7 @@ internal class ParticipantControllerTest : TestRestDocs() {
                         HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
                     ),
                     RequestDocumentation.requestParameters(
-                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 뿌리기 id (첫 요청시 id = null)"),
+                        RequestDocumentation.parameterWithName("id").description("마지막으로 전달받은 participantId (첫 요청시 id = null)"),
                         RequestDocumentation.parameterWithName("limit").description("조회 개수"),
                     ),
                     PayloadDocumentation.responseFields(
