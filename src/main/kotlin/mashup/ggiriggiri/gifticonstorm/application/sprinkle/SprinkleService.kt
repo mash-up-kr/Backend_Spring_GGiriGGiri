@@ -16,14 +16,15 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDateTime
 
 
 @Service
@@ -80,11 +81,14 @@ class SprinkleService(
         val applySprinkleMember = memberRepository.findByInherenceId(userInfoDto.inherenceId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "member not found -> inherenceId : ${userInfoDto.inherenceId}")
         val sprinkle = sprinkleRepository.findByIdOrNull(sprinkleId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "sprinkle not found -> sprinkleId : $sprinkleId")
 
+        if (sprinkle.sprinkleAt.isBefore(LocalDateTime.now()))
+            throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "만료된 뿌리기 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
+
         if (sprinkle.member.id == applySprinkleMember.id)
             throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "뿌리기 생성자, 참여자 동일 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
         if (sprinkle.participants.any { it.member.id == applySprinkleMember.id })
-            throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "이미 참여한 뿌리기, sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
+            throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "이미 참여한 뿌리기 sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
         participantRepository.save(Participant(applySprinkleMember, sprinkle))
     }
