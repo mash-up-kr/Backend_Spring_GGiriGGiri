@@ -37,7 +37,7 @@ class GlobalExceptionHandler {
     private fun handleBaseException(e: BaseException): ResponseEntity<BaseResponse<Unit>> {
         log.warn(e.message, e)
         return ResponseEntity.status(e.responseCode.status)
-            .body(BaseResponse.error(e.responseCode, e.message))
+            .body(BaseResponse.error(e.responseCode))
     }
 
     @ExceptionHandler(Exception::class)
