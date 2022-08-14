@@ -58,6 +58,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - run: |
+          cd deploy && zip -r deploy.zip .
+
+      - run: ls
+
       - name: 배포
         uses: einaregilsson/beanstalk-deploy@v20
         with:
@@ -67,5 +72,5 @@ jobs:
           environment_name: Ggiriggiriserver-env
           version_label: deploy-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment_package: ./deploy/Dockerrun.aws.json
+          deployment_package: ./deploy/deploy.zip
           wait_for_deployment: false
