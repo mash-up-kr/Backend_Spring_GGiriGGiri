@@ -16,8 +16,8 @@ import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.Participant
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
 import org.springframework.data.repository.findByIdOrNull
@@ -88,10 +88,11 @@ class SprinkleService(
 
         participantRepository.save(Participant(applySprinkleMember, sprinkle))
     }
-    fun getSprinkleInfo(sprinkleId: Long): SprinkleInfoResDto {
+
+    fun getSprinkleInfo(sprinkleId: Long, userInfoDto: UserInfoDto): SprinkleInfoResDto {
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)
             ?: throw EntityNotFoundException("sprinkle", "sprinkleId : $sprinkleId")
-        return SprinkleInfoResDto.of(sprinkleInfoVo)
+        return SprinkleInfoResDto.of(sprinkleInfoVo, userInfoDto)
     }
 
     fun getSprinkleRegistHistory(userInfoDto: UserInfoDto, noOffsetRequest: NoOffsetRequest): List<SprinkleRegistHistoryResDto> {
