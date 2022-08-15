@@ -593,10 +593,11 @@ internal class SprinkleControllerTest : TestRestDocs() {
             category = Category.CAFE,
             expiredAt = now.plusDays(1).with(LocalTime.MAX).toString(),
             sprinkleAt = now.plusMinutes(10).toString(),
-            participants = 100
+            participants = 100,
+            registeredBy = false
         )
 
-        every { sprinkleService.getSprinkleInfo(1) } returns resDto
+        every { sprinkleService.getSprinkleInfo(1, userInfoDto) } returns resDto
 
         //when, then
         mockMvc.perform(
@@ -615,7 +616,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
             )
             .andDo(
                 MockMvcRestDocumentation.document(
-                    "뿌리기 단건 조회/{methodName}",
+                    "뿌리기 정보 조회/{methodName}",
                     HeaderDocumentation.requestHeaders(
                         HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
                     ),
@@ -632,6 +633,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
                         PayloadDocumentation.fieldWithPath("data.expiredAt").type(JsonFieldType.STRING).description("유효기간"),
                         PayloadDocumentation.fieldWithPath("data.sprinkleAt").type(JsonFieldType.STRING).description("뿌리기 시간"),
                         PayloadDocumentation.fieldWithPath("data.participants").type(JsonFieldType.NUMBER).description("응모자 수"),
+                        PayloadDocumentation.fieldWithPath("data.registeredBy").type(JsonFieldType.BOOLEAN).description("자신이 등록한 뿌리기 여부"),
                     ),
                     HeaderDocumentation.requestHeaders()
                 )

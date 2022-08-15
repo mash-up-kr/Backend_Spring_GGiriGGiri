@@ -8,18 +8,18 @@ enum class ResponseCode(
     val message: String
 ) {
     //Success
-    OK(HttpStatus.OK, "S001", "Success"),
+    OK(HttpStatus.OK, "S001", "성공했습니다."),
 
     //Fail
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "F001", "No Header Name: Authorization"),
-    FAILED_RECOGNIZE(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "FAILED_RECOGNIZE_IMAGE"),
-    NOT_SUPPORT_OCR_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "F003", "NOT_SUPPORTED_IMAGE_FORMAT"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "F001", "사용자 인증에 실패했습니다."),
+    FAILED_RECOGNIZE(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "OCR 인식에 실패했습니다."),
+    NOT_SUPPORT_OCR_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "F003", "지원하지 않는 이미지 형식입니다."),
 
-    DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "F002", "Data not found"),
+    DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "F004", "해당 데이터를 찾을 수 없습니다."),
 
-    INVALID_PARTICIPATE_REQUEST(HttpStatus.BAD_REQUEST, "F003", "participant, sprinkle creator is same"),
+    INVALID_PARTICIPATE_REQUEST(HttpStatus.BAD_REQUEST, "F005", "내가 등록한 기프티콘에는 응모할 수 없어요!"),
 
     // Common
-    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "C001", "Invalid Input Value"),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C002", "Internal Server Error")
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "C001", "유효하지 않은 입력값 입니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C002", "서버 에러가 발생했습니다.")
 }

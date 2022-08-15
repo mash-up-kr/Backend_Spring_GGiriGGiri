@@ -31,7 +31,7 @@ class UserInfoResolver(
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): Any? {
-        val authkey = webRequest.getHeader(AUTHORIZATION_KEY_HEADER_NAME) ?: throw UnauthorizedException()
+        val authkey = webRequest.getHeader(AUTHORIZATION_KEY_HEADER_NAME) ?: throw UnauthorizedException("No Header Name: Authorization")
 
         memberRepository.findByInherenceId(authkey)?.let {
             return UserInfoDto(id = it.id, inherenceId = it.inherenceId)

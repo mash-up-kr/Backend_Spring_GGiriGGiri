@@ -60,7 +60,7 @@ class SprinkleController(
         @UserInfo userInfoDto: UserInfoDto,
         @PathVariable(name = "id") sprinkleId: Long
     ): BaseResponse<SprinkleInfoResDto> {
-        return BaseResponse.ok(sprinkleService.getSprinkleInfo(sprinkleId))
+        return BaseResponse.ok(sprinkleService.getSprinkleInfo(sprinkleId, userInfoDto))
     }
 
     @GetMapping("/sprinkle/registration-history")
