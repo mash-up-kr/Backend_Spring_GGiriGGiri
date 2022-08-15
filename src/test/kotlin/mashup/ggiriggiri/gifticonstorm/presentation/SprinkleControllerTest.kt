@@ -590,7 +590,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
             sprinkleId = 1,
             brandName = "스타벅스",
             merchandiseName = "아이스 아메리카노",
-            category = Category.CAFE,
+            category = "카페/디저트",
             expiredAt = now.plusDays(1).with(LocalTime.MAX).toString(),
             sprinkleAt = now.plusMinutes(10).toString(),
             participants = 100,
