@@ -7,8 +7,8 @@ import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.QCoupon.coupon
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.QSprinkle.sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.QSprinkleInfoVo
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.QSprinkleRegistHistoryVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleRegistHistoryVo
 import java.time.LocalDateTime
 import java.util.stream.Collectors
@@ -27,7 +27,8 @@ class SprinkleRepositoryCustomImpl(
                 coupon.category,
                 coupon.expiredAt,
                 sprinkle.participants.size(),
-                sprinkle.sprinkleAt
+                sprinkle.sprinkleAt,
+                sprinkle.member.id
             ))
             .from(sprinkle)
             .join(sprinkle.coupon, coupon)
@@ -46,7 +47,8 @@ class SprinkleRepositoryCustomImpl(
                 coupon.category,
                 coupon.expiredAt,
                 sprinkle.participants.size(),
-                sprinkle.sprinkleAt
+                sprinkle.sprinkleAt,
+                sprinkle.member.id
             ))
             .from(sprinkle)
             .join(sprinkle.coupon, coupon)
@@ -63,13 +65,14 @@ class SprinkleRepositoryCustomImpl(
     override fun findInfoById(id: Long): SprinkleInfoVo? {
         return jpaQueryFactory
             .select(QSprinkleInfoVo(
-                    sprinkle.id,
-                    coupon.brandName,
-                    coupon.merchandiseName,
-                    coupon.category,
-                    coupon.expiredAt,
-                    sprinkle.participants.size(),
-                    sprinkle.sprinkleAt
+                sprinkle.id,
+                coupon.brandName,
+                coupon.merchandiseName,
+                coupon.category,
+                coupon.expiredAt,
+                sprinkle.participants.size(),
+                sprinkle.sprinkleAt,
+                sprinkle.member.id
             ))
             .from(sprinkle)
             .join(sprinkle.coupon, coupon)

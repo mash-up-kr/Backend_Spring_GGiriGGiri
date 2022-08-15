@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: db, aws, ocr, discord
+    include: db, aws, ocr, discord, log
     active: local
 
 server:

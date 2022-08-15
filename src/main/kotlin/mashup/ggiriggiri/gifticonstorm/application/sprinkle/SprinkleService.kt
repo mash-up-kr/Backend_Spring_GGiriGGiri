@@ -92,10 +92,11 @@ class SprinkleService(
 
         participantRepository.save(Participant(member = applySprinkleMember, sprinkle = sprinkle))
     }
-    fun getSprinkleInfo(sprinkleId: Long): SprinkleInfoResDto {
+
+    fun getSprinkleInfo(sprinkleId: Long, userInfoDto: UserInfoDto): SprinkleInfoResDto {
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)
             ?: throw EntityNotFoundException("sprinkle", "sprinkleId : $sprinkleId")
-        return SprinkleInfoResDto.of(sprinkleInfoVo)
+        return SprinkleInfoResDto.of(sprinkleInfoVo, userInfoDto)
     }
 
     fun getSprinkleRegistHistory(userInfoDto: UserInfoDto, noOffsetRequest: NoOffsetRequest): List<SprinkleRegistHistoryResDto> {

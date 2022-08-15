@@ -107,11 +107,10 @@ internal class SprinkleServiceTest : FunSpec({
     context("뿌리기 정보 조회") {
         test("성공") {
             //given
-            every { sprinkleRepository.findByIdOrNull(1) } returns sprinkle
             every { sprinkleRepository.findInfoById(1) } returns sprinkleInfoVos[0]
 
             //when
-            val resDto = sprinkleService.getSprinkleInfo(1)
+            val resDto = sprinkleService.getSprinkleInfo(1, userInfoDto)
 
             //then
             resDto.sprinkleId shouldBe 1
@@ -121,13 +120,14 @@ internal class SprinkleServiceTest : FunSpec({
             resDto.expiredAt shouldBe now.plusDays(1).with(LocalTime.MAX).toString()
             resDto.participants shouldBe 3
             resDto.sprinkleAt shouldBe now.plusMinutes(10).toString()
+            resDto.registeredBy shouldBe true
         }
 
         test("실패 - 해당 뿌리기가 존재하지 않을 때") {
             every { sprinkleRepository.findInfoById(1) } returns null
 
             shouldThrow<BaseException> {
-                sprinkleService.getSprinkleInfo(1)
+                sprinkleService.getSprinkleInfo(1, userInfoDto)
             }
         }
     }
@@ -163,7 +163,8 @@ internal class SprinkleServiceTest : FunSpec({
                 category = Category.CAFE,
                 expiredAt = now.plusDays(1).with(LocalTime.MAX),
                 participants = 3,
-                sprinkleAt = now.plusMinutes(10)
+                sprinkleAt = now.plusMinutes(10),
+                memberId = 1
             ),
             SprinkleInfoVo(
                 sprinkleId = 2,
@@ -172,7 +173,8 @@ internal class SprinkleServiceTest : FunSpec({
                 category = Category.ICECREAM,
                 expiredAt = now.plusDays(1).with(LocalTime.MAX),
                 participants = 2,
-                sprinkleAt = now.plusMinutes(9)
+                sprinkleAt = now.plusMinutes(9),
+                memberId = 2
             )
         )
 
