@@ -594,7 +594,8 @@ internal class SprinkleControllerTest : TestRestDocs() {
             expiredAt = now.plusDays(1).with(LocalTime.MAX).toString(),
             sprinkleAt = now.plusMinutes(10).toString(),
             participants = 100,
-            registeredBy = false
+            registeredBy = false,
+            participateIn = false
         )
 
         every { sprinkleService.getSprinkleInfo(1, userInfoDto) } returns resDto
@@ -634,6 +635,7 @@ internal class SprinkleControllerTest : TestRestDocs() {
                         PayloadDocumentation.fieldWithPath("data.sprinkleAt").type(JsonFieldType.STRING).description("뿌리기 시간"),
                         PayloadDocumentation.fieldWithPath("data.participants").type(JsonFieldType.NUMBER).description("응모자 수"),
                         PayloadDocumentation.fieldWithPath("data.registeredBy").type(JsonFieldType.BOOLEAN).description("자신이 등록한 뿌리기 여부"),
+                        PayloadDocumentation.fieldWithPath("data.participateIn").type(JsonFieldType.BOOLEAN).description("응모 여부"),
                     ),
                     HeaderDocumentation.requestHeaders()
                 )
