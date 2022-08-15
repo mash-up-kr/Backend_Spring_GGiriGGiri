@@ -25,4 +25,16 @@ class Participant(
     var isChecked: Boolean = false,
 
     var checkedAt: LocalDateTime? = null
-) : BaseEntity()
+) : BaseEntity() {
+
+    fun drawResultCheck() {
+        if (!isDrawResultChecked() && drawStatus != DrawStatus.PROGRESS) {
+            this.isChecked = true
+            this.checkedAt = LocalDateTime.now()
+        }
+    }
+
+    private fun isDrawResultChecked(): Boolean {
+        return this.isChecked && checkedAt != null
+    }
+}
