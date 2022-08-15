@@ -1,15 +1,19 @@
 package mashup.ggiriggiri.gifticonstorm.application.sprinkle
 
 import mashup.ggiriggiri.gifticonstorm.application.push.PushService
-import mashup.ggiriggiri.gifticonstorm.domain.coupon.repository.CouponRepository
+import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
+import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.context.event.EventListener
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class SprinkleDrawHandler(
-    private val couponRepository: CouponRepository,
+    private val sprinkleRepository: SprinkleRepository,
     private val pushService: PushService
 ) {
 
@@ -17,12 +21,13 @@ class SprinkleDrawHandler(
 
     @Async
     @EventListener
+    @Transactional
     fun drawEventListener(sprinkleDto: SprinkleDto) {
         draw(sprinkleDto.sprinkleId)
     }
 
-    private fun draw(couponId: Long) {
-        val coupon = couponRepository.findByCouponId(couponId) ?: throw RuntimeException()
-//        val winnerParticipant = coupon.participants.also { it.shuffle() }.first()
+    private fun draw(sprinkleId: Long) {
+        val sprinkle = sprinkleRepository.findByIdOrNull(sprinkleId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "sprinkle not found -> sprinkleId : $sprinkleId")
+        sprinkle.drawProcess()
     }
 }
