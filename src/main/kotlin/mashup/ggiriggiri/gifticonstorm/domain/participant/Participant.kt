@@ -9,6 +9,8 @@ import javax.persistence.*
 
 @Entity
 class Participant(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0L,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     val member: Member,
@@ -23,4 +25,16 @@ class Participant(
     var isChecked: Boolean = false,
 
     var checkedAt: LocalDateTime? = null
-) : BaseEntity()
+) : BaseEntity() {
+
+    fun drawResultCheck() {
+        if (!isDrawResultChecked() && drawStatus != DrawStatus.PROGRESS) {
+            this.isChecked = true
+            this.checkedAt = LocalDateTime.now()
+        }
+    }
+
+    private fun isDrawResultChecked(): Boolean {
+        return this.isChecked && checkedAt != null
+    }
+}

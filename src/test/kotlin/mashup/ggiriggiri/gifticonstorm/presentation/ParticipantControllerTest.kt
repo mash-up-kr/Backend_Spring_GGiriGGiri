@@ -11,6 +11,8 @@ import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.participant.dto.ParticipantInfoResDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.CouponInfoDto
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.DrawResultResDto
 import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.BeforeEach
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.request.RequestDocumentation
@@ -27,6 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @WebMvcTest(ParticipantController::class)
 internal class ParticipantControllerTest : TestRestDocs() {
@@ -113,6 +117,40 @@ internal class ParticipantControllerTest : TestRestDocs() {
                         PayloadDocumentation.fieldWithPath("data[0].participateDate").type(JsonFieldType.STRING).description("응모 날짜"),
                         PayloadDocumentation.fieldWithPath("data[0].isChecked").type(JsonFieldType.BOOLEAN).description("응모 결과 확인 여부"),
                         PayloadDocumentation.fieldWithPath("data[0].drawStatus").type(JsonFieldType.STRING).description("응모 진행 상태"),
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun `응모 결과 조회`() {
+        val drawResultResDto = DrawResultResDto(DrawStatus.WIN, CouponInfoDto("베스킨라빈스", "싱글 레귤러", LocalDateTime.now().plusMonths(2), "http://dummyimage.com/240x100.png/dddddd/000000"))
+        every { participantService.getDrawResult(userInfoDto, 1L) } returns drawResultResDto
+
+        //when, then
+        mockMvc.perform(
+            RestDocumentationRequestBuilders.get("/api/v1/participant/draw-result/{sprinkleId}", 1L)
+                .header("Authorization", userInfoDto.inherenceId)
+        ).andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(
+                MockMvcRestDocumentation.document(
+                    "응모 결과 조회/{methodName}",
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
+                    RequestDocumentation.pathParameters(
+                        RequestDocumentation.parameterWithName("sprinkleId").description("응모 대상 sprinkleId")
+                    ),
+                    PayloadDocumentation.responseFields(
+                        PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
+                        PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
+                        PayloadDocumentation.fieldWithPath("data.drawStatus").type(JsonFieldType.STRING).description("응모 결과 상태 (PROGRESS(진행중), WIN(당첨), LOSE(낙첨))"),
+                        PayloadDocumentation.fieldWithPath("data.couponInfo").type(JsonFieldType.OBJECT).optional().description("쿠폰 정보(당첨시 포함)"),
+                        PayloadDocumentation.fieldWithPath("data.couponInfo.brandName").type(JsonFieldType.STRING).description("브랜드명"),
+                        PayloadDocumentation.fieldWithPath("data.couponInfo.merchandiseName").type(JsonFieldType.STRING).description("상품명"),
+                        PayloadDocumentation.fieldWithPath("data.couponInfo.expiredAt").type(JsonFieldType.STRING).description("쿠폰 유효기간"),
+                        PayloadDocumentation.fieldWithPath("data.couponInfo.imageUrl").type(JsonFieldType.STRING).description("쿠폰 이미지 url")
                     )
                 )
             )

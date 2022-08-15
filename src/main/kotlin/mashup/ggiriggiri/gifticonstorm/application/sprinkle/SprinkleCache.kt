@@ -28,7 +28,7 @@ class SprinkleCache(
         sprinkleCache.addListener(object : EntryExpiredListener<String, String> {
             override fun onExpired(event: EntryEvent<String, String>) {
                 if (event.key.startsWith(SPRINKLE_KEY_IDENTIFIER)) {
-                    eventPublisher.publishEvent(DEFAULT_OBJECT_MAPPER.readValue(event.key, SprinkleDto::class.java))
+                    eventPublisher.publishEvent(DEFAULT_OBJECT_MAPPER.readValue(event.value, SprinkleDto::class.java))
                 }
             }
         })

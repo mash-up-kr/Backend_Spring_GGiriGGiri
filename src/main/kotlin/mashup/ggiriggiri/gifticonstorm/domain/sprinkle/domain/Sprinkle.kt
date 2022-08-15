@@ -9,6 +9,8 @@ import javax.persistence.*
 
 @Entity
 class Sprinkle(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0L,
     @ManyToOne
     @JoinColumn(name = "member_id")
     val member: Member,
