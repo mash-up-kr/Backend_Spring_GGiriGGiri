@@ -578,7 +578,7 @@ Content-Type: multipart/form-data
 Content-Disposition: form-data; name=eventInfo; filename=eventInfo
 Content-Type: application/json
 
-{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-15","deadlineMinutes":60}
+{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-16","deadlineMinutes":60}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -630,7 +630,7 @@ Content-Type: application/json
 </table>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code>{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-15","deadlineMinutes":60}</code></pre>
+<pre class="highlightjs highlight nowrap"><code>{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-16","deadlineMinutes":60}</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -681,11 +681,11 @@ Content-Type: application/json
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 63
+Content-Length: 75
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : null
 }</code></pre>
 </div>
@@ -762,11 +762,11 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 63
+Content-Length: 75
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : null
 }</code></pre>
 </div>
@@ -831,7 +831,7 @@ Content-Type: multipart/form-data
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code>{
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : {
     "brandName" : "스타벅스",
     "merchandiseName" : "아메리카.",
@@ -956,19 +956,19 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 355
+Content-Length: 367
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : [ {
     "sprinkleId" : 1,
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
     "category" : "CAFE",
-    "expiredAt" : "2022-08-15T23:59:59.999999999",
+    "expiredAt" : "2022-08-16T23:59:59.999999999",
     "participants" : 100,
-    "sprinkleAt" : "2022-08-14T01:15:45.017725",
+    "sprinkleAt" : "2022-08-15T16:41:50.666168",
     "participateIn" : true
   } ]
 }</code></pre>
@@ -1123,19 +1123,19 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 355
+Content-Length: 367
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : [ {
     "sprinkleId" : 1,
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
     "category" : "CAFE",
-    "expiredAt" : "2022-08-15T23:59:59.999999999",
+    "expiredAt" : "2022-08-16T23:59:59.999999999",
     "participants" : 100,
-    "sprinkleAt" : "2022-08-14T01:15:45.148563",
+    "sprinkleAt" : "2022-08-15T16:41:50.804583",
     "participateIn" : true
   } ]
 }</code></pre>
@@ -1234,11 +1234,11 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 152
+Content-Length: 164
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : [ "ALL", "CAFE", "DELIVERY", "ICECREAM", "CONVENIENCE_STORE", "FAST_FOOD", "VOUCHER", "ETC" ]
 }</code></pre>
 </div>
@@ -1322,19 +1322,20 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 323
+Content-Length: 363
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : {
     "sprinkleId" : 1,
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
     "category" : "CAFE",
-    "expiredAt" : "2022-08-15T23:59:59.999999999",
+    "expiredAt" : "2022-08-16T23:59:59.999999999",
     "participants" : 100,
-    "sprinkleAt" : "2022-08-14T01:15:44.032226"
+    "sprinkleAt" : "2022-08-15T16:41:49.897802",
+    "registeredBy" : false
   }
 }</code></pre>
 </div>
@@ -1397,6 +1398,11 @@ Content-Length: 323
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.participants</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">응모자 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.registeredBy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">자신이 등록한 뿌리기 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -1469,20 +1475,20 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 373
+Content-Length: 385
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : [ {
     "participantId" : 1,
     "sprinkleId" : 1,
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
-    "expiredAt" : "2022-08-14",
+    "expiredAt" : "2022-08-15",
     "category" : "CAFE",
     "participants" : 100,
-    "participateDate" : "2022-08-13",
+    "participateDate" : "2022-08-14",
     "isChecked" : false,
     "drawStatus" : "WIN"
   } ]
@@ -1634,19 +1640,19 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 349
+Content-Length: 361
 
 {
   "code" : "S001",
-  "message" : "Success",
+  "message" : "성공했습니다.",
   "data" : [ {
     "sprinkleId" : 1,
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
-    "expiredAt" : "2022-08-15T23:59:59.999999999",
+    "expiredAt" : "2022-08-16T23:59:59.999999999",
     "category" : "CAFE",
     "participants" : 100,
-    "deliveryDate" : "2022-08-14",
+    "deliveryDate" : "2022-08-15",
     "sprinkledStatus" : "PROGRESS"
   } ]
 }</code></pre>
@@ -1726,7 +1732,7 @@ Content-Length: 349
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-14 01:03:09 +0900
+Last updated 2022-08-15 16:31:06 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
