@@ -8,4 +8,6 @@ interface ParticipantRepositoryCustom {
     fun findAllSprinkleIdByMemberId(memberId: Long): List<Long>
 
     fun findHistoryByMemberId(memberId: Long, noOffsetRequest: NoOffsetRequest): List<ParticipantInfoVo>
+
+    fun findAllMemberIdBySprinkleId(sprinkleId: Long): List<Long>
 }

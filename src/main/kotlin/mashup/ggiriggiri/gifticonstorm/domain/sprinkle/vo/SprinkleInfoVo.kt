@@ -11,9 +11,8 @@ data class SprinkleInfoVo @QueryProjection constructor(
     val merchandiseName: String,
     val category: Category,
     val expiredAt: LocalDateTime,
-    val participants: Int,
     val sprinkleAt: LocalDateTime,
-    val memberId : Long
+    val memberId: Long
 ) {
 
     fun getRegisteredBy(userInfoDto: UserInfoDto): Boolean {

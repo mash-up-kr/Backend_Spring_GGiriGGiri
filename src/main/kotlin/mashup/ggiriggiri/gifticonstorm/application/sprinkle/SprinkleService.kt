@@ -19,7 +19,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.GetSprinkleVo
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -41,18 +41,18 @@ class SprinkleService(
         if (orderBy == null || category == null) {
             throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         }
-        val sprinkleInfoVos =
+        val getSprinkleVos =
             if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category)
             else findAllByCategory(category, noOffsetRequest)
         val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id)
-        return sprinkleInfoVos.map { GetSprinkleResDto.of(it, it.sprinkleId in sprinkleIds) }
+        return getSprinkleVos.map { GetSprinkleResDto.of(it, it.sprinkleId in sprinkleIds) }
     }
 
-    private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<SprinkleInfoVo> {
+    private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<GetSprinkleVo> {
         return sprinkleRepository.findAllByCategory(category, noOffsetRequest)
     }
 
-    private fun findAllByDeadLine(category: Category): List<SprinkleInfoVo> {
+    private fun findAllByDeadLine(category: Category): List<GetSprinkleVo> {
         if (category != Category.ALL) throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         return sprinkleRepository.findAllByDeadLine(10, 4)
     }
@@ -96,7 +96,8 @@ class SprinkleService(
     fun getSprinkleInfo(sprinkleId: Long, userInfoDto: UserInfoDto): SprinkleInfoResDto {
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)
             ?: throw EntityNotFoundException("sprinkle", "sprinkleId : $sprinkleId")
-        return SprinkleInfoResDto.of(sprinkleInfoVo, userInfoDto)
+        val memberIds = participantRepository.findAllMemberIdBySprinkleId(sprinkleId)
+        return SprinkleInfoResDto.of(sprinkleInfoVo, userInfoDto, memberIds.size, userInfoDto.id in memberIds)
     }
 
     fun getSprinkleRegistHistory(userInfoDto: UserInfoDto, noOffsetRequest: NoOffsetRequest): List<SprinkleRegistHistoryResDto> {
