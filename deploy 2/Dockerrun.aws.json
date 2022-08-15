@@ -1,9 +1,5 @@
 {
   "AWSEBDockerrunVersion": "1",
-  "Image": {
-    "Name": "mashupggiriggiri/server",
-    "Update": "true"
-  },
   "Ports": [
     {
       "ContainerPort": "8080"

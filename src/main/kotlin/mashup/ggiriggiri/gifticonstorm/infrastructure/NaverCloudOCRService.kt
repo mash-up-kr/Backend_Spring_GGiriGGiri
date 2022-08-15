@@ -57,7 +57,9 @@ class NaverCloudOcrService(
             throw OcrFailedException()
         }
 
-        return objectMapper.convertValue(result, NaverOcrResult::class.java)
+        return objectMapper.convertValue(result, NaverOcrResult::class.java).also {
+            log.info("OCR SUCCESS : $it")
+        }
     }
 
     private fun requestInternal(body: String) = naverCloudOCRClient.post()
