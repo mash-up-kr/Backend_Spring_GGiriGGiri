@@ -20,7 +20,7 @@ class Participant(
     val sprinkle: Sprinkle,
 
     @Enumerated(EnumType.STRING)
-    val drawStatus: DrawStatus = DrawStatus.PROGRESS,
+    var drawStatus: DrawStatus = DrawStatus.PROGRESS,
 
     var isChecked: Boolean = false,
 
@@ -32,6 +32,14 @@ class Participant(
             this.isChecked = true
             this.checkedAt = LocalDateTime.now()
         }
+    }
+
+    fun win() {
+        this.drawStatus = DrawStatus.WIN
+    }
+
+    fun lose() {
+        this.drawStatus = DrawStatus.LOSE
     }
 
     private fun isDrawResultChecked(): Boolean {
