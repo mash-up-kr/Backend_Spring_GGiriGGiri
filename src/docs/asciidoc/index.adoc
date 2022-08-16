@@ -206,6 +206,26 @@ include::{snippets}/뿌리기 등록 내역 조회/뿌리기 등록 내역 조�
 
 include::{snippets}/뿌리기 등록 내역 조회/뿌리기 등록 내역 조회 성공/response-fields.adoc[]
 
+=== 응모 결과 조회
+
+==== Curl Command
+
+include::{snippets}/응모 결과 조회/응모 결과 조회/curl-request.adoc[]
+
+==== Http Request
+
+include::{snippets}/응모 결과 조회/응모 결과 조회/http-request.adoc[]
+
+include::{snippets}/응모 결과 조회/응모 결과 조회/request-headers.adoc[]
+
+include::{snippets}/응모 결과 조회/응모 결과 조회/path-parameters.adoc[]
+
+==== Http Response
+
+include::{snippets}/응모 결과 조회/응모 결과 조회/http-response.adoc[]
+
+include::{snippets}/응모 결과 조회/응모 결과 조회/response-fields.adoc[]
+
 
 
 
