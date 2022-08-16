@@ -1,7 +1,7 @@
 package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto
 
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.GetSprinkleVo
 
 data class GetSprinkleResDto(
     val sprinkleId: Long,
@@ -15,15 +15,15 @@ data class GetSprinkleResDto(
 ) {
 
     companion object {
-        fun of(sprinkleInfoVo: SprinkleInfoVo, participateIn: Boolean): GetSprinkleResDto {
+        fun of(getSprinkleVo: GetSprinkleVo, participateIn: Boolean): GetSprinkleResDto {
             return GetSprinkleResDto(
-                sprinkleId = sprinkleInfoVo.sprinkleId,
-                brandName = sprinkleInfoVo.brandName,
-                merchandiseName = sprinkleInfoVo.merchandiseName,
-                category = sprinkleInfoVo.category,
-                expiredAt = sprinkleInfoVo.expiredAt.toString(),
-                participants = sprinkleInfoVo.participants,
-                sprinkleAt = sprinkleInfoVo.sprinkleAt.toString(),
+                sprinkleId = getSprinkleVo.sprinkleId,
+                brandName = getSprinkleVo.brandName,
+                merchandiseName = getSprinkleVo.merchandiseName,
+                category = getSprinkleVo.category,
+                expiredAt = getSprinkleVo.expiredAt.toString(),
+                participants = getSprinkleVo.participants,
+                sprinkleAt = getSprinkleVo.sprinkleAt.toString(),
                 participateIn = participateIn
             )
         }

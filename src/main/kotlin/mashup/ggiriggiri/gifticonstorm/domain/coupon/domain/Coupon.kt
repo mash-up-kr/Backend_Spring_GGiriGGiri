@@ -10,6 +10,8 @@ import javax.persistence.*
 
 @Entity
 class Coupon(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0L,
     val brandName: String,
     val merchandiseName: String,
     val expiredAt: LocalDateTime,

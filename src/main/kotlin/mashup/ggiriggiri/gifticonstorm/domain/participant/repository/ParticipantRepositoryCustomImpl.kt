@@ -47,6 +47,14 @@ class ParticipantRepositoryCustomImpl(
             .fetch()
     }
 
+    override fun findAllMemberIdBySprinkleId(sprinkleId: Long): List<Long> {
+        return jpaQueryFactory
+            .select(participant.member.id)
+            .from(participant)
+            .where(participant.sprinkle.id.eq(sprinkleId))
+            .fetch()
+    }
+
     private fun ltParticipantId(id: Long?): BooleanExpression? {
         return id?.let { participant.id.lt(id) }
     }

@@ -9,6 +9,8 @@ import javax.persistence.*
 
 @Entity
 class Sprinkle(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0L,
     @ManyToOne
     @JoinColumn(name = "member_id")
     val member: Member,
@@ -20,6 +22,7 @@ class Sprinkle(
     @OneToMany(mappedBy = "sprinkle")
     val participants: MutableList<Participant> = mutableListOf()
 ) : BaseEntity() {
+
     companion object {
         fun of(deadlineMinutes: Long, coupon: Coupon, member: Member): Sprinkle {
             return Sprinkle(sprinkleAt = getSprinkleTimeFromNow(deadlineMinutes), coupon = coupon, member = member)
@@ -28,5 +31,20 @@ class Sprinkle(
         private fun getSprinkleTimeFromNow(deadlineMinutes: Long): LocalDateTime {
             return LocalDateTime.now().plusMinutes(deadlineMinutes)
         }
+    }
+
+    fun drawProcess() {
+        if (!sprinkled) {
+            this.sprinkled = true
+            draw()
+        }
+    }
+
+    private fun draw() {
+        if (participants.isEmpty()) return
+        val winnerParticipant = participants.also { it.shuffle() }.first()
+        val loserParticipants = participants.subList(1, participants.count())
+        winnerParticipant.win()
+        loserParticipants.forEach { it.lose() }
     }
 }

@@ -19,11 +19,12 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.GetSprinkleResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
-import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.GetSprinkleVo
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDateTime
 
 
 @Service
@@ -40,18 +41,18 @@ class SprinkleService(
         if (orderBy == null || category == null) {
             throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         }
-        val sprinkleInfoVos =
+        val getSprinkleVos =
             if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category)
             else findAllByCategory(category, noOffsetRequest)
         val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id)
-        return sprinkleInfoVos.map { GetSprinkleResDto.of(it, it.sprinkleId in sprinkleIds) }
+        return getSprinkleVos.map { GetSprinkleResDto.of(it, it.sprinkleId in sprinkleIds) }
     }
 
-    private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<SprinkleInfoVo> {
+    private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<GetSprinkleVo> {
         return sprinkleRepository.findAllByCategory(category, noOffsetRequest)
     }
 
-    private fun findAllByDeadLine(category: Category): List<SprinkleInfoVo> {
+    private fun findAllByDeadLine(category: Category): List<GetSprinkleVo> {
         if (category != Category.ALL) throw BaseException(ResponseCode.INVALID_INPUT_VALUE)
         return sprinkleRepository.findAllByDeadLine(10, 4)
     }
@@ -80,19 +81,23 @@ class SprinkleService(
         val applySprinkleMember = memberRepository.findByInherenceId(userInfoDto.inherenceId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "member not found -> inherenceId : ${userInfoDto.inherenceId}")
         val sprinkle = sprinkleRepository.findByIdOrNull(sprinkleId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "sprinkle not found -> sprinkleId : $sprinkleId")
 
+        if (sprinkle.sprinkleAt.isBefore(LocalDateTime.now()))
+            throw BaseException(ResponseCode.ALREADY_EXPIRED_SPRINKLE, "만료된 뿌리기 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
+
         if (sprinkle.member.id == applySprinkleMember.id)
             throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "뿌리기 생성자, 참여자 동일 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
         if (sprinkle.participants.any { it.member.id == applySprinkleMember.id })
-            throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "이미 참여한 뿌리기, sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
+            throw BaseException(ResponseCode.ALREADY_PARTICIPATE_IN, "이미 참여한 뿌리기 sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
-        participantRepository.save(Participant(applySprinkleMember, sprinkle))
+        participantRepository.save(Participant(member = applySprinkleMember, sprinkle = sprinkle))
     }
 
     fun getSprinkleInfo(sprinkleId: Long, userInfoDto: UserInfoDto): SprinkleInfoResDto {
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleId)
             ?: throw EntityNotFoundException("sprinkle", "sprinkleId : $sprinkleId")
-        return SprinkleInfoResDto.of(sprinkleInfoVo, userInfoDto)
+        val memberIds = participantRepository.findAllMemberIdBySprinkleId(sprinkleId)
+        return SprinkleInfoResDto.of(sprinkleInfoVo, userInfoDto, memberIds.size, userInfoDto.id in memberIds)
     }
 
     fun getSprinkleRegistHistory(userInfoDto: UserInfoDto, noOffsetRequest: NoOffsetRequest): List<SprinkleRegistHistoryResDto> {
