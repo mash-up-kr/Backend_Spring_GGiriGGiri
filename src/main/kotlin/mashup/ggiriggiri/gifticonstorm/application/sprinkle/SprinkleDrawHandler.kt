@@ -10,6 +10,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Component
 class SprinkleDrawHandler(
@@ -23,11 +24,13 @@ class SprinkleDrawHandler(
     @EventListener
     @Transactional
     fun drawEventListener(sprinkleDto: SprinkleDto) {
+        log.info("draw start at ${LocalDateTime.now()}")
         draw(sprinkleDto.sprinkleId)
     }
 
     private fun draw(sprinkleId: Long) {
         val sprinkle = sprinkleRepository.findByIdOrNull(sprinkleId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "sprinkle not found -> sprinkleId : $sprinkleId")
+        log.info("draw target sprinkle id : ${sprinkle.id}}")
         sprinkle.drawProcess()
     }
 }
