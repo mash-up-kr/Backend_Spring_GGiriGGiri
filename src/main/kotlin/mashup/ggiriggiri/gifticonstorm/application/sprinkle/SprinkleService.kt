@@ -88,7 +88,7 @@ class SprinkleService(
             throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "뿌리기 생성자, 참여자 동일 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
         if (sprinkle.participants.any { it.member.id == applySprinkleMember.id })
-            throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "이미 참여한 뿌리기 sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
+            throw BaseException(ResponseCode.ALREADY_PARTICIPATE_IN, "이미 참여한 뿌리기 sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
         participantRepository.save(Participant(member = applySprinkleMember, sprinkle = sprinkle))
     }
