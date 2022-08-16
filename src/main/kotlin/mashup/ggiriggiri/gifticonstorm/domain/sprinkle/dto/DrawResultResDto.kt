@@ -2,6 +2,7 @@ package mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import mashup.ggiriggiri.gifticonstorm.application.push.DrawStatus
+import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
 import java.time.LocalDateTime
 
@@ -24,7 +25,8 @@ data class CouponInfoDto(
     val brandName: String,
     val merchandiseName: String,
     val expiredAt: LocalDateTime,
-    val imageUrl: String
+    val imageUrl: String,
+    val category: Category
 ) {
     companion object {
         fun of(coupon: Coupon): CouponInfoDto {
@@ -32,7 +34,8 @@ data class CouponInfoDto(
                 brandName = coupon.brandName,
                 merchandiseName = coupon.merchandiseName,
                 expiredAt = coupon.expiredAt,
-                imageUrl = coupon.imageUrl
+                imageUrl = coupon.imageUrl,
+                category = coupon.category
             )
         }
     }

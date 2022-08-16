@@ -124,7 +124,7 @@ internal class ParticipantControllerTest : TestRestDocs() {
 
     @Test
     fun `응모 결과 조회`() {
-        val drawResultResDto = DrawResultResDto(DrawStatus.WIN, CouponInfoDto("베스킨라빈스", "싱글 레귤러", LocalDateTime.now().plusMonths(2), "http://dummyimage.com/240x100.png/dddddd/000000"))
+        val drawResultResDto = DrawResultResDto(DrawStatus.WIN, CouponInfoDto("베스킨라빈스", "싱글 레귤러", LocalDateTime.now().plusMonths(2), "http://dummyimage.com/240x100.png/dddddd/000000", category = Category.ICECREAM))
         every { participantService.getDrawResult(userInfoDto, 1L) } returns drawResultResDto
 
         //when, then
@@ -150,7 +150,8 @@ internal class ParticipantControllerTest : TestRestDocs() {
                         PayloadDocumentation.fieldWithPath("data.couponInfo.brandName").type(JsonFieldType.STRING).description("브랜드명"),
                         PayloadDocumentation.fieldWithPath("data.couponInfo.merchandiseName").type(JsonFieldType.STRING).description("상품명"),
                         PayloadDocumentation.fieldWithPath("data.couponInfo.expiredAt").type(JsonFieldType.STRING).description("쿠폰 유효기간"),
-                        PayloadDocumentation.fieldWithPath("data.couponInfo.imageUrl").type(JsonFieldType.STRING).description("쿠폰 이미지 url")
+                        PayloadDocumentation.fieldWithPath("data.couponInfo.imageUrl").type(JsonFieldType.STRING).description("쿠폰 이미지 url"),
+                        PayloadDocumentation.fieldWithPath("data.couponInfo.category").type(JsonFieldType.STRING).description("쿠폰 카테고리")
                     )
                 )
             )
