@@ -168,7 +168,6 @@ class SprinkleRepositoryCustomImplTest @Autowired constructor(
         val sprinkleInfoVo = sprinkleRepository.findInfoById(sprinkleList[0].id)
         //then
         assertThat(sprinkleInfoVo!!.brandName).isEqualTo("스타벅스")
-        assertThat(sprinkleInfoVo.participants).isEqualTo(2)
     }
 
     @Test

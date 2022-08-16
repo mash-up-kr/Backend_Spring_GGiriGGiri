@@ -15,5 +15,9 @@ enum class Category(
 
     companion object {
         val categories = Category.values()
+
+        fun getDescription(name: String): String {
+            return Category.valueOf(name).description
+        }
     }
 }

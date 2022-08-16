@@ -18,9 +18,9 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkledStatus
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.GetSprinkleVo
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleInfoVo
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.SprinkleRegistHistoryVo
-import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -36,7 +36,7 @@ internal class SprinkleServiceTest : FunSpec({
     context("뿌리기 마감임박 조회") {
         test("성공") {
             //given
-            every { sprinkleRepository.findAllByDeadLine(10, 4) } returns sprinkleInfoVos
+            every { sprinkleRepository.findAllByDeadLine(10, 4) } returns getSprinkleVos
             every { participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id) } returns listOf(1L)
 
             //when
@@ -64,7 +64,7 @@ internal class SprinkleServiceTest : FunSpec({
             //given
             val category = Category.ALL
 
-            every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns sprinkleInfoVos
+            every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns getSprinkleVos
             every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
 
             //when
@@ -84,7 +84,7 @@ internal class SprinkleServiceTest : FunSpec({
             //given
             val category = Category.CAFE
 
-            every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns listOf(sprinkleInfoVos[0])
+            every { sprinkleRepository.findAllByCategory(category, noOffsetRequest) } returns listOf(getSprinkleVos[0])
             every { participantRepository.findAllSprinkleIdByMemberId(1) } returns listOf(1L)
 
             //when
@@ -108,6 +108,7 @@ internal class SprinkleServiceTest : FunSpec({
         test("성공") {
             //given
             every { sprinkleRepository.findInfoById(1) } returns sprinkleInfoVos[0]
+            every { participantRepository.findAllMemberIdBySprinkleId(1) } returns listOf(2)
 
             //when
             val resDto = sprinkleService.getSprinkleInfo(1, userInfoDto)
@@ -116,11 +117,12 @@ internal class SprinkleServiceTest : FunSpec({
             resDto.sprinkleId shouldBe 1
             resDto.brandName shouldBe "스타벅스"
             resDto.merchandiseName shouldBe "아이스 아메리카노"
-            resDto.category shouldBe Category.CAFE
+            resDto.category shouldBe "카페/디저트"
             resDto.expiredAt shouldBe now.plusDays(1).with(LocalTime.MAX).toString()
-            resDto.participants shouldBe 3
+            resDto.participants shouldBe 1
             resDto.sprinkleAt shouldBe now.plusMinutes(10).toString()
             resDto.registeredBy shouldBe true
+            resDto.participateIn shouldBe false
         }
 
         test("실패 - 해당 뿌리기가 존재하지 않을 때") {
@@ -155,6 +157,27 @@ internal class SprinkleServiceTest : FunSpec({
         private val noOffsetRequest = NoOffsetRequest.of()
 
         private val now = LocalDateTime.now()
+        private val getSprinkleVos = listOf(
+            GetSprinkleVo(
+                sprinkleId = 1,
+                brandName = "스타벅스",
+                merchandiseName = "아이스 아메리카노",
+                category = Category.CAFE,
+                expiredAt = now.plusDays(1).with(LocalTime.MAX),
+                participants = 3,
+                sprinkleAt = now.plusMinutes(10)
+            ),
+            GetSprinkleVo(
+                sprinkleId = 2,
+                brandName = "베스킨라빈스",
+                merchandiseName = "파인트",
+                category = Category.ICECREAM,
+                expiredAt = now.plusDays(1).with(LocalTime.MAX),
+                participants = 2,
+                sprinkleAt = now.plusMinutes(9)
+            )
+        )
+
         private val sprinkleInfoVos = listOf(
             SprinkleInfoVo(
                 sprinkleId = 1,
@@ -162,7 +185,6 @@ internal class SprinkleServiceTest : FunSpec({
                 merchandiseName = "아이스 아메리카노",
                 category = Category.CAFE,
                 expiredAt = now.plusDays(1).with(LocalTime.MAX),
-                participants = 3,
                 sprinkleAt = now.plusMinutes(10),
                 memberId = 1
             ),
@@ -172,7 +194,6 @@ internal class SprinkleServiceTest : FunSpec({
                 merchandiseName = "파인트",
                 category = Category.ICECREAM,
                 expiredAt = now.plusDays(1).with(LocalTime.MAX),
-                participants = 2,
                 sprinkleAt = now.plusMinutes(9),
                 memberId = 2
             )
