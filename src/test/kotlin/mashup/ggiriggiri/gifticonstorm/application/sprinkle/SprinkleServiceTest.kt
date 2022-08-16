@@ -10,9 +10,12 @@ import mashup.ggiriggiri.gifticonstorm.common.dto.NoOffsetRequest
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
 import mashup.ggiriggiri.gifticonstorm.config.resolver.UserInfoDto
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Category
+import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
+import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.domain.participant.repository.ParticipantRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.OrderBy
+import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.domain.Sprinkle
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkledStatus
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.GetSprinkleVo
