@@ -19,6 +19,7 @@ enum class ResponseCode(
 
     INVALID_PARTICIPATE_REQUEST(HttpStatus.BAD_REQUEST, "F005", "내가 등록한 기프티콘에는 응모할 수 없어요!"),
     ALREADY_PARTICIPATE_IN(HttpStatus.BAD_REQUEST, "F006", "이미 응모한 뿌리기 입니다."),
+    ALREADY_EXPIRED_SPRINKLE(HttpStatus.BAD_REQUEST, "F007", "이미 만료된 뿌리기 입니다."),
 
     // Common
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "C001", "유효하지 않은 입력값 입니다."),

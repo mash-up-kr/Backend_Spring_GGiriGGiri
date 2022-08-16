@@ -82,7 +82,7 @@ class SprinkleService(
         val sprinkle = sprinkleRepository.findByIdOrNull(sprinkleId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "sprinkle not found -> sprinkleId : $sprinkleId")
 
         if (sprinkle.sprinkleAt.isBefore(LocalDateTime.now()))
-            throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "만료된 뿌리기 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
+            throw BaseException(ResponseCode.ALREADY_EXPIRED_SPRINKLE, "만료된 뿌리기 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
         if (sprinkle.member.id == applySprinkleMember.id)
             throw BaseException(ResponseCode.INVALID_PARTICIPATE_REQUEST, "뿌리기 생성자, 참여자 동일 -> sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
