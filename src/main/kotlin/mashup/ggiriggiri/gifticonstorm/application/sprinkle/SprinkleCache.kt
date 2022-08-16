@@ -35,6 +35,7 @@ class SprinkleCache(
     }
 
     fun generateSprinkle(sprinkleId: Long, deadLineMinutes: Long) {
+        log.info("generateSprinkle")
         sprinkleCache.fastPut(generateSprinkleKey(), SprinkleDto(sprinkleId).toJson(), deadLineMinutes, TimeUnit.MINUTES)
     }
 

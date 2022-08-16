@@ -20,6 +20,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleInfoResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistoryResDto
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.GetSprinkleVo
+import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -35,6 +36,9 @@ class SprinkleService(
     private val couponService: CouponService,
     private val memberRepository: MemberRepository,
 ) {
+
+    companion object : Logger
+
     fun getSprinkles(
         userInfoDto: UserInfoDto, orderBy: OrderBy?, category: Category?, noOffsetRequest: NoOffsetRequest
     ): List<GetSprinkleResDto> {
@@ -68,6 +72,7 @@ class SprinkleService(
         val sprinkle = saveSprinkle(createEventRequestDto, coupon, member)
 
         // redis에 sprinkle 저장
+        log.info("sprinkledAt ${sprinkle.sprinkleAt}, deadline minutes ${createEventRequestDto.deadlineMinutes}")
         sprinkleCache.generateSprinkle(sprinkle.id, createEventRequestDto.deadlineMinutes)
     }
 

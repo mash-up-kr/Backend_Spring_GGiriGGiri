@@ -4,6 +4,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.BaseEntity
 import mashup.ggiriggiri.gifticonstorm.domain.coupon.domain.Coupon
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.participant.Participant
+import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -23,13 +24,17 @@ class Sprinkle(
     val participants: MutableList<Participant> = mutableListOf()
 ) : BaseEntity() {
 
-    companion object {
+    companion object : Logger {
+
         fun of(deadlineMinutes: Long, coupon: Coupon, member: Member): Sprinkle {
             return Sprinkle(sprinkleAt = getSprinkleTimeFromNow(deadlineMinutes), coupon = coupon, member = member)
         }
 
         private fun getSprinkleTimeFromNow(deadlineMinutes: Long): LocalDateTime {
-            return LocalDateTime.now().plusMinutes(deadlineMinutes)
+            log.info("getSprinkleTimeFromNow deadlineMinutes : $deadlineMinutes")
+            val dateTime = LocalDateTime.now().plusMinutes(deadlineMinutes)
+            log.info("getSprinkleTimeFromNow plusedMinutes  : $dateTime")
+            return dateTime
         }
     }
 
@@ -45,6 +50,7 @@ class Sprinkle(
         val winnerParticipant = participants.also { it.shuffle() }.first()
         val loserParticipants = participants.subList(1, participants.count())
         winnerParticipant.win()
+        log.info("winner id : ${winnerParticipant.id}")
         loserParticipants.forEach { it.lose() }
     }
 }
