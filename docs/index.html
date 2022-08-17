@@ -585,7 +585,7 @@ Content-Type: multipart/form-data
 Content-Disposition: form-data; name=eventInfo; filename=eventInfo
 Content-Type: application/json
 
-{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-17","deadlineMinutes":60}
+{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-18","deadlineMinutes":60}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -637,7 +637,7 @@ Content-Type: application/json
 </table>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code>{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-17","deadlineMinutes":60}</code></pre>
+<pre class="highlightjs highlight nowrap"><code>{"category":"CAFE","brandName":"스타벅스","merchandiseName":"아이스 아메리카노","couponExpiredTime":"2022-08-18","deadlineMinutes":60}</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -973,9 +973,9 @@ Content-Length: 367
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
     "category" : "CAFE",
-    "expiredAt" : "2022-08-17T23:59:59.999999999",
+    "expiredAt" : "2022-08-18T23:59:59.999999999",
     "participants" : 100,
-    "sprinkleAt" : "2022-08-16T10:20:41.661256",
+    "sprinkleAt" : "2022-08-17T21:10:04.682072",
     "participateIn" : true
   } ]
 }</code></pre>
@@ -1140,9 +1140,9 @@ Content-Length: 367
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
     "category" : "CAFE",
-    "expiredAt" : "2022-08-17T23:59:59.999999999",
+    "expiredAt" : "2022-08-18T23:59:59.999999999",
     "participants" : 100,
-    "sprinkleAt" : "2022-08-16T10:20:41.794129",
+    "sprinkleAt" : "2022-08-17T21:10:04.806710",
     "participateIn" : true
   } ]
 }</code></pre>
@@ -1339,9 +1339,9 @@ Content-Length: 404
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
     "category" : "카페/디저트",
-    "expiredAt" : "2022-08-17T23:59:59.999999999",
+    "expiredAt" : "2022-08-18T23:59:59.999999999",
     "participants" : 100,
-    "sprinkleAt" : "2022-08-16T10:20:40.756673",
+    "sprinkleAt" : "2022-08-17T21:10:03.945712",
     "registeredBy" : false,
     "participateIn" : false
   }
@@ -1498,10 +1498,10 @@ Content-Length: 385
     "sprinkleId" : 1,
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
-    "expiredAt" : "2022-08-16",
+    "expiredAt" : "2022-08-17",
     "category" : "CAFE",
     "participants" : 100,
-    "participateDate" : "2022-08-15",
+    "participateDate" : "2022-08-16",
     "isChecked" : false,
     "drawStatus" : "WIN"
   } ]
@@ -1662,10 +1662,10 @@ Content-Length: 361
     "sprinkleId" : 1,
     "brandName" : "스타벅스",
     "merchandiseName" : "아이스 아메리카노",
-    "expiredAt" : "2022-08-17T23:59:59.999999999",
+    "expiredAt" : "2022-08-18T23:59:59.999999999",
     "category" : "CAFE",
     "participants" : 100,
-    "deliveryDate" : "2022-08-16",
+    "deliveryDate" : "2022-08-17",
     "sprinkledStatus" : "PROGRESS"
   } ]
 }</code></pre>
@@ -1803,7 +1803,7 @@ Host: sample.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 336
+Content-Length: 367
 
 {
   "code" : "S001",
@@ -1813,8 +1813,9 @@ Content-Length: 336
     "couponInfo" : {
       "brandName" : "베스킨라빈스",
       "merchandiseName" : "싱글 레귤러",
-      "expiredAt" : "2022-10-16T10:10:39.096702",
-      "imageUrl" : "http://dummyimage.com/240x100.png/dddddd/000000"
+      "expiredAt" : "2022-10-17T21:00:02.616554",
+      "imageUrl" : "http://dummyimage.com/240x100.png/dddddd/000000",
+      "category" : "ICECREAM"
     }
   }
 }</code></pre>
@@ -1874,6 +1875,11 @@ Content-Length: 336
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">쿠폰 이미지 url</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.couponInfo.category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">쿠폰 카테고리</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1884,7 +1890,7 @@ Content-Length: 336
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-08-16 10:10:01 +0900
+Last updated 2022-08-17 20:57:20 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
