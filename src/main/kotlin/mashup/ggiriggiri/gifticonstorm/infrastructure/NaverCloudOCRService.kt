@@ -8,7 +8,6 @@ import mashup.ggiriggiri.gifticonstorm.common.error.onFailureWhen
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.reactive.function.client.WebClient
-import java.io.File
 
 @Service
 class NaverCloudOcrService(
@@ -20,12 +19,15 @@ class NaverCloudOcrService(
     companion object : Logger
 
     override fun recognize(file: MultipartFile): OcrResult {
-        kotlin.runCatching {
+
+        try {
             val bodyJson = getRequestBody(file)
             return request(bodyJson)
-        }.onFailureWhen(NotSupportedOcrImageType::class.java, OcrFailedException::class.java) {
+        } catch (e: Exception) {
             s3ImageUploader.upload(file)
-        } .getOrThrow()
+            throw OcrFailedException()
+        }
+        
     }
 
     private fun getRequestBody(file: MultipartFile): String {
