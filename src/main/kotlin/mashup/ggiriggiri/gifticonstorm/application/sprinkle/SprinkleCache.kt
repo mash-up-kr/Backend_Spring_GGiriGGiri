@@ -36,7 +36,8 @@ class SprinkleCache(
     }
 
     fun generateSprinkle(sprinkleId: Long, deadLineMinutes: Long) {
-        sprinkleCache.fastPut(generateSprinkleKey(), SprinkleDto(sprinkleId).toJson(), deadLineMinutes, TimeUnit.MINUTES)
+        val microseconds = deadLineMinutes * 60 * 1000 * 1000
+        sprinkleCache.fastPut(generateSprinkleKey(), SprinkleDto(sprinkleId).toJson(), microseconds, TimeUnit.MICROSECONDS)
         log.info("generateSprinkle cache -> sprinkleId : $sprinkleId, deadLineMinutes : $deadLineMinutes, expireAt : ${LocalDateTime.now().plusMinutes(deadLineMinutes)}")
     }
 
