@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import mashup.ggiriggiri.gifticonstorm.common.Base64Utils
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.NotSupportedOcrImageType
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.OcrFailedException
-import mashup.ggiriggiri.gifticonstorm.common.error.onFailureWhen
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.reactive.function.client.WebClient
@@ -25,7 +24,11 @@ class NaverCloudOcrService(
             return request(bodyJson)
         } catch (e: Exception) {
             s3ImageUploader.upload(file)
-            throw OcrFailedException()
+
+            when(e) {
+                is NotSupportedOcrImageType -> { throw e }
+                else -> throw OcrFailedException()
+            }
         }
         
     }
