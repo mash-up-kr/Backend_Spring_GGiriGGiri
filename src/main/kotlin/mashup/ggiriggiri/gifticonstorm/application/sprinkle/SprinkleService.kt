@@ -49,7 +49,9 @@ class SprinkleService(
             if (orderBy == OrderBy.DEADLINE) findAllByDeadLine(category)
             else findAllByCategory(category, noOffsetRequest)
         val sprinkleIds = participantRepository.findAllSprinkleIdByMemberId(userInfoDto.id)
-        return getSprinkleVos.map { GetSprinkleResDto.of(it, it.sprinkleId in sprinkleIds) }
+        return getSprinkleVos
+            .filter { !it.isSprinkled() }
+            .map { GetSprinkleResDto.of(it, it.sprinkleId in sprinkleIds) }
     }
 
     private fun findAllByCategory(category: Category, noOffsetRequest: NoOffsetRequest): List<GetSprinkleVo> {
