@@ -24,13 +24,12 @@ class SprinkleDrawHandler(
     @EventListener
     @Transactional
     fun drawEventListener(sprinkleDto: SprinkleDto) {
-        log.info("draw start at ${LocalDateTime.now()}")
         draw(sprinkleDto.sprinkleId)
     }
 
     private fun draw(sprinkleId: Long) {
         val sprinkle = sprinkleRepository.findByIdOrNull(sprinkleId) ?: throw BaseException(ResponseCode.DATA_NOT_FOUND, "sprinkle not found -> sprinkleId : $sprinkleId")
-        log.info("draw target sprinkle id : ${sprinkle.id}}")
+        log.info("draw target sprinkle id : ${sprinkle.id}, sprinkleAt : ${sprinkle.sprinkleAt}, now : ${LocalDateTime.now()}")
         sprinkle.drawProcess()
     }
 }
