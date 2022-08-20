@@ -27,7 +27,7 @@ data class KakaoLocalDateTime(
 ) : OcrResultDateTime {
 
     override val formatter = DateTimeFormatter.ofPattern("yyyy년MM월dd일")
-    override val dateTime = LocalDate.parse(preprocess(s), formatter).atTime(23, 59, 59, 999999999)
+    override val dateTime = LocalDate.parse(preprocess(s), formatter).atTime(23, 59, 59)
 
     override fun preprocess(s: String): String {
         return s.removeNewLine()
@@ -40,7 +40,7 @@ data class GifticonLocalDateTime(
 ) : OcrResultDateTime {
 
     override val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
-    override val dateTime = LocalDate.parse(preprocess(s), formatter).atTime(23, 59, 59, 999999999)
+    override val dateTime = LocalDate.parse(preprocess(s), formatter).atTime(23, 59, 59)
 
     override fun preprocess(s: String): String {
         return s.removeNewLine()

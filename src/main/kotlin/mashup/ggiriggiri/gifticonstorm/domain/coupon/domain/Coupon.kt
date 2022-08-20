@@ -30,7 +30,7 @@ class Coupon(
             return Coupon(
                 brandName = createEventRequestDto.brandName,
                 merchandiseName = createEventRequestDto.merchandiseName,
-                expiredAt = LocalDate.parse(createEventRequestDto.couponExpiredTime).atTime(LocalTime.MAX),
+                expiredAt = LocalDate.parse(createEventRequestDto.couponExpiredTime).atTime(23, 59, 59),
                 imageUrl = imageUrl,
                 category = createEventRequestDto.category,
                 member = member
