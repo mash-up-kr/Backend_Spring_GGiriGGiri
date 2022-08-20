@@ -13,14 +13,13 @@ enum class ResponseCode(
     //Fail
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "F001", "사용자 인증에 실패했습니다."),
     FAILED_RECOGNIZE(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "OCR에 실패했습니다."),
-    NOT_SUPPORT_OCR_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "F003", "지원하지 않는 이미지 형식입니다."),
+    NOT_SUPPORT_OCR_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "F003", "OCR은 JPG, JPEG, PNG, PDF, TIFF 확장자만 지원합니다."),
 
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "F004", "해당 데이터를 찾을 수 없습니다."),
 
     INVALID_PARTICIPATE_REQUEST(HttpStatus.BAD_REQUEST, "F005", "내가 등록한 기프티콘에는 응모할 수 없어요!"),
     ALREADY_PARTICIPATE_IN(HttpStatus.BAD_REQUEST, "F006", "이미 응모한 뿌리기 입니다."),
     ALREADY_EXPIRED_SPRINKLE(HttpStatus.BAD_REQUEST, "F007", "이미 만료된 뿌리기 입니다."),
-
     PAYLOAD_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE, "F008", "HTTP PAYLOAD가 너무 큽니다."),
 
     // Common

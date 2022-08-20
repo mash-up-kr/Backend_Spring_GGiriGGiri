@@ -3,6 +3,7 @@ package mashup.ggiriggiri.gifticonstorm.common.error
 import mashup.ggiriggiri.gifticonstorm.common.dto.BaseResponse
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
+import mashup.ggiriggiri.gifticonstorm.common.error.exception.NotSupportedOcrImageType
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.OcrFailedException
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.UnauthorizedException
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
@@ -68,5 +69,12 @@ class GlobalExceptionHandler {
     private fun handleOcrFailed(e: OcrFailedException) : BaseResponse<Unit> {
         log.error(e.message, e)
         return BaseResponse.error(ResponseCode.FAILED_RECOGNIZE)
+    }
+
+    @ExceptionHandler(NotSupportedOcrImageType::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private fun handleNotSupportedImage(e: NotSupportedOcrImageType) : BaseResponse<Unit> {
+        log.error(e.message, e)
+        return BaseResponse.error(ResponseCode.NOT_SUPPORT_OCR_IMAGE_FORMAT)
     }
 }

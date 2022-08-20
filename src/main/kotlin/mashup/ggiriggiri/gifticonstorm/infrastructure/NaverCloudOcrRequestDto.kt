@@ -19,7 +19,7 @@ class NaverCloudOcrRequestDto(
     val enableTableDetection = false
 
     fun isSupported(): Boolean {
-        return images.first().format != ImageFormat.NOT_SUPPORT.name
+        return images.first().format != ImageFormat.NOT_SUPPORT.name.lowercase()
     }
 }
 
@@ -60,6 +60,7 @@ enum class ImageFormat(
             return map[format.lowercase()] ?: NOT_SUPPORT
         }
     }
+
 }
 
 data class Image(
