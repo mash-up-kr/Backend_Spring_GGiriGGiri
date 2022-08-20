@@ -21,6 +21,7 @@ import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.dto.SprinkleRegistHistory
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.repository.SprinkleRepository
 import mashup.ggiriggiri.gifticonstorm.domain.sprinkle.vo.GetSprinkleVo
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -97,7 +98,11 @@ class SprinkleService(
         if (sprinkle.participants.any { it.member.id == applySprinkleMember.id })
             throw BaseException(ResponseCode.ALREADY_PARTICIPATE_IN, "이미 참여한 뿌리기 sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
 
-        participantRepository.save(Participant(member = applySprinkleMember, sprinkle = sprinkle))
+        try {
+            participantRepository.save(Participant(member = applySprinkleMember, sprinkle = sprinkle))
+        } catch (e: DataIntegrityViolationException) {
+            throw BaseException(ResponseCode.ALREADY_PARTICIPATE_IN, "이미 참여한 뿌리기 sprinkleId : ${sprinkle.id}, memberId : ${applySprinkleMember.id}")
+        }
     }
 
     fun getSprinkleInfo(sprinkleId: Long, userInfoDto: UserInfoDto): SprinkleInfoResDto {
