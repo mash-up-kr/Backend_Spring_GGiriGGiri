@@ -21,6 +21,8 @@ enum class ResponseCode(
     ALREADY_PARTICIPATE_IN(HttpStatus.BAD_REQUEST, "F006", "이미 응모한 뿌리기 입니다."),
     ALREADY_EXPIRED_SPRINKLE(HttpStatus.BAD_REQUEST, "F007", "이미 만료된 뿌리기 입니다."),
 
+    PAYLOAD_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE, "F008", "HTTP PAYLOAD가 너무 큽니다."),
+
     // Common
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "C001", "유효하지 않은 입력값 입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C002", "서버 에러가 발생했습니다.")

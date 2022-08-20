@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import org.springframework.web.multipart.MaxUploadSizeExceededException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -52,5 +53,12 @@ class GlobalExceptionHandler {
     private fun handMethodArgumentTypeMismatchException(e: MethodArgumentTypeMismatchException): BaseResponse<Unit> {
         log.warn(e.message, e)
         return BaseResponse.error(ResponseCode.INVALID_INPUT_VALUE)
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException::class)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+    private fun handlePayloadTooLarge(e : MaxUploadSizeExceededException) : BaseResponse<Unit> {
+        log.error(e.message, e)
+        return BaseResponse.error(ResponseCode.PAYLOAD_TOO_LARGE)
     }
 }
