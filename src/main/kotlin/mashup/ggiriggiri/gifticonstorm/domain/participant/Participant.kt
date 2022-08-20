@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
+@Table(uniqueConstraints= [UniqueConstraint(columnNames = ["member_id", "sprinkle_id"])])
 class Participant(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
