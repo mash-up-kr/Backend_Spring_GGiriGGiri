@@ -12,7 +12,7 @@ enum class ResponseCode(
 
     //Fail
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "F001", "사용자 인증에 실패했습니다."),
-    FAILED_RECOGNIZE(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "OCR 인식에 실패했습니다."),
+    FAILED_RECOGNIZE(HttpStatus.INTERNAL_SERVER_ERROR, "F002", "OCR에 실패했습니다."),
     NOT_SUPPORT_OCR_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "F003", "지원하지 않는 이미지 형식입니다."),
 
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "F004", "해당 데이터를 찾을 수 없습니다."),

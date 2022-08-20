@@ -3,6 +3,7 @@ package mashup.ggiriggiri.gifticonstorm.common.error
 import mashup.ggiriggiri.gifticonstorm.common.dto.BaseResponse
 import mashup.ggiriggiri.gifticonstorm.common.dto.ResponseCode
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.BaseException
+import mashup.ggiriggiri.gifticonstorm.common.error.exception.OcrFailedException
 import mashup.ggiriggiri.gifticonstorm.common.error.exception.UnauthorizedException
 import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.http.HttpStatus
@@ -60,5 +61,12 @@ class GlobalExceptionHandler {
     private fun handlePayloadTooLarge(e : MaxUploadSizeExceededException) : BaseResponse<Unit> {
         log.error(e.message, e)
         return BaseResponse.error(ResponseCode.PAYLOAD_TOO_LARGE)
+    }
+
+    @ExceptionHandler(OcrFailedException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    private fun handleOcrFailed(e: OcrFailedException) : BaseResponse<Unit> {
+        log.error(e.message, e)
+        return BaseResponse.error(ResponseCode.FAILED_RECOGNIZE)
     }
 }
