@@ -1,12 +1,15 @@
 package mashup.ggiriggiri.gifticonstorm.presentation
 
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import mashup.ggiriggiri.gifticonstorm.application.CouponService
+import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
 import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import mashup.ggiriggiri.gifticonstorm.presentation.restdocs.TestRestDocs
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
@@ -28,14 +31,20 @@ internal class CouponControllerTest : TestRestDocs() {
 
     @Test
     fun `쿠폰 카테고리 목록 조회 성공`() {
+        every { memberRepository.findByInherenceId(any()) } returns Member(inherenceId = "id")
+
         //when, then
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/v1/coupon/category")
+                .header("Authorization", "id")
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentation.document(
                     "쿠폰 카테고리 목록 조회/{methodName}",
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     PayloadDocumentation.responseFields(
                         PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.STRING).description("응답 코드"),
                         PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지"),
