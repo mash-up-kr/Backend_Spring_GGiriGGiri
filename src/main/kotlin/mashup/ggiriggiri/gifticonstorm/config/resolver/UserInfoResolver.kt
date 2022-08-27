@@ -4,6 +4,7 @@ import mashup.ggiriggiri.gifticonstorm.common.error.exception.UnauthorizedExcept
 import mashup.ggiriggiri.gifticonstorm.config.annotation.UserInfo
 import mashup.ggiriggiri.gifticonstorm.domain.member.domain.Member
 import mashup.ggiriggiri.gifticonstorm.domain.member.repository.MemberRepository
+import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import mashup.ggiriggiri.gifticonstorm.infrastructure.SigninBot
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
@@ -17,7 +18,7 @@ class UserInfoResolver(
     private val memberRepository: MemberRepository,
     private val signinBot: SigninBot,
 ) : HandlerMethodArgumentResolver {
-    companion object {
+    companion object : Logger {
         const val AUTHORIZATION_KEY_HEADER_NAME = "Authorization"
     }
 
@@ -38,7 +39,8 @@ class UserInfoResolver(
         }
 
 
-        return memberRepository.save(Member(inherenceId =  authkey)).let {
+        return memberRepository.save(Member(inherenceId =  authkey)).also {
+            log.info("GOGOGO")
             signinBot.notify(it.id)
             UserInfoDto(id = it.id, inherenceId = it.inherenceId)
         }

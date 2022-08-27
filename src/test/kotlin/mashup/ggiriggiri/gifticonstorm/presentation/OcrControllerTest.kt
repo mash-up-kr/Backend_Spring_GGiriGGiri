@@ -35,6 +35,8 @@ internal class OcrControllerTest : TestRestDocs() {
 
     @Test
     fun `OCR 성공`() {
+        every { memberRepository.findByInherenceId(any()) } returns Member(inherenceId = "id")
+
         //given
         val image = MockMultipartFile(
             "image",
@@ -52,13 +54,16 @@ internal class OcrControllerTest : TestRestDocs() {
             MockMvcRequestBuilders.multipart("/ocr")
                 .file(image)
                 .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "id")
         )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentation.document(
                     "OCR 요청",
-                    HeaderDocumentation.requestHeaders(),
+                    HeaderDocumentation.requestHeaders(
+                        HeaderDocumentation.headerWithName("Authorization").description("애플 사용자 고유 id"),
+                    ),
                     RequestDocumentation.requestParts(
                         RequestDocumentation.partWithName("image").description("기프티콘 이미지"),
                     ),
