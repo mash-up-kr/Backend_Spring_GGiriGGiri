@@ -38,8 +38,7 @@ class UserInfoResolver(
             return UserInfoDto(id = it.id, inherenceId = it.inherenceId)
         }
 
-
-        return memberRepository.save(Member(inherenceId =  authkey)).also {
+        return memberRepository.save(Member(inherenceId =  authkey)).let {
             log.info("GOGOGO")
             signinBot.notify(it.id)
             UserInfoDto(id = it.id, inherenceId = it.inherenceId)
