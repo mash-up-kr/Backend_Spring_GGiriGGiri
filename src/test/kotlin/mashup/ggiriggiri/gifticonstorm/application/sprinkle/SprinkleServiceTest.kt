@@ -26,12 +26,11 @@ import java.time.LocalTime
 
 internal class SprinkleServiceTest : FunSpec({
 
-    val sprinkleCache = mockk<SprinkleCache>()
     val sprinkleRepository = mockk<SprinkleRepository>()
     val participantRepository = mockk<ParticipantRepository>()
     val couponService = mockk<CouponService>()
     val memberRepository = mockk<MemberRepository>()
-    val sprinkleService = SprinkleService(sprinkleCache, sprinkleRepository, participantRepository, couponService, memberRepository)
+    val sprinkleService = SprinkleService(sprinkleRepository, participantRepository, couponService, memberRepository)
 
     context("뿌리기 마감임박 조회") {
         test("성공") {
