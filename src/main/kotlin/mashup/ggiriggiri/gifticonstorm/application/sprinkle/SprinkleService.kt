@@ -31,7 +31,6 @@ import java.time.LocalDateTime
 
 @Service
 class SprinkleService(
-    private val sprinkleCache: SprinkleCache,
     private val sprinkleRepository: SprinkleRepository,
     private val participantRepository: ParticipantRepository,
     private val couponService: CouponService,
@@ -73,10 +72,7 @@ class SprinkleService(
 
         // sprinkle 저장
         val sprinkle = saveSprinkle(createEventRequestDto, coupon, member)
-
-        // redis에 sprinkle 저장
         log.info("sprinkledAt ${sprinkle.sprinkleAt}, deadline minutes ${createEventRequestDto.deadlineMinutes}")
-        sprinkleCache.generateSprinkle(sprinkle.id, createEventRequestDto.deadlineMinutes)
     }
 
     fun saveSprinkle(createEventRequestDto: CreateEventRequestDto, coupon: Coupon, user: Member): Sprinkle {
