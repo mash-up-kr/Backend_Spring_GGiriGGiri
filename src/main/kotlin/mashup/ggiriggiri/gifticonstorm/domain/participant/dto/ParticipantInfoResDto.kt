@@ -24,10 +24,10 @@ data class ParticipantInfoResDto(
                 sprinkleId = participantInfoVo.sprinkleId,
                 brandName = participantInfoVo.brandName,
                 merchandiseName = participantInfoVo.merchandiseName,
-                expiredAt = participantInfoVo.expiredAt.toLocalDate().toString(),
+                expiredAt = participantInfoVo.expiredAt.toString(),
                 category = participantInfoVo.category,
                 participants = participantInfoVo.participants,
-                participateDate = participantInfoVo.createdAt.toLocalDate().toString(),
+                participateDate = participantInfoVo.createdAt.toString(),
                 isChecked = participantInfoVo.isChecked,
                 drawStatus = participantInfoVo.drawStatus
             )
