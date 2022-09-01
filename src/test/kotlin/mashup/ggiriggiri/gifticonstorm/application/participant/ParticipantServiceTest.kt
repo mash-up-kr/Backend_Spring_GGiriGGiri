@@ -36,8 +36,6 @@ class ParticipantServiceTest : FunSpec({
             //then
             resDtos.size shouldBe 1
             resDtos[0].participantId shouldBe 1
-            resDtos[0].expiredAt shouldBe now.toLocalDate().toString()
-            resDtos[0].participateDate shouldBe now.minusDays(1).toLocalDate().toString()
         }
     }
 

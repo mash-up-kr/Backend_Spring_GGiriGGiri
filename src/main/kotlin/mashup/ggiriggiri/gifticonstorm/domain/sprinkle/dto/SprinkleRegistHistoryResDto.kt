@@ -23,7 +23,7 @@ data class SprinkleRegistHistoryResDto(
                 expiredAt = sprinkleRegistHistoryVo.expiredAt.toString(),
                 category = sprinkleRegistHistoryVo.category,
                 participants = sprinkleRegistHistoryVo.participants,
-                deliveryDate = sprinkleRegistHistoryVo.sprinkleAt.toLocalDate().toString(),
+                deliveryDate = sprinkleRegistHistoryVo.sprinkleAt.toString(),
                 sprinkledStatus = sprinkleRegistHistoryVo.getSprinkledStatus()
             )
         }
