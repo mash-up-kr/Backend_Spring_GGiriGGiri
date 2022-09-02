@@ -5,6 +5,7 @@ import mashup.ggiriggiri.gifticonstorm.infrastructure.Logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Component
 class SprinkleDrawHandler(
@@ -16,7 +17,7 @@ class SprinkleDrawHandler(
     @Transactional
     @Scheduled(cron = "0 * * * * *", zone = "Asia/Seoul")
     fun drawEventListener() {
-        val sprinkles = sprinkleRepository.findAllBySprinkledFalse()
+        val sprinkles = sprinkleRepository.findAllBySprinkledFalseAndSprinkleAtLessThanEqual(LocalDateTime.now())
         if (sprinkles.isEmpty()) {
             log.info("[DRAW] no sprinkles")
             return
