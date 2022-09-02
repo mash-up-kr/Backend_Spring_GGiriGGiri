@@ -23,6 +23,7 @@ class JpaConfig {
             this.jdbcUrl = jdbcUrl
             this.password = password
             this.username = username
+            this.maximumPoolSize = 100
         }
     }
 
